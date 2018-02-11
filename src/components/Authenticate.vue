@@ -1,41 +1,29 @@
 <template>
-  <modal v-if="showModal" @close="$emit('close')">
+  <modal :dialog="showModal" @close="$emit('close')">
   
   
-        <div slot="header" class="left-align">
-        <h4 v-if="isUserAskingANewPassword">Mot de passe oubliÃ©</h4>
+       <div slot="header" class="left-align">
+        <h4 v-if="isUserAskingANewPassword">Mot de passe oublié</h4>
         <h4 v-else>Connexion</h4>
         </div>
-      <div slot="body">
+       <div slot="body">
+		
+       <v-text-field name="email" v-model="user.email" type="email" class="validate" label="Email" v-validate="'required|email'" />
 
-        <div class="row">
-          <div class="input-field col s12">
-            <input name="email" id="email" v-model="user.email" type="email" class="validate" v-validate="'required|email'">
-            <label for="email">Email</label>
-              <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
-          </div>
-        </div>
-
-        <div v-if="!isUserAskingANewPassword" class="row">
-        <div class="input-field col s12">
-          <input id="password" v-model="user.password" type="password" v-validate="{ required: true }">
-          <label for="password">{{ 'password' | translate }}</label>
-        </div>
-      </div>
+       <v-text-field v-if="!isUserAskingANewPassword" v-model="user.password" label="password" type="password" v-validate="{ required: true }"></v-text-field>
       
-      <div class="row">
-      	<a href="#" v-if="!isUserAskingANewPassword" v-on:click="isUserAskingANewPassword = true">Mot de passe oubliÃ© ?</a>
-      	<a href="#" v-else v-on:click="isUserAskingANewPassword = false;">Oups, je me rappelle de mon mot de passe !</a>
+      
+      	<v-btn flat v-if="!isUserAskingANewPassword" v-on:click="isUserAskingANewPassword = true">Mot de passe oublié ?</v-btn>
+      	<v-btn flat v-else v-on:click="isUserAskingANewPassword = false;">Oups, je me rappelle de mon mot de passe !</v-btn>
       	</br>
-      	<a href="#" v-if="!isUserAskingANewPassword" v-on:click="onClickCreateAccount()">CrÃ©er un compte</a>
-      </div>
+      	<v-btn flat v-if="!isUserAskingANewPassword" v-on:click="onClickCreateAccount()">Créer un compte</v-btn>
     </div>
     
     <div slot="footer" class="right-align">
-        <a class="btn-flat waves-effect" href="#" v-on:click="$emit('close')">Annuler</a>
-        <a class="btn-flat waves-effect" href="#" v-if="isUserAskingANewPassword">Demander</a>
-        <a class="btn-flat waves-effect" href="#"  v-on:click="onClickQueryAuthenticate()" v-else>Valider</a>
-      </div>
+        <v-btn v-on:click="$emit('close')" flat>Annuler</v-btn>
+        <v-btn v-if="isUserAskingANewPassword" flat>Demander</v-btn>
+        <v-btn v-on:click="onClickQueryAuthenticate()" v-else flat>Valider</v-btn>
+      </div>-->
   	
  </modal>
 </template>

@@ -1,6 +1,6 @@
 <template>
 
-  <modal v-if="showModal" @close="$emit('close')">
+  <modal :dialog="showModal" @close="$emit('close')">
   
         <div slot="header" class="left-align">
         <h4>Inscription</h4>
@@ -8,61 +8,33 @@
         
       <div slot="body">
 
-		 <div class="row">
-      <div class="row">
-        <div class="input-field col s12">
-          <i class="material-icons prefix">email</i>
-          <input id="email" v-model="newUser.email" type="email" class="validate" required="required">
-          <label for="email">Email</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s6">
-          <i class="material-icons prefix">face</i>
-          <input id="first_name" v-model="newUser.firstname" type="text" class="validate" required="required">
-          <label for="first_name">Prenom</label>
-        </div>
-        <div class="input-field col s6">
-          <input id="last_name" v-model="newUser.lastname" type="text" class="validate" required="required">
-          <label for="last_name">Nom</label>
-        </div>
-      </div>
+        <v-text-field v-model="newUser.email" type="email" class="validate" required="required" label="Email" />
+      <v-text-field  v-model="newUser.firstname" type="text" class="validate" required="required" label="Prénom"/>
+        <v-text-field v-model="newUser.lastname" type="text" class="validate" required="required" label="Nom"/>
       
-      <div class="row">
-      <div class="input-field col s12">
-            <i class="material-icons prefix">date_range</i>
-	      	<input id="birthdate" type="text" class="datepicker" required="required">
-	      	<label for="birthdate">Date de naissance</label>
-	      	</div>
-      </div>
+      <v-text-field
+          slot="activator"
+          label="Date de naissance"
+          v-model="selectedDate"
+          prepend-icon="event"
+          readonly
+        ></v-text-field>
+        <v-date-picker v-model="selectedDate" no-title scrollable actions></v-date-picker>
       
-      <div class="alert" :class="equalsPasswordSeverity">{{ equalsPasswordSeverity === 'warning' ? 'Les deux mots de passe doivent être égaux' : 'Mot de passe confirmé' }}</div>
+      <v-alert value="true" color="success">{{ equalsPasswordSeverity === 'warning' ? 'Les deux mots de passe doivent être égaux' : 'Mot de passe confirmé' }}</v-alert>
       
-      <div class="row">
-        <div class="input-field col s12">
-          <i class="material-icons prefix">security</i>
-          <input v-validate="{ required: true, regex: '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})' }" name="password1" id="password" v-model="newUser.password" type="password" required="required">
-          <label for="password">Mot de passe</label>
-          <span v-show="errors.has('password1')" class="help is-danger">{{ errors.first('password1') }}</span>
-        </div>
-      </div>
+      <v-text-field v-validate="{ required: true, regex: '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})' }" 
+      name="password1" id="password" v-model="newUser.password" type="password" required="required" />
       
-      <div class="row">
-        <div class="input-field col s12">
-          <i class="material-icons prefix">security</i>
-          <input v-on:keyup="checkPasswordsAreEquals()" v-validate="{ required: true, regex: '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})' }" name="password2" id="passwordVerif" v-model="verifPassword" type="password" required="required">
-          <label for="passwordVerif">Confirmer le mot de passe</label>
-          <span v-show="errors.has('password2')" class="help is-danger">{{ errors.first('password2') }}</span>
-        </div>
-      </div>
+      <v-text-field v-on:keyup="checkPasswordsAreEquals()" v-validate="{ required: true, regex: '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})' }" 
+      name="password2" id="passwordVerif" v-model="verifPassword" type="password" required="required" />
       
   </div>
 
-    	</div>
     
     <div slot="footer" class="right-align">
-        <a class="btn-flat waves-effect" href="#" v-on:click="$emit('close')">Annuler</a>
-        <a class="btn-flat waves-effect" href="#" v-on:click="queryCreateNewUser()">Valider</a>
+        <v-btn v-on:click="$emit('close')" flat>Annuler</v-btn>
+        <v-btn v-on:click="queryCreateNewUser()" flat>Valider</v-btn>
       </div>
   	
  </modal>
@@ -86,23 +58,6 @@ export default {
 		Modal,
 	},
 	watch: { 
-		showModal: function(newVal, oldVal) {
-	    	if (newVal == true) {
-	    		this.newUser = new User();
-	    		this.$nextTick(function () {
-	    			var elem = this.$el.querySelector(".datepicker");
-					new M.Datepicker(elem, { 
-						format: 'dd/mm/yyyy',
-					}, false, this.selectedDate);
-	    		})
-	    	}
-	    	else {
-	    		var elem = this.$el.querySelector(".datepicker");
-
-	    		var instance = M.Datepicker.getInstance(elem);
-	    		instance.destroy();
-	    	}
-	    },
     },
 	methods: {
 		//Permet de vérifier que les mots de passe saisis respectent une sécurité minimale
@@ -127,9 +82,9 @@ export default {
 				if (response.status == 200) {
 					console.log("user well created");
 					this.$emit("close");
-					M.toast( { html: 'Bienvenue parmis nous ' + this.newUser.firstname + ' !' } )
+// 					M.toast( { html: 'Bienvenue parmis nous ' + this.newUser.firstname + ' !' } )
 					setTimeout(function () {
-						M.toast(  { html: 'Ton compte a bien été crée' } );
+// 						M.toast(  { html: 'Ton compte a bien été crée' } );
 					}, 2000);
 				}
 				else

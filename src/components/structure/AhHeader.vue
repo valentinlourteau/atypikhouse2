@@ -24,10 +24,9 @@
     <v-spacer></v-spacer>
     <v-toolbar-side-icon class="hidden-md-and-up"></v-toolbar-side-icon>
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn flat>Link One</v-btn>
       <v-btn @click="$router.push('/discover')" flat>Voyager</v-btn>
-      <v-btn v-if="this.$store.state.user == null" flat>Connexion</v-btn>
-    </v-toolbar-items>
+      <v-btn v-if="this.$store.state.user == null" flat @click="showModalAuthenticate = true">Connexion</v-btn>
+          </v-toolbar-items>
   </v-toolbar>
 
 <authenticate :showModal="showModalAuthenticate" @close="showModalAuthenticate = false" @createAccount="showModalCreateAccount = true"></authenticate>
