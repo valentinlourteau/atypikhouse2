@@ -1,13 +1,8 @@
 /* La page sur les biens atypiques dont je dispose ... */
 <template>
 <div>
-	<div class="container">
-		
-	</div>
-	
-	<div style="position: fixed; right: 16px; bottom: 16px;">
-		<a id="addNewExperienceBtn" v-on:click="onAddNewEstate();" class="btn-floating btn-large waves-effect waves-light yellow"><i class="material-icons">add</i></a>
-	</div>
+
+		<v-btn v-on:click="onAddNewEstate();" fab color="primary" fixed right bottom><v-icon>add</v-icon></v-btn>
 </div>
 </template>
 
