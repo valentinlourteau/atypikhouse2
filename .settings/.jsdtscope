@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.baseBrowserLibrary"/>
-	<classpathentry kind="src" path=""/>
+	<classpathentry excluding="node_modules/" including=".babelrc|.editorconfig|.gitignore|.postcssrc.js|.project|.settings/|.tern-project|README.md|build/|config/|index.html|node_modules/|package-lock.json|package.json|properties.txt|src/|static/|test/" kind="src" path=""/>
 	<classpathentry kind="output" path=""/>
 </classpath>

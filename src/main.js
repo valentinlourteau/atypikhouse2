@@ -11,6 +11,7 @@ import Vuex from 'vuex';
 import vuexI18n from 'vuex-i18n';
 import VueLocalStorage from 'vue-ls';
 import VeeValidate from 'vee-validate';
+import GoogleMapsLoader from 'google-maps';
 //components
 import Home from './components/view/Home';
 import Account from './components/view/Account';
@@ -95,6 +96,10 @@ const store = new Vuex.Store({
 });
 
 Vue.use(vuexI18n.plugin, store);
+
+GoogleMapsLoader.KEY = 'AIzaSyB1h7TjJ_nYVQn09j9JZsdVwD59C7Skp78';
+GoogleMapsLoader.LIBRARIES = ['geometry', 'places'];
+GoogleMapsLoader.LANGUAGE = 'fr';
 
 export default store;
 

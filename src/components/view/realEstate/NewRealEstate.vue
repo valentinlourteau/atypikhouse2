@@ -1,4 +1,4 @@
-/* La page de création d'un nouveau bien ... */
+/* La page de crï¿½ation d'un nouveau bien ... */
 <template>
 <div>
 	<div class="container">
@@ -6,7 +6,7 @@
 		 <v-stepper v-model="stepIndex">
 		 
       <v-stepper-header>
-        <v-stepper-step step="1" :complete="stepIndex > 1">Préambule</v-stepper-step>
+        <v-stepper-step step="1" :complete="stepIndex > 1">PrÃ©ambule</v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step step="2" :complete="stepIndex > 2">Localisation</v-stepper-step>
         <v-divider></v-divider>
@@ -22,9 +22,9 @@
         <v-divider></v-divider>
         <v-stepper-step step="8" :complete="stepIndex > 8">Pour accueillir</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="9" :complete="stepIndex > 9">Règlement</v-stepper-step>
+        <v-stepper-step step="9" :complete="stepIndex > 9">RÃ©glement</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="10" :complete="stepIndex > 10">Qui peut réserver ?</v-stepper-step>
+        <v-stepper-step step="10" :complete="stepIndex > 10">Qui peut rÃ©server ?</v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step step="11" :complete="stepIndex > 11">Calendrier</v-stepper-step>
       </v-stepper-header>
@@ -32,14 +32,20 @@
       <v-stepper-items>
         <v-stepper-content step="1">
           <v-card color="grey lighten-1" class="mb-5" height="200px">
-          	<p>Ici, quelques infos du site sur l'intérêt et les engagements relatifs à la publication d'un hébergement. le fait que chaque étape validée enregistre la réservation pour la continuer plus tard si besoin
+          	<p>Ici, quelques infos du site sur l'intï¿½rï¿½t et les engagements relatifs ï¿½ la publication d'un hï¿½bergement. le fait que chaque ï¿½tape validï¿½e enregistre la rï¿½servation pour la continuer plus tard si besoin
           	est</p>
           </v-card>
-          <v-btn color="primary" @click.native="stepIndex = 2">Continue</v-btn>
+          <v-btn color="primary" @click.native="stepIndex = 2;initMap();">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">La localisation du bien, une gmaps, le type de bien, une estimation des prix</v-card>
+          <v-card color="grey lighten-1" class="mb-5" height="200px">
+          
+          <input id="location-input" class="controls" type="text"
+        	placeholder="SÃ©lectionnez votre adresse">
+          <div id="map" style="height:100%;"></div>
+    
+          </v-card>
           <v-btn color="primary" @click.native="stepIndex = 3">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
@@ -49,48 +55,48 @@
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="4">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">La liste des équipements proposés par le bien</v-card>
+          <v-card color="grey lighten-1" class="mb-5" height="200px">La liste des ï¿½quipements proposï¿½s par le bien</v-card>
           <v-btn color="primary" @click.native="stepIndex = 5">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="5">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">L'ensemble des espaces disponibles pour l'utilisateur au sein de la propriété, jardin, cuisine, jaccuzi, etc ..</v-card>
+          <v-card color="grey lighten-1" class="mb-5" height="200px">L'ensemble des espaces disponibles pour l'utilisateur au sein de la propriï¿½tï¿½, jardin, cuisine, jaccuzi, etc ..</v-card>
           <v-btn color="primary" @click.native="stepIndex = 6">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="6">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Donner une description personnalisée, du bien, ce qui le rend atypique, 
-          ajouter des photos avec légendes, définir la photo qui sera mùise en avant sur la pubnlications. Le titre de l'annonce</v-card>
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Donner une description personnalisï¿½e, du bien, ce qui le rend atypique, 
+          ajouter des photos avec lï¿½gendes, dï¿½finir la photo qui sera mï¿½ise en avant sur la pubnlications. Le titre de l'annonce</v-card>
           <v-btn color="primary" @click.native="stepIndex = 7">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="7">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Ici, le titre de l'annonce, et éventuellement des mots clés fournis par le site pour classer l'annonce, à voir pour cette partie :
-          'en famille', 'en amoureux', 'nature', 'dépaysement'</v-card>
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Ici, le titre de l'annonce, et ï¿½ventuellement des mots clï¿½s fournis par le site pour classer l'annonce, ï¿½ voir pour cette partie :
+          'en famille', 'en amoureux', 'nature', 'dï¿½paysement'</v-card>
           <v-btn color="primary" @click.native="stepIndex = 8">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="8">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Explications générales (explications plus précises sur les pages concernées) sur la tarification, calendrier, comment accueillir le visiteur. Explications sur les obligations à remplir par
-          le visiteur pour pouvoir louer le bien, typiquement numéro de téléphone vérifié, informations de payement, carte d'identité... Possiblité d'ajotuer des contrainte supplémentaires, ID, Recommandations ..
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Explications gï¿½nï¿½rales (explications plus prï¿½cises sur les pages concernï¿½es) sur la tarification, calendrier, comment accueillir le visiteur. Explications sur les obligations ï¿½ remplir par
+          le visiteur pour pouvoir louer le bien, typiquement numï¿½ro de tï¿½lï¿½phone vï¿½rifiï¿½, informations de payement, carte d'identitï¿½... Possiblitï¿½ d'ajotuer des contrainte supplï¿½mentaires, ID, Recommandations ..
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 9">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="9">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Quelles règles appliquer, adapté aux bébés, fumeur ... Et également les infos à connaitre sur le logement ,zone inondable, animaux dangereux, armes etc
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Quelles rï¿½gles appliquer, adaptï¿½ aux bï¿½bï¿½s, fumeur ... Et ï¿½galement les infos ï¿½ connaitre sur le logement ,zone inondable, animaux dangereux, armes etc
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 10">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="10">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Récapitulatif sur qui peut réserver et comment, infos en plus...
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Rï¿½capitulatif sur qui peut rï¿½server et comment, infos en plus...
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 11">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="11">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Explications détaillées sur le calendrier
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Explications dï¿½taillï¿½es sur le calendrier
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 12">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
@@ -99,7 +105,7 @@
       
     </v-stepper>
     
-    <!-- Chaque step peut disposer d'une v-card d'aide, d'informations supplémentaires, voir airbnb -->
+    <!-- Chaque step peut disposer d'une v-card d'aide, d'informations supplï¿½mentaires, voir airbnb -->
 		
 		
 	</div>
@@ -108,6 +114,7 @@
 </template>
 
 <script>
+import GoogleMapsLoader from 'google-maps';
 
 export default {
 	data: function() {
@@ -116,11 +123,92 @@ export default {
 		}
 	},
 	methods: {
-	},
-	mounted: function() {
+		initMap() {
+				var map;
+				GoogleMapsLoader.load(function(google) {
+				    map = new google.maps.Map(document.getElementById('map'), {
+				          center: {lat: -34.397, lng: 150.644},
+				          zoom: 8
+				        });
+				    console.log("map " + map)
+				    
+					var input = /** @type {!HTMLInputElement} */(
+				            document.getElementById('location-input'));
+					console.log("input " + input)
+					var autocomplete = new google.maps.places.Autocomplete(input);
+					console.log("autocomplete " + autocomplete)
+
+					var infowindow = new google.maps.InfoWindow();
+					console.log("infowindow " + infowindow)
+
+			        var marker = new google.maps.Marker({
+			          map: map,
+			          anchorPoint: new google.maps.Point(0, -29)
+			        });
+					console.log("marker " + marker)
+			        
+			        autocomplete.addListener('place_changed', function() {
+			            infowindow.close();
+			            marker.setVisible(false);
+			            var place = autocomplete.getPlace();
+			            if (!place.geometry) {
+			              // User entered the name of a Place that was not suggested and
+			              // pressed the Enter key, or the Place Details request failed.
+			              window.alert("No details available for input: '" + place.name + "'");
+			              return;
+			            }
+
+			            // If the place has a geometry, then present it on a map.
+			            if (place.geometry.viewport) {
+			              map.fitBounds(place.geometry.viewport);
+			            } else {
+			              map.setCenter(place.geometry.location);
+			              map.setZoom(17);  // Why 17? Because it looks good.
+			            }
+			            marker.setIcon(/** @type {google.maps.Icon} */({
+			              url: place.icon,
+			              size: new google.maps.Size(71, 71),
+			              origin: new google.maps.Point(0, 0),
+			              anchor: new google.maps.Point(17, 34),
+			              scaledSize: new google.maps.Size(35, 35)
+			            }));
+			            marker.setPosition(place.geometry.location);
+			            marker.setVisible(true);
+
+			            var address = '';
+			            if (place.address_components) {
+			              address = [
+			                (place.address_components[0] && place.address_components[0].short_name || ''),
+			                (place.address_components[1] && place.address_components[1].short_name || ''),
+			                (place.address_components[2] && place.address_components[2].short_name || '')
+			              ].join(' ');
+			            }
+
+			            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+			            infowindow.open(map, marker);
+			          });
+					
+// 					google.maps.event.addListener(map,'bounds_changed', function() {
+// 						console.log("listener bounds changed map : " + map)
+// 						  autocomplete.bindTo(map, 'bounds');
+// 						});
+			        
+			        
+				});
+		},
 	},
 };
 </script>
 
 <style>
+#location-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 300px;
+      }
 </style>
