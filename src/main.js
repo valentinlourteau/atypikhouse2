@@ -95,6 +95,9 @@ const store = new Vuex.Store({
   },
 });
 
+import translationsEn from './resources/translations/translation_en';
+import translationsFr from './resources/translations/translation_fr';
+
 Vue.use(vuexI18n.plugin, store);
 
 GoogleMapsLoader.KEY = 'AIzaSyB1h7TjJ_nYVQn09j9JZsdVwD59C7Skp78';

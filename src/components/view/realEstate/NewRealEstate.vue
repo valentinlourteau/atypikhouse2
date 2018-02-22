@@ -8,7 +8,7 @@
       <v-stepper-header>
         <v-stepper-step step="1" :complete="stepIndex > 1">Préambule</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete="stepIndex > 2">Localisation</v-stepper-step>
+        <v-stepper-step step="2" :complete="stepIndex > 2">Pour démarrer</v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step step="3" :complete="stepIndex > 3">L'essentiel</v-stepper-step>
         <v-divider></v-divider>
@@ -39,18 +39,21 @@
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">
+          <v-card class="mb-5" height="200px">
           
-          <input id="location-input" class="controls" type="text"
-        	placeholder="Sélectionnez votre adresse">
+          
+          <v-text-field id="location-input" label="Adresse du bien" class="controls" type="text"
+        	placeholder="Sélectionnez votre adresse"></v-text-field>
           <div id="map" style="height:100%;"></div>
+          
+          <v-select :items="items" v-model="e1" label="Select" single-line bottom></v-select>
     
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 3">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Quelques informations essentielles sur le bien, bien complet, partie seulement ..., le nombre de voyageurs possible, nombre et configuration des lits</v-card>
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Quelques informations essentielles, le nombre de voyageurs possible, nombre et configuration des lits</v-card>
           <v-btn color="primary" @click.native="stepIndex = 4">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
