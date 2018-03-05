@@ -45,15 +45,46 @@
           <v-text-field id="location-input" label="Adresse du bien" class="controls" type="text"
         	placeholder="Sélectionnez votre adresse"></v-text-field>
           <div id="map" style="height:100%;"></div>
-          
-          <v-select :items="items" v-model="e1" label="Select" single-line bottom></v-select>
-    
+              
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 3">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Quelques informations essentielles, le nombre de voyageurs possible, nombre et configuration des lits</v-card>
+          <v-card class="mb-5">Quelques informations essentielles, le nombre de voyageurs possible, nombre et configuration des lits
+          
+          <!-- Type de bien -->
+          <v-select :items="typeOfAccomodationList" v-model="accomodation.type" label="Type de bien" multi-line bottom></v-select>
+          
+          <v-layout row wrap>
+          
+          <!-- Capacité d'accueil -->
+          <v-flex xs12>
+          <v-subheader>Capacité d'accueil</v-subheader>
+          </v-flex>
+          
+          <v-flex xs9>
+         <v-slider v-model="accomodation.maximumPeopleCount" min="1" max="20"></v-slider>
+         </v-flex>
+         <v-flex xs3>
+            <v-text-field v-model="accomodation.maximumPeopleCount" type="number"></v-text-field>
+          </v-flex>
+         
+         <!-- Nombre de lits -->
+         <v-flex xs12>
+         	<v-subheader>Nombre de couchages</v-subheader>
+         </v-flex>
+         <v-flex xs9>
+         	<v-slider v-model="accomodation.numberOfBeds" min="1" max="20" xs9></v-slider>
+         </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="accomodation.numberOfBeds" type="number"></v-text-field>
+          </v-flex>
+          
+          </v-layout>
+          
+          </v-card>
+     
           <v-btn color="primary" @click.native="stepIndex = 4">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
@@ -118,11 +149,17 @@
 
 <script>
 import GoogleMapsLoader from 'google-maps';
+import Accomodation from '../../../class/entities/accomodation';
 
 export default {
 	data: function() {
 		return {
-			stepIndex: 0,
+			accomodation : new Accomodation(),
+			stepIndex: 3,
+			typeOfAccomodationList: [
+				{text:"dick"},
+				{text:"zizi"},
+			],
 		}
 	},
 	methods: {

@@ -2,8 +2,10 @@
 	  
 
   // constructor
-  constructor() {
-    this.email = email
+  constructor(type, numberOfBeds, maximumPeopleCount) {
+	this.type = type;
+    this.numberOfBeds = numberOfBeds;
+    this.maximumPeopleCount = maximumPeopleCount;
   }
 
 }
