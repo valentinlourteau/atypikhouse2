@@ -6,27 +6,27 @@
 		 <v-stepper v-model="stepIndex">
 		 
       <v-stepper-header>
-        <v-stepper-step step="1" :complete="stepIndex > 1">Préambule</v-stepper-step>
+        <v-stepper-step step="1" :complete="stepIndex > 1" editable>Préambule</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete="stepIndex > 2">Pour démarrer</v-stepper-step>
+        <v-stepper-step step="2" :complete="stepIndex > 2" editable>Pour démarrer</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="3" :complete="stepIndex > 3">L'essentiel</v-stepper-step>
+        <v-stepper-step step="3" :complete="stepIndex > 3" editable>L'essentiel</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="4" :complete="stepIndex > 4">Equipements</v-stepper-step>
+        <v-stepper-step step="4" :complete="stepIndex > 4" editable>Equipements</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="5" :complete="stepIndex > 5">Espaces accessibles</v-stepper-step>
+        <v-stepper-step step="5" :complete="stepIndex > 5" editable>Espaces accessibles</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="6" :complete="stepIndex > 6">Avant de finir</v-stepper-step>
+        <v-stepper-step step="6" :complete="stepIndex > 6" editable>Avant de finir</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="7" :complete="stepIndex > 7">Le mot de la fin</v-stepper-step>
+        <v-stepper-step step="7" :complete="stepIndex > 7" editable>Le mot de la fin</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="8" :complete="stepIndex > 8">Pour accueillir</v-stepper-step>
+        <v-stepper-step step="8" :complete="stepIndex > 8" editable>Pour accueillir</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="9" :complete="stepIndex > 9">Réglement</v-stepper-step>
+        <v-stepper-step step="9" :complete="stepIndex > 9" editable>Réglement</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="10" :complete="stepIndex > 10">Qui peut réserver ?</v-stepper-step>
+        <v-stepper-step step="10" :complete="stepIndex > 10" editable>Qui peut réserver ?</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="11" :complete="stepIndex > 11">Calendrier</v-stepper-step>
+        <v-stepper-step step="11" :complete="stepIndex > 11" editable>Calendrier</v-stepper-step>
       </v-stepper-header>
       
       <v-stepper-items>
@@ -39,12 +39,16 @@
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <v-card class="mb-5" height="200px">
+          <v-card class="mb-5">
           
           
           <v-text-field id="location-input" label="Adresse du bien" class="controls" type="text"
         	placeholder="Sélectionnez votre adresse"></v-text-field>
-          <div id="map" style="height:100%;"></div>
+          <div id="map" style="height:300px;"></div>
+          
+          </br>
+          
+          <v-text-field label="Appartement, b�timent, r�sidence (facultatif)" v-model="accomodation.complementAdresse"></v-text-field>
               
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 3">Continue</v-btn>
@@ -89,7 +93,14 @@
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="4">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">La liste des �quipements propos�s par le bien</v-card>
+          <v-card color="grey lighten-1" class="mb-5" >La liste des �quipements propos�s par le bien
+          
+          
+          
+          
+          
+          
+          </v-card>
           <v-btn color="primary" @click.native="stepIndex = 5">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
@@ -155,10 +166,14 @@ export default {
 	data: function() {
 		return {
 			accomodation : new Accomodation(),
-			stepIndex: 3,
+			stepIndex: 4,
 			typeOfAccomodationList: [
 				{text:"dick"},
 				{text:"zizi"},
+			],
+			goodsAvailableForGuestList: [
+				{text:"douche"},
+				{text:"animaux accept�s"},
 			],
 		}
 	},
