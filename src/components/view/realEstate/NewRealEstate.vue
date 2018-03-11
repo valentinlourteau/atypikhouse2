@@ -1,4 +1,4 @@
-/* La page de cr�ation d'un nouveau bien ... */
+/* La page de crï¿½ation d'un nouveau bien ... */
 <template>
 <div>
 	<div class="container">
@@ -32,7 +32,7 @@
       <v-stepper-items>
         <v-stepper-content step="1">
           <v-card color="grey lighten-1" class="mb-5" height="200px">
-          	<p>Ici, quelques infos du site sur l'int�r�t et les engagements relatifs � la publication d'un h�bergement. le fait que chaque �tape valid�e enregistre la r�servation pour la continuer plus tard si besoin
+          	<p>Ici, quelques infos du site sur l'intérêt et les engagements relatifs ï¿½ la publication d'un hï¿½bergement. le fait que chaque ï¿½tape validï¿½e enregistre la rï¿½servation pour la continuer plus tard si besoin
           	est</p>
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 2;initMap();">Continue</v-btn>
@@ -48,7 +48,7 @@
           
           </br>
           
-          <v-text-field label="Appartement, b�timent, r�sidence (facultatif)" v-model="accomodation.complementAdresse"></v-text-field>
+          <v-text-field label="Appartement, bâtiment, résidence (facultatif)" v-model="accomodation.complementAdresse"></v-text-field>
               
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 3">Continue</v-btn>
@@ -93,55 +93,82 @@
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="4">
-          <v-card color="grey lighten-1" class="mb-5" >La liste des �quipements propos�s par le bien
-          
-          
-          
-          
-          
-          
+          <v-card color="grey lighten-1" class="mb-5" >La liste des ï¿½quipements proposï¿½s par le bien          
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 5">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="5">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">L'ensemble des espaces disponibles pour l'utilisateur au sein de la propri�t�, jardin, cuisine, jaccuzi, etc ..</v-card>
+          <v-card color="grey lighten-1" class="mb-5" height="200px">L'ensemble des espaces disponibles pour l'utilisateur au sein de la propriï¿½tï¿½, jardin, cuisine, jaccuzi, etc ..</v-card>
           <v-btn color="primary" @click.native="stepIndex = 6">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
-        <v-stepper-content step="6">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Donner une description personnalis�e, du bien, ce qui le rend atypique, 
-          ajouter des photos avec l�gendes, d�finir la photo qui sera m�ise en avant sur la pubnlications. Le titre de l'annonce</v-card>
+        <v-stepper-content step="6" >
+        <v-jumbotron>
+		    <v-container fill-height>
+		      <v-layout align-center>
+		        <v-flex>
+		          <h3 class="display-3">Votre bien mérite les plus belles photos</h3>
+		          <span class="subheading">Vous allez pouvoir ajouter ici les photos qui vont rendre votre bien unique, nous en sommes persuadé. N'hésitez pas à prendre des photos de jour, mettant votre bien en valeur. La popularité qu'aura votre bien en dépend largement.</span>
+		          <v-divider class="my-3"></v-divider>
+		          <div class="title mb-3">Vendez leur du rêve !</div>
+		          <file-upload @formData="onChooseImg($event)"></file-upload>
+		        </v-flex>
+		      </v-layout>
+		    </v-container>		
+  		</v-jumbotron>
+		
+		<v-layout row wrap>
+		  	<v-flex xs12 lg4 xl3 v-for="picture in accomodationPictures">
+			  	<v-card :key="picture.file.name" class="ma-3">
+			  		
+			  	<v-card-media :src="picture.url" height="200px"></v-card-media>
+			  	
+			  	<v-card-actions class="blue">
+			  	  <div class="cut-text white--text">{{picture.file.name}}</div>
+                  <v-spacer></v-spacer>
+                  <v-btn icon>
+                    <v-icon color="white">star</v-icon>
+                  </v-btn>
+                  <v-btn icon @click="onDeleteImg(picture)">
+                    <v-icon color="white" >delete</v-icon>
+                  </v-btn>
+                </v-card-actions>
+			  		
+			  	</v-card>
+		       </v-flex>
+	    </v-layout>
+          
+          
           <v-btn color="primary" @click.native="stepIndex = 7">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="7">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Ici, le titre de l'annonce, et �ventuellement des mots cl�s fournis par le site pour classer l'annonce, � voir pour cette partie :
-          'en famille', 'en amoureux', 'nature', 'd�paysement'</v-card>
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Ici, le titre de l'annonce. Donner une description personnalisï¿½e, du bien, ce qui le rend atypique, '</v-card>
           <v-btn color="primary" @click.native="stepIndex = 8">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="8">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Explications g�n�rales (explications plus pr�cises sur les pages concern�es) sur la tarification, calendrier, comment accueillir le visiteur. Explications sur les obligations � remplir par
-          le visiteur pour pouvoir louer le bien, typiquement num�ro de t�l�phone v�rifi�, informations de payement, carte d'identit�... Possiblit� d'ajotuer des contrainte suppl�mentaires, ID, Recommandations ..
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Explications gï¿½nï¿½rales (explications plus prï¿½cises sur les pages concernï¿½es) sur la tarification, calendrier, comment accueillir le visiteur. Explications sur les obligations ï¿½ remplir par
+          le visiteur pour pouvoir louer le bien, typiquement numï¿½ro de tï¿½lï¿½phone vï¿½rifiï¿½, informations de payement, carte d'identitï¿½... Possiblitï¿½ d'ajotuer des contrainte supplï¿½mentaires, ID, Recommandations ..
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 9">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="9">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Quelles r�gles appliquer, adapt� aux b�b�s, fumeur ... Et �galement les infos � connaitre sur le logement ,zone inondable, animaux dangereux, armes etc
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Quelles rï¿½gles appliquer, adaptï¿½ aux bï¿½bï¿½s, fumeur ... Et ï¿½galement les infos ï¿½ connaitre sur le logement ,zone inondable, animaux dangereux, armes etc
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 10">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="10">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">R�capitulatif sur qui peut r�server et comment, infos en plus...
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Rï¿½capitulatif sur qui peut rï¿½server et comment, infos en plus...
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 11">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="11">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Explications d�taill�es sur le calendrier
+          <v-card color="grey lighten-1" class="mb-5" height="200px">Explications dï¿½taillï¿½es sur le calendrier
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 12">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
@@ -150,7 +177,7 @@
       
     </v-stepper>
     
-    <!-- Chaque step peut disposer d'une v-card d'aide, d'informations suppl�mentaires, voir airbnb -->
+    <!-- Chaque step peut disposer d'une v-card d'aide, d'informations supplï¿½mentaires, voir airbnb -->
 		
 		
 	</div>
@@ -161,23 +188,48 @@
 <script>
 import GoogleMapsLoader from 'google-maps';
 import Accomodation from '../../../class/entities/accomodation';
+import FileUpload from '../../utility/fileUpload';
 
 export default {
+	components: {
+		FileUpload,
+	},
 	data: function() {
 		return {
 			accomodation : new Accomodation(),
-			stepIndex: 4,
+			stepIndex: 6,
+			accomodationPictures : new Array(),
+			
+			
+			
+			
+			
 			typeOfAccomodationList: [
 				{text:"dick"},
 				{text:"zizi"},
 			],
 			goodsAvailableForGuestList: [
 				{text:"douche"},
-				{text:"animaux accept�s"},
+				{text:"animaux acceptés"},
 			],
 		}
 	},
 	methods: {
+		onDeleteImg(picture) {
+			this.accomodationPictures.splice(this.accomodationPictures.indexOf(picture), 1);
+		},
+		onChooseImg(files) {
+			var reader = new FileReader();
+			var accomodRef = this.accomodationPictures;
+			reader.onload = function (e) {
+				accomodRef.push({
+					file: files.get('data'),
+					url: e.target.result,
+				});
+            };
+            reader.readAsDataURL(files.get('data'));
+		},
+		//Déplacer ça dans un composant
 		initMap() {
 				var map;
 				GoogleMapsLoader.load(function(google) {
@@ -266,4 +318,9 @@ export default {
         text-overflow: ellipsis;
         width: 300px;
       }
+.cut-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+ }
 </style>
