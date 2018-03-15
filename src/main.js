@@ -100,6 +100,9 @@ import translationsFr from './resources/translations/translation_fr';
 
 Vue.use(vuexI18n.plugin, store);
 
+Vue.http.options.root = 'http://46.226.111.181:4040/api/';
+Vue.http.options.rejectUnauthorized = false;
+
 GoogleMapsLoader.KEY = 'AIzaSyB1h7TjJ_nYVQn09j9JZsdVwD59C7Skp78';
 GoogleMapsLoader.LIBRARIES = ['geometry', 'places'];
 GoogleMapsLoader.LANGUAGE = 'fr';

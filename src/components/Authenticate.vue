@@ -3,7 +3,7 @@
   
   
        <div slot="header" class="left-align">
-        <h4 v-if="isUserAskingANewPassword">Mot de passe oublié</h4>
+        <h4 v-if="isUserAskingANewPassword">Mot de passe oubliï¿½</h4>
         <h4 v-else>Connexion</h4>
         </div>
        <div slot="body">
@@ -13,16 +13,16 @@
        <v-text-field v-if="!isUserAskingANewPassword" v-model="user.password" label="password" type="password" v-validate="{ required: true }"></v-text-field>
       
       
-      	<v-btn flat v-if="!isUserAskingANewPassword" v-on:click="isUserAskingANewPassword = true">Mot de passe oublié ?</v-btn>
+      	<v-btn flat v-if="!isUserAskingANewPassword" v-on:click="isUserAskingANewPassword = true">Mot de passe oubliÃ© ?</v-btn>
       	<v-btn flat v-else v-on:click="isUserAskingANewPassword = false;">Oups, je me rappelle de mon mot de passe !</v-btn>
       	</br>
-      	<v-btn flat v-if="!isUserAskingANewPassword" v-on:click="onClickCreateAccount()">Créer un compte</v-btn>
+      	<v-btn flat v-if="!isUserAskingANewPassword" v-on:click="onClickCreateAccount()">CrÃ©er un compte</v-btn>
     </div>
     
     <div slot="footer" class="right-align">
-        <v-btn v-on:click="$emit('close')" flat>Annuler</v-btn>
+        <v-btn v-on:click="$emit('close')" flat color="blue">Annuler</v-btn>
         <v-btn v-if="isUserAskingANewPassword" flat>Demander</v-btn>
-        <v-btn v-on:click="onClickQueryAuthenticate()" v-else flat>Valider</v-btn>
+        <v-btn v-on:click="onClickQueryAuthenticate()" v-else flat color="blue">Valider</v-btn>
       </div>-->
   	
  </modal>
@@ -46,7 +46,7 @@ export default {
     }
   },
   methods: {
-	  //Appelé lorsque l'on tente de s'authentifier
+	  //Appelï¿½ lorsque l'on tente de s'authentifier
   	onClickQueryAuthenticate() {
     	this.$http.post("auth/login", {
     		"email": this.user.email,
