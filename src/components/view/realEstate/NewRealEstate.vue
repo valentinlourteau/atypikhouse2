@@ -31,9 +31,17 @@
       
       <v-stepper-items>
         <v-stepper-content step="1">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">
+          <v-card color="grey lighten-1" class="mb-5">
           	<p>Ici, quelques infos du site sur l'intérêt et les engagements relatifs ï¿½ la publication d'un hï¿½bergement. le fait que chaque ï¿½tape validï¿½e enregistre la rï¿½servation pour la continuer plus tard si besoin
           	est</p>
+          	<p>Bienvenue sur la création d'un bien atypique. 
+          	<p>Vous allez contribuer à l'expension de notre offre et à la promotion des logements atypiques.</p>
+          	Nous sommes fier de vous permettre de promouvoir notre passion pour la découverte, le voyage, et nous pensons que les logements atypiques contribuent à ces valeurs.
+          	Nous vous assisterons tout au long du processus de création de votre bien sur le site. Et vous apporterons, nous l'ésperons,  toutes les précisions nécessaires pour mener à bien le processus de création.
+          	</p>
+          	<p>Dans le cas ou vous ne pourriez pas valider toutes les étapes, nous les sauvegardons automatiquement pour vos prochaines connexions.</p>
+          	
+          	<p>Voila, vous savez tous ! On commence ?</p>
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 2;initMap();">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
@@ -93,7 +101,13 @@
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="4">
-          <v-card color="grey lighten-1" class="mb-5" >La liste des ï¿½quipements proposï¿½s par le bien          
+          <v-card class="mb-5">
+          La liste des équipements proposés par le bien
+          <v-layout row wrap>
+          <v-flex v-for="equipment in listOfEquipments" xs4>
+          	<v-switch v-model="listOfEquipementsChoosen" :label="equipment.label" :value="equipment.value"></v-switch>       
+          </v-flex>
+          </v-layout>
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 5">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
@@ -144,7 +158,15 @@
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="7">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Ici, le titre de l'annonce. Donner une description personnalisï¿½e, du bien, ce qui le rend atypique, '</v-card>
+          <div>
+          Ici, le titre de l'annonce. Donner une description personnalisée, du bien, ce qui le rend atypique, '
+          <v-text-field label="Titre de l'annonce"></v-text-field>
+          <v-text-field label="Description" multi-line></v-text-field>
+          
+          
+          
+          
+          </div>
           <v-btn color="primary" @click.native="stepIndex = 8">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
@@ -156,7 +178,15 @@
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
          <v-stepper-content step="9">
-          <v-card color="grey lighten-1" class="mb-5" height="200px">Quelles rï¿½gles appliquer, adaptï¿½ aux bï¿½bï¿½s, fumeur ... Et ï¿½galement les infos ï¿½ connaitre sur le logement ,zone inondable, animaux dangereux, armes etc
+          <v-card class="mb-5" height="200px">
+          Quelles rï¿½gles appliquer, adaptï¿½ aux bï¿½bï¿½s, fumeur ... Et ï¿½galement les infos ï¿½ connaitre sur le logement ,zone inondable, animaux dangereux, armes etc
+          
+          <v-layout>
+          	<v-flex xs6 v-for="rule in availableRules">
+          		<v-switch v-model="selectedRules" :value="rule.value" :label="rule.label" ></v-switch>
+          	</v-flex>
+          </v-layout>
+          
           </v-card>
           <v-btn color="primary" @click.native="stepIndex = 10">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
@@ -197,13 +227,8 @@ export default {
 	data: function() {
 		return {
 			accomodation : new Accomodation(),
-			stepIndex: 6,
+			stepIndex: 1,
 			accomodationPictures : new Array(),
-			
-			
-			
-			
-			
 			typeOfAccomodationList: [
 				{text:"dick"},
 				{text:"zizi"},
@@ -212,6 +237,16 @@ export default {
 				{text:"douche"},
 				{text:"animaux acceptés"},
 			],
+			listOfEquipments : [
+				{label: "lave linge", value: "lave-linge"},
+				{label: "télévision", value: "television"},
+			],
+			listOfEquipementsChoosen :[],
+			availableRules : [
+				{label: "fumeurs autorisés", value: "smoke"},
+				{label: "animaux autorisés", value: "animals"},
+			],
+			selectedRules : [],
 		}
 	},
 	methods: {
