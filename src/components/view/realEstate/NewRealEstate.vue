@@ -3,7 +3,7 @@
 <div>
 	<div class="container">
 		
-		 <v-stepper v-model="stepIndex">
+	<v-stepper v-model="stepIndex">
 		 
       <v-stepper-header>
         <v-stepper-step step="1" :complete="stepIndex > 1" editable>Préambule</v-stepper-step>
@@ -133,7 +133,7 @@
   		</v-jumbotron>
 		
 		<v-layout row wrap>
-		  	<v-flex xs12 lg4 xl3 v-for="picture in accomodationPictures">
+		  	<v-flex xs12 lg4 xl3 v-for="picture in accomodationPictures" :key="picture.file.name">
 			  	<v-card :key="picture.file.name" class="ma-3">
 			  		
 			  	<v-card-media :src="picture.url" height="200px"></v-card-media>
@@ -357,5 +357,8 @@ export default {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+ }
+ .stepper__header {
+ 	height: initial;
  }
 </style>
