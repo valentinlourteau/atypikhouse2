@@ -102,6 +102,7 @@ Vue.use(vuexI18n.plugin, store);
 
 Vue.http.options.root = 'http://46.226.111.181:4040/api/';
 Vue.http.options.rejectUnauthorized = false;
+Vue.http.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get("token");
 
 GoogleMapsLoader.KEY = 'AIzaSyB1h7TjJ_nYVQn09j9JZsdVwD59C7Skp78';
 GoogleMapsLoader.LIBRARIES = ['geometry', 'places'];

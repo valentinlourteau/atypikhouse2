@@ -2,9 +2,9 @@
 	  
 
   // constructor
-  constructor(type, numberOfBeds, maximumPeopleCount, complementAdresse) {
+  constructor(type, beds, maximumPeopleCount, complementAdresse) {
 	this.type = type;
-    this.numberOfBeds = numberOfBeds;
+    this.beds = beds;
     this.maximumPeopleCount = maximumPeopleCount;
     this.complementAdresse = complementAdresse;
   }
