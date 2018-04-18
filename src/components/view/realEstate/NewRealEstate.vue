@@ -47,25 +47,24 @@
         <v-stepper-content step="2">   
           <gmaps ref="gmaps" @pickAdress="onPickAdress($event)"></gmaps>      
           </br>
-          <v-text-field label="Appartement, bâtiment, résidence (facultatif)" v-model="accomodation.complementAdresse"></v-text-field>
+<!--           <v-text-field label="Appartement, bâtiment, résidence (facultatif)" v-model="accomodation.complementAdresse"></v-text-field> -->
           <v-btn color="primary" @click.native="changeIndex(3)">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         
-        <v-stepper-content step="3">
-          Quelques informations essentielles, le nombre de voyageurs possible, nombre et configuration des lits        
+        <v-stepper-content step="3">       
           <!-- Type de bien -->
-          <v-select :items="typeOfAccomodationList" v-model="accomodation.type" label="Type de bien" multi-line bottom></v-select>        
+<!--           <v-select :items="listOfAccomodationTypes" v-model="accomodation.type" label="Type de bien" item-value="_id" item-text="frname" multi-line bottom></v-select>         -->
           <v-layout row wrap>         
           <!-- Capacité d'accueil -->
           <v-flex xs12>
           <v-subheader>Capacité d'accueil</v-subheader>
           </v-flex>   
           <v-flex xs9>
-         <v-slider v-model="accomodation.maximumPeopleCount" min="1" max="20"></v-slider>
+         <v-slider v-model="accomodation.guests" min="1" max="20"></v-slider>
          </v-flex>
          <v-flex xs3>
-            <v-text-field v-model="accomodation.maximumPeopleCount" type="number"></v-text-field>
+            <v-text-field v-model="accomodation.guests" type="number"></v-text-field>
           </v-flex>      
          <!-- Nombre de lits -->
          <v-flex xs12>
@@ -75,7 +74,7 @@
          	<v-slider v-model="accomodation.beds" min="1" max="20" xs9></v-slider>
          </v-flex>
           <v-flex xs3>
-            <v-text-field v-model="accomodation.numberOfBeds" type="number"></v-text-field>
+            <v-text-field v-model="accomodation.beds" type="number"></v-text-field>
           </v-flex>       
           </v-layout> 
           <v-btn color="primary" @click.native="changeIndex(4)">Continue</v-btn>
@@ -83,10 +82,10 @@
         </v-stepper-content>
         
         <v-stepper-content step="4">
-          La liste des équipements proposés par le bien
+          EQUIPEMENTS
           <v-layout row wrap>
           <v-flex v-for="equipment in listOfEquipments" xs4>
-          	<v-switch v-model="accomodation.equipments" :label="equipment.label" :value="equipment.value"></v-switch>       
+          	<v-checkbox v-model="accomodation.equipments" :label="equipment.frname" :value="equipment"></v-checkbox>       
           </v-flex>
           </v-layout>
           <v-btn color="primary" @click.native="changeIndex(5)">Continue</v-btn>
@@ -94,10 +93,16 @@
         </v-stepper-content>
         
         <v-stepper-content step="5">
-          L'ensemble des espaces disponibles pour l'utilisateur au sein de la propriï¿½tï¿½, jardin, cuisine, jaccuzi, etc ..
+          ESPACES ACCESSIBLES
+          <v-layout row wrap>
+          <v-flex v-for="space in listOfAvailableSpaces" xs4>
+          	<v-checkbox v-model="accomodation.availableSpaces" :label="space.frname" :value="space"></v-checkbox>       
+          </v-flex>
+          </v-layout>
           <v-btn color="primary" @click.native="changeIndex(6)">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
+        
         <v-stepper-content step="6" >
         <v-jumbotron>
 		    <v-container fill-height>
@@ -114,7 +119,7 @@
   		</v-jumbotron>
   		<!-- LISTE DES PHOTOS -->	
 		<v-layout row wrap>
-		  	<v-flex xs12 lg4 xl3 v-for="picture in accomodationPictures" :key="picture.file.name">
+		  	<v-flex xs12 lg4 xl3 v-for="picture in accomodation.pictures" :key="picture.file.name">
 			  	<v-card class="ma-3">		  		
 			  	<v-card-media :src="picture.url" height="200px"></v-card-media>			  	
 			  	<v-card-actions class="blue">
@@ -136,9 +141,8 @@
         
          <v-stepper-content step="7">
           <div>
-          Ici, le titre de l'annonce. Donner une description personnalisée, du bien, ce qui le rend atypique, '
-          <v-text-field label="Titre de l'annonce"></v-text-field>
-          <v-text-field label="Description" multi-line></v-text-field>   
+          	<v-text-field v-model="accomodation.name" label="Titre de l'annonce"></v-text-field>
+          	<v-text-field v-model="accomodation.description" label="Description" multi-line></v-text-field>   
           </div>
           <v-btn color="primary" @click.native="changeIndex(8)">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
@@ -152,11 +156,11 @@
         </v-stepper-content>
         
          <v-stepper-content step="9">
-          Quelles rï¿½gles appliquer, adaptï¿½ aux bï¿½bï¿½s, fumeur ... Et ï¿½galement les infos ï¿½ connaitre sur le logement ,zone inondable, animaux dangereux, armes etc
-          <v-layout>
-          	<v-flex xs6 v-for="rule in availableRules">
-          		<v-switch v-model="selectedRules" :value="rule.value" :label="rule.label" ></v-switch>
-          	</v-flex>
+			REGLEMENT
+          <v-layout row wrap>
+	      	<v-flex v-for="rule in listOfAvailableRules" xs4>
+	        	<v-switch v-model="accomodation.requirements" :label="rule.frname" :value="rule"></v-switch>       
+	        </v-flex>
           </v-layout>
           <v-btn color="primary" @click.native="changeIndex(10)">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
@@ -169,8 +173,8 @@
         </v-stepper-content>
         
          <v-stepper-content step="11">
-          Explications dï¿½taillï¿½es sur le calendrier
-          <v-btn color="primary" @click.native="changeIndex(12)">Continue</v-btn>
+          CALENDRIER
+          <v-btn color="primary" @click="onValidate()">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         
@@ -179,6 +183,34 @@
     </v-stepper>
 		
 	</div>
+	
+	<!-- Le dialog de récupération du bien déjà commencé mais pas fini (si il y en a un) -->
+	
+	<v-dialog v-model="restoreAccomodation" max-width="500px">
+        <v-card>
+          <v-card-title>
+            REPRENDRE LA CREATION DU BIEN
+          </v-card-title>
+          <v-card-text>
+          	Vous aviez déjà commencé la création d'un bien, voulez vous reprendre la ou vous en étiez ?
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" @click="onRestoreAccomodation(false)" flat>NON</v-btn>
+            <v-btn color="primary" @click="onRestoreAccomodation(true)" flat>OUI</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      
+      <v-snackbar
+      :timeout="6000"
+      v-model="snackbar.show"
+      right
+      bottom
+    >
+      {{ snackbar.text }}
+      <v-btn flat color="blue" @click.native="snackbar.show = false">Close</v-btn>
+    </v-snackbar>
+	
 	
 </div>
 </template>
@@ -196,32 +228,51 @@ export default {
 		Gmaps,
 	},
 	mounted: function () {
-		ListService.fetchList("equipment", this.listOfEquipments);
+		//On récupère l'accomodation stockée
+		if (this.$ls.get("accomodation") != null)
+			this.restoreAccomodation = true;
+		ListService.fetchList("accomodationTypes", this.listOfAccomodationTypes);
+		ListService.fetchList("accomodationEquipements", this.listOfEquipments);
+		ListService.fetchList("accomodationAvailableSpaces", this.listOfAvailableSpaces);
+		ListService.fetchList("accomodationRules", this.listOfAvailableRules);
 	},
 	data: function() {
 		return {
 			accomodation : new Accomodation(),
-			stepIndex: 1,
-			maxStep: 1,
+			stepIndex : 1,
+			maxStep : 1,
 			accomodationPictures : new Array(),
-			typeOfAccomodationList: [
-				{text:"dick"},
-				{text:"zizi"},
-			],
-			goodsAvailableForGuestList: [
-				{text:"douche"},
-				{text:"animaux acceptés"},
-			],
+			listOfAccomodationTypes : [],
 			listOfEquipments : [],
-			listOfEquipementsChoosen :[],
-			availableRules : [
-				{label: "fumeurs autorisés", value: "smoke"},
-				{label: "animaux autorisés", value: "animals"},
-			],
-			selectedRules : [],
+			listOfAvailableSpaces : [],
+			listOfAvailableRules : [],
+			restoreAccomodation : false,
+			snackbar : {
+				show : false,
+				text : "default",
+			},
 		}
 	},
 	methods: {
+		onValidate() {
+			this.$http.post("accomodation",	 {
+				type : 	this.accomodation.type,
+			}).then(response => {
+				if (response.status === 200) {
+					snackBar.text = "Modifications enregistrées";
+					snackBar.show = true;
+					this.$ls.remove("accomodation");
+				}
+			});
+		},
+		onRestoreAccomodation(restore) {
+			if (restore)
+				this.accomodation = this.$ls.get("accomodation");
+			else
+				this.accomodation = new Accomodation();
+			console.log(this.accomodation);
+			this.restoreAccomodation = false;
+		},
 		onDeleteImg(picture) {
 			this.accomodationPictures.splice(this.accomodationPictures.indexOf(picture), 1);
 		},
@@ -232,14 +283,19 @@ export default {
 			if (index == 2) {
 				this.$refs.gmaps.initMap();
 			}
+			//a chaque changement d'étape on fourre l'accomodation dans le localstorage
+			this.$ls.set("accomodation", this.accomodation);
 		},
 		onChooseImg(files) {
 			var reader = new FileReader();
-			var accomodRef = this.accomodationPictures;
+			//on fait une variable tampon pour pouvoir l'utiliser dans le onload 
+			//car je n'arrive pas à utiliser directement la variable de data
+			var accomodRef = this.accomodation.pictures;
 			reader.onload = function (e) {
 				accomodRef.push({
 					file: files.get('data'),
 					url: e.target.result,
+					isMain: false,
 				});
             };
             reader.readAsDataURL(files.get('data'));

@@ -6,6 +6,7 @@ class ListService {
 //		
 //	}
 	
+	//Permet de chercher une liste de combo depuis l'api. On populate directement la référence de la liste
 	static fetchList(flag, value) {
 		Vue.http.get("list/" + flag).then(response => {
 			if (response.status === 200) {
