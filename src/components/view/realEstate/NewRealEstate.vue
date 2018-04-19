@@ -292,6 +292,7 @@ export default {
 			//car je n'arrive pas à utiliser directement la variable de data
 			var accomodRef = this.accomodation.pictures;
 			reader.onload = function (e) {
+				//si l'image est la première alors isMain = true;
 				accomodRef.push({
 					file: files.get('data'),
 					url: e.target.result,

@@ -9,7 +9,7 @@
 			<v-flex v-if="unfinishedAccomodation != null" xs12 sm6 lg4 xl3>
 			
 				<v-card >
-			        <v-card-media :src="getUnfinishedMainPictureUrl()" height="200px">
+			        <v-card-media :src="getUnfinishedMainPictureUrl" height="200px">
 			        </v-card-media>
 			        <v-card-title primary-title>
 			          <div>
@@ -48,9 +48,11 @@ export default {
 		}
 	},
 	computed: {
-		getUnfinishedMainPictureUrl() {
-			if (this.unfinishedAccomodation != null)
-				return this.unfinishedAccomodation.pictures.filter(pic => pic.isMain)[0].url;
+		getUnfinishedMainPictureUrl : function () {
+			if (this.unfinishedAccomodation != null) {
+				console.log(this.unfinishedAccomodation.pictures.filter(pic => pic.isMain))
+				return this.unfinishedAccomodation.pictures.filter(pic => pic.isMain).url;
+			}
 		},
 	},
  	methods: {
