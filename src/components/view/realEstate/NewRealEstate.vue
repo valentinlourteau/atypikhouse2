@@ -199,6 +199,29 @@
           CALENDRIER
           
           <v-layout row wrap>
+
+          <!-- Durée minimale de séjour -->
+          <v-flex xs12>
+         	<v-subheader>Durée minimale de séjour (jours)</v-subheader>
+         	</v-flex>
+          <v-flex xs9>
+         	<v-slider v-model="accomodation.durationmin" min="1" max="360" xs9></v-slider>
+         </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="accomodation.durationmin" type="number"></v-text-field>
+          </v-flex>
+          
+          <!-- Durée maximale de séjour -->
+          <v-flex xs12>
+         	<v-subheader>Durée maximale de séjour (jours)</v-subheader>
+         	</v-flex>
+          <v-flex xs9>
+         	<v-slider v-model="accomodation.durationmax" min="1" max="360" xs9></v-slider>
+         </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="accomodation.durationmax" type="number"></v-text-field>
+          </v-flex>
+          
           <!-- Heure d'arrivée -->
           <v-flex xs12>
          	<v-subheader>Heure limite d'arrivée</v-subheader>
@@ -219,7 +242,7 @@
          </v-flex>
           <v-flex xs3>
             <v-text-field v-model="accomodation.departure" type="number"></v-text-field>
-          </v-flex>  
+          </v-flex>
           
           </v-layout>
           
@@ -310,6 +333,7 @@ export default {
 	},
 	methods: {
 		onValidate() {
+			this.$ls.set("accomodation", this.accomodation);
 			this.$http.post("accomodation",	 {
 				"type" : this.accomodation.type,
 				"equipments" : this.accomodation.equipments,
