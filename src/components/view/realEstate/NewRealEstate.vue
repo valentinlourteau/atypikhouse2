@@ -38,7 +38,7 @@
           	<p>Nous sommes fier de vous permettre de promouvoir notre passion pour la découverte, le voyage, et nous pensons que les logements atypiques contribuent à ces valeurs.
           	Nous vous assisterons tout au long du processus de création de votre bien sur le site. Et vous apporterons, nous l'ésperons,  toutes les précisions nécessaires pour mener à bien le processus de création.
           	</p>
-          	<p>Pour votre confort, nous enregistrons automatiquement les étapes pour vos prochaines connexions.</p>          	
+          	<p>Pour votre confort, nous enregistrons automatiquement votre annonce au fur et à mesure que vous complétez les étapes, de sorte à pouvoir reprendre la saisie si vous ne pouvez pas tout faire en une fois.</p>          	
           	<p>Voila, vous savez tous ! On commence ?</p>
           <v-btn color="primary" @click.native="changeIndex(2);">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
@@ -68,14 +68,35 @@
           </v-flex>      
          <!-- Nombre de lits -->
          <v-flex xs12>
-         	<v-subheader>Nombre de couchages</v-subheader>
+         	<v-subheader>Nombre de couchages (un fauteuil une place, ça ne compte pas !)</v-subheader>
          </v-flex>
          <v-flex xs9>
          	<v-slider v-model="accomodation.beds" min="1" max="20" xs9></v-slider>
          </v-flex>
           <v-flex xs3>
             <v-text-field v-model="accomodation.beds" type="number"></v-text-field>
-          </v-flex>       
+          </v-flex>
+          <!-- Nombre de chambres --> 
+          <v-flex xs12>
+         	<v-subheader>Nombre de chambres</v-subheader>
+         </v-flex>
+         <v-flex xs9>
+         	<v-slider v-model="accomodation.bedrooms" min="1" max="20" xs9></v-slider>
+         </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="accomodation.bedrooms" type="number"></v-text-field>
+          </v-flex>  
+          <!-- Nombre de salles de bains -->
+          <v-flex xs12>
+         	<v-subheader>Nombre de salles de bains</v-subheader>
+         </v-flex>
+         <v-flex xs9>
+         	<v-slider v-model="accomodation.bathrooms" min="1" max="20" xs9></v-slider>
+         </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="accomodation.bathrooms" type="number"></v-text-field>
+          </v-flex>  
+                 
           </v-layout> 
           <v-btn color="primary" @click.native="changeIndex(4)">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
@@ -104,7 +125,7 @@
         </v-stepper-content>
         
         <v-stepper-content step="6" >
-        <v-jumbotron>
+        <v-jumbotron height="300px">
 		    <v-container fill-height>
 		      <v-layout align-center>
 		        <v-flex>
@@ -117,24 +138,26 @@
 		      </v-layout>
 		    </v-container>		
   		</v-jumbotron>
+  		
   		<!-- LISTE DES PHOTOS -->	
 		<v-layout row wrap>
-		  	<v-flex xs12 lg4 xl3 v-for="picture in accomodation.pictures" :key="picture.file.name">
+		  	<v-flex xs12 lg4 xl3 v-for="picture in accomodation.pictures" :key="picture.fileName">
 			  	<v-card class="ma-3">		  		
 			  	<v-card-media :src="picture.url" height="200px"></v-card-media>			  	
 			  	<v-card-actions class="blue">
-			  	  <div class="cut-text white--text">{{picture.file.name}}</div>
+			  	  <div class="cut-text white--text">{{picture.fileName}}</div>
                   <v-spacer></v-spacer>
-                  <v-btn icon>
-                    <v-icon color="white">star</v-icon>
+                  <v-btn @click="onSetPictureIsMain(picture)" icon>
+                    <v-icon :color="picture.isMain ? 'yellow' : 'white'">star</v-icon>
                   </v-btn>
-                  <v-btn icon @click="onDeleteImg(picture)">
+                  <v-btn @click="onDeleteImg(picture)" icon>
                     <v-icon color="white" >delete</v-icon>
                   </v-btn>
                 </v-card-actions>	
 			  	</v-card>
 		       </v-flex>
-	    </v-layout>         
+	    </v-layout>     
+	        
           <v-btn color="primary" @click.native="changeIndex(7)">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
@@ -159,7 +182,7 @@
 			REGLEMENT
           <v-layout row wrap>
 	      	<v-flex v-for="rule in listOfAvailableRules" xs4>
-	        	<v-switch v-model="accomodation.requirements" :label="rule.frname" :value="rule"></v-switch>       
+	        	<v-checkbox v-model="accomodation.requirements" :label="rule.frname" :value="rule"></v-checkbox>           
 	        </v-flex>
           </v-layout>
           <v-btn color="primary" @click.native="changeIndex(10)">Continue</v-btn>
@@ -174,6 +197,33 @@
         
          <v-stepper-content step="11">
           CALENDRIER
+          
+          <v-layout row wrap>
+          <!-- Heure d'arrivée -->
+          <v-flex xs12>
+         	<v-subheader>Heure limite d'arrivée</v-subheader>
+         	</v-flex>
+          <v-flex xs9>
+         	<v-slider v-model="accomodation.arrival" min="1" max="24" xs9></v-slider>
+         </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="accomodation.arrival" type="number"></v-text-field>
+          </v-flex>  
+          
+          <!-- Heure de départ -->
+          <v-flex xs12>
+         	<v-subheader>Heure limite de départ</v-subheader>
+         	</v-flex>
+          <v-flex xs9>
+         	<v-slider v-model="accomodation.departure" min="1" max="24" xs9></v-slider>
+         </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="accomodation.departure" type="number"></v-text-field>
+          </v-flex>  
+          
+          </v-layout>
+          
+          
           <v-btn color="primary" @click="onValidate()">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
@@ -231,6 +281,12 @@ export default {
 		//On récupère l'accomodation stockée
 		if (this.$ls.get("accomodation") != null)
 			this.restoreAccomodation = true;
+		else
+			this.accomodation._userId = this.$ls.get("user")._id;
+		
+		console.log(this.accomodation)
+		
+		//Chargement des combo
 		ListService.fetchList("accomodationTypes", this.listOfAccomodationTypes);
 		ListService.fetchList("accomodationEquipements", this.listOfEquipments);
 		ListService.fetchList("accomodationAvailableSpaces", this.listOfAvailableSpaces);
@@ -241,7 +297,6 @@ export default {
 			accomodation : new Accomodation(),
 			stepIndex : 1,
 			maxStep : 1,
-			accomodationPictures : new Array(),
 			listOfAccomodationTypes : [],
 			listOfEquipments : [],
 			listOfAvailableSpaces : [],
@@ -256,7 +311,24 @@ export default {
 	methods: {
 		onValidate() {
 			this.$http.post("accomodation",	 {
-				type : 	this.accomodation.type,
+				"type" : this.accomodation.type,
+				"equipments" : this.accomodation.equipments,
+				"requirements" : this.accomodation.requirements,
+				"arrival" : this.accomodation.arrival,
+				"departure" : this.accomodation.departure,
+				"name" : this.accomodation.name,
+				"room" : this.accomodation.room,
+				"description" : this.accomodation.description,
+				"city" : this.accomodation.city,
+				"street" : this.accomodation.street,
+				"apartment" : this.accomodation.apartment,
+				"zipcode" : this.accomodation.zipcode,
+				"durationmax" : this.accomodation.durationmax,
+				"durationmin" : this.accomodation.durationmin,
+				"guests" : this.accomodation.guests,
+				"bedrooms" : this.accomodation.bedrooms,
+				"bathrooms" : this.accomodation.bathrooms,
+				"beds" : this.accomodation.beds,
 			}).then(response => {
 				if (response.status === 200) {
 					snackBar.text = "Modifications enregistrées";
@@ -266,15 +338,27 @@ export default {
 			});
 		},
 		onRestoreAccomodation(restore) {
-			if (restore)
+			if (restore) {
 				this.accomodation = this.$ls.get("accomodation");
-			else
+				this.maxStep = this.accomodation.currentStep;
+				this.stepIndex = this.accomodation.currentStep;
+			}
+			else {
+				this.$ls.remove("accomodation");
 				this.accomodation = new Accomodation();
-			console.log(this.accomodation);
+				this.accomodation._userId = this.$ls.get("user")._id;
+			}
+			//pour fermer la popup
 			this.restoreAccomodation = false;
 		},
 		onDeleteImg(picture) {
-			this.accomodationPictures.splice(this.accomodationPictures.indexOf(picture), 1);
+			this.accomodation.pictures.splice(this.accomodation.pictures.indexOf(picture), 1);
+		},
+		onSetPictureIsMain(picture) {
+			for (let picture of this.accomodation.pictures) {
+				picture.isMain = false;
+			};
+			picture.isMain = true;
 		},
 		changeIndex(index) {
 			this.stepIndex = index;
@@ -283,20 +367,27 @@ export default {
 			if (index == 2) {
 				this.$refs.gmaps.initMap();
 			}
+			this.accomodation.currentStep = index;
 			//a chaque changement d'étape on fourre l'accomodation dans le localstorage
+			console.log(this.accomodation.pictures.length)
 			this.$ls.set("accomodation", this.accomodation);
 		},
 		onChooseImg(files) {
 			var reader = new FileReader();
 			//on fait une variable tampon pour pouvoir l'utiliser dans le onload 
-			//car je n'arrive pas à utiliser directement la variable de data
+			//car je n'arrive pas à utiliser directement la variable de data dans la callback
 			var accomodRef = this.accomodation.pictures;
 			reader.onload = function (e) {
+				let isMain = false;
+				let imgName = files.get('data').name;
+				console.log(imgName)
 				//si l'image est la première alors isMain = true;
+				if (accomodRef.length == 0)
+					isMain = true;
 				accomodRef.push({
-					file: files.get('data'),
+					fileName: imgName,
 					url: e.target.result,
-					isMain: false,
+					isMain: isMain,
 				});
             };
             reader.readAsDataURL(files.get('data'));

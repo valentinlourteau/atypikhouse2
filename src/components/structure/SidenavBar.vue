@@ -19,7 +19,7 @@
 	</div>
 	
 	<v-list>
-      <v-list-tile v-for="item in items" :key="item.title" @click="route(item.link)">
+      <v-list-tile v-if="$store.state.user != null && item.needUserAuth || !item.needUserAuth" v-for="item in items" :key="item.title" @click="route(item.link)">
         <v-list-tile-action>
           <v-icon >{{ item.icon }}</v-icon>
         </v-list-tile-action>
@@ -30,7 +30,7 @@
       
       <v-divider></v-divider>
       
-      <v-list-tile v-if="this.$store.state.user != null" @click="onClickDisconnect();">
+      <v-list-tile v-if="$store.state.user != null" @click="onClickDisconnect();">
         <v-list-tile-action>
           <v-icon >exit_to_app</v-icon>
         </v-list-tile-action>
@@ -57,9 +57,9 @@ export default {
 		      drawer: true,
 		      fixed: false,
 		      items: [
-		          { title: 'Mon compte', icon: 'account_circle', link: '/account'},
-		          { title: 'Mes biens atypiques', icon: 'account_box', link: '/realEstate/home'},
-		          { title: 'Mes voyages', icon: 'flight_takeoff', link: '/'},
+		          { title: 'Mon compte', icon: 'account_circle', link: '/account', needUserAuth: false},
+		          { title: 'Mes biens atypiques', icon: 'account_box', link: '/realEstate/home', needUserAuth: true},
+		          { title: 'Mes voyages', icon: 'flight_takeoff', link: '/', needUserAuth: true},
 		        ],
 		      miniVariant: false,
 		      right: true,

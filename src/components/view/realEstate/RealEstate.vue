@@ -9,17 +9,18 @@
 			<v-flex v-if="unfinishedAccomodation != null" xs12 sm6 lg4 xl3>
 			
 				<v-card >
-			        <v-card-media :src="getUnfinishedMainPictureUrl" height="200px">
+			        <v-card-media :src="getUnfinishedMainPictureUrl == null ? '/static/images/no_bkg_state.svg' : getUnfinishedMainPictureUrl" height="200px">
 			        </v-card-media>
 			        <v-card-title primary-title>
 			          <div>
-			            <h3 class="headline mb-0">Dans ma bulle</h3>
-			            <div>Située dans un jardin à l'abri des regards et de toutes pollutions sonores, notre bulle vous accueille ...</div>
+			            <h3 class="headline mb-0">{{unfinishedAccomodation.name != null ? unfinishedAccomodation.name : $t('accomodation.default.name') }}</h3>
+			            <div>{{unfinishedAccomodation.description != null ? unfinishedAccomodation.description : $t('accomodation.default.description') }}</div>
 			          </div>
 			        </v-card-title>
 			        <v-card-actions>
-			          <v-btn flat color="blue">DETAIL</v-btn>
-			          <v-btn flat color="blue">DISPONIBILITES</v-btn>
+			          <v-btn flat color="blue" @click="onAddNewEstate()">REPRENDRE LA CREATION</v-btn>
+			          <v-spacer></v-spacer>
+			          <v-icon>{{ unfinishedAccomodation.actif ? 'visibility' : 'visibility_off' }}</v-icon>
 			        </v-card-actions>
       			</v-card>
 			
@@ -38,8 +39,9 @@ import Accomodation from '../../../class/entities/Accomodation';
 
 export default {
 	mounted: function () {
+// 		console.log(" ..... userId = " + this.$ls.get('user')._id + " ..... et accomodation.userId= " + this.$ls.get("accomodation")._userId)
 		console.log(this.$ls.get("accomodation"))
-		if (this.$ls.get("accomodation") != null)
+		if (this.$ls.get("accomodation") != null && this.$ls.get('user')._id == this.$ls.get("accomodation")._userId)
 			this.unfinishedAccomodation = this.$ls.get("accomodation");
 	},
 	data: function() {

@@ -100,6 +100,11 @@ import translationsFr from './resources/translations/translation_fr';
 
 Vue.use(vuexI18n.plugin, store);
 
+Vue.i18n.add('fr', translationsFr);
+Vue.i18n.add('en', translationsEn);
+
+Vue.i18n.set('fr');
+
 Vue.http.options.root = 'http://46.226.111.181:4040/api/';
 Vue.http.options.rejectUnauthorized = false;
 Vue.http.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get("token");

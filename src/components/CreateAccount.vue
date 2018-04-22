@@ -9,7 +9,7 @@
       <div slot="body">
 
         <v-text-field v-model="newUser.email" type="email" class="validate" required="required" label="Email" />
-      <v-text-field  v-model="newUser.firstname" type="text" class="validate" required="required" label="Prénom"/>
+      <v-text-field  v-model="newUser.firstname" type="text" class="validate" required="required" label="PrÃ©nom"/>
         <v-text-field v-model="newUser.lastname" type="text" class="validate" required="required" label="Nom"/>
       
       <v-text-field
@@ -21,7 +21,7 @@
         ></v-text-field>
         <v-date-picker v-model="selectedDate" no-title scrollable actions></v-date-picker>
       
-      <v-alert value="true" color="success">{{ equalsPasswordSeverity === 'warning' ? 'Les deux mots de passe doivent être égaux' : 'Mot de passe confirmé' }}</v-alert>
+      <v-alert value="true" color="success">{{ equalsPasswordSeverity === 'warning' ? 'Les deux mots de passe doivent Ãªtre Ã©gaux' : 'Mot de passe confirmÃ©' }}</v-alert>
       
       <v-text-field v-validate="{ required: true, regex: '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})' }" 
       name="password1" id="password" v-model="newUser.password" type="password" required="required" />
@@ -60,7 +60,7 @@ export default {
 	watch: { 
     },
 	methods: {
-		//Permet de vérifier que les mots de passe saisis respectent une sécurité minimale
+		//Permet de vï¿½rifier que les mots de passe saisis respectent une sï¿½curitï¿½ minimale
 		checkPasswordsAreEquals() {
 			if (this.verifPassword === this.newUser.password) {
 				console.log("je change l'icone");
@@ -69,7 +69,7 @@ export default {
 			else if (this.verifPassword !== this.newUser.password && this.equalsPasswordSeverity)
 				this.equalsPasswordSeverity = 'warning';
 		},
-		//Permet de créer un nouvel utilisateur
+		//Permet de crï¿½er un nouvel utilisateur
 		queryCreateNewUser() {
 			//this.$validator.validateAll();
 	        //if (!this.errors.any()) {
@@ -84,7 +84,7 @@ export default {
 					this.$emit("close");
 // 					M.toast( { html: 'Bienvenue parmis nous ' + this.newUser.firstname + ' !' } )
 					setTimeout(function () {
-// 						M.toast(  { html: 'Ton compte a bien été crée' } );
+// 						M.toast(  { html: 'Ton compte a bien ï¿½tï¿½ crï¿½e' } );
 					}, 2000);
 				}
 				else

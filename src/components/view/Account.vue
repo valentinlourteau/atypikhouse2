@@ -89,11 +89,6 @@
 import User from '../../class/entities/User';
 
 export default {
-	mounted: function() {
-		var elem = document.querySelectorAll('.scrollspy');
-		var instance = M.ScrollSpy.init(elem, null);
-		M.updateTextFields();
-	},
 	data: function() {
 		return {
 			user: Object.assign({}, this.$store.state.user),
