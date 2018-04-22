@@ -282,7 +282,7 @@ export default {
 		if (this.$ls.get("accomodation") != null)
 			this.restoreAccomodation = true;
 		else
-			this.accomodation._userId = this.$ls.get("user")._id;
+			this.accomodation._userId = this.$ls.get("user").id;
 		
 		console.log(this.accomodation)
 		
@@ -346,7 +346,7 @@ export default {
 			else {
 				this.$ls.remove("accomodation");
 				this.accomodation = new Accomodation();
-				this.accomodation._userId = this.$ls.get("user")._id;
+				this.accomodation._userId = this.$ls.get("user").id;
 			}
 			//pour fermer la popup
 			this.restoreAccomodation = false;

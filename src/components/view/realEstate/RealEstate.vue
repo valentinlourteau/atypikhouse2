@@ -39,9 +39,9 @@ import Accomodation from '../../../class/entities/Accomodation';
 
 export default {
 	mounted: function () {
-// 		console.log(" ..... userId = " + this.$ls.get('user')._id + " ..... et accomodation.userId= " + this.$ls.get("accomodation")._userId)
+		console.log(" ..... userId = " + this.$ls.get('user').id + " ..... et accomodation.userId= " + this.$ls.get("accomodation")._userId)
 		console.log(this.$ls.get("accomodation"))
-		if (this.$ls.get("accomodation") != null && this.$ls.get('user')._id == this.$ls.get("accomodation")._userId)
+		if (this.$ls.get("accomodation") != null && this.$ls.get('user').id == this.$ls.get("accomodation")._userId)
 			this.unfinishedAccomodation = this.$ls.get("accomodation");
 	},
 	data: function() {
@@ -51,9 +51,10 @@ export default {
 	},
 	computed: {
 		getUnfinishedMainPictureUrl : function () {
-			if (this.unfinishedAccomodation != null) {
-				console.log(this.unfinishedAccomodation.pictures.filter(pic => pic.isMain))
-				return this.unfinishedAccomodation.pictures.filter(pic => pic.isMain).url;
+			if (this.unfinishedAccomodation != null && this.unfinishedAccomodation.pictures.length >= 1) {
+				//on garde uniquement l'image principale
+				this.unfinishedAccomodation.pictures.filter(pic => pic.isMain);
+				return this.unfinishedAccomodation.pictures[0].url;
 			}
 		},
 	},
