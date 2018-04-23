@@ -6,27 +6,23 @@
 	<v-stepper v-model="stepIndex">
 		 
       <v-stepper-header>
-        <v-stepper-step step="1" :complete="maxStep > 0" :editable="maxStep > 0">Préambule</v-stepper-step>
+        <v-stepper-step step="1" :complete="maxStep > 0" :editable="maxStep > 0">{{$t('accomodation.stepper.step.1')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete="maxStep > 1" :editable="maxStep > 1">Pour démarrer</v-stepper-step>
+        <v-stepper-step step="2" :complete="maxStep > 1" :editable="maxStep > 1">{{$t('accomodation.stepper.step.2')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="3" :complete="maxStep > 2" :editable="maxStep > 2">L'essentiel</v-stepper-step>
+        <v-stepper-step step="3" :complete="maxStep > 2" :editable="maxStep > 2">{{$t('accomodation.stepper.step.3')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="4" :complete="maxStep > 3" :editable="maxStep > 3">Equipements</v-stepper-step>
+        <v-stepper-step step="4" :complete="maxStep > 3" :editable="maxStep > 3">{{$t('accomodation.stepper.step.4')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="5" :complete="maxStep > 4" :editable="maxStep > 4">Espaces accessibles</v-stepper-step>
+        <v-stepper-step step="5" :complete="maxStep > 4" :editable="maxStep > 4">{{$t('accomodation.stepper.step.5')}}s</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="6" :complete="maxStep > 5" :editable="maxStep > 5">Avant de finir</v-stepper-step>
+        <v-stepper-step step="6" :complete="maxStep > 5" :editable="maxStep > 5">{{$t('accomodation.stepper.step.6')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="7" :complete="maxStep > 6" :editable="maxStep > 6">Le mot de la fin</v-stepper-step>
+        <v-stepper-step step="7" :complete="maxStep > 6" :editable="maxStep > 6">{{$t('accomodation.stepper.step.7')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="8" :complete="maxStep > 7" :editable="maxStep > 7">Pour accueillir</v-stepper-step>
+        <v-stepper-step step="8" :complete="maxStep > 7" :editable="maxStep > 7">{{$t('accomodation.stepper.step.8')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="9" :complete="maxStep > 8" :editable="maxStep > 8">Réglement</v-stepper-step>
-        <v-divider></v-divider>
-        <v-stepper-step step="10" :complete="maxStep > 9" :editable="maxStep > 9">Qui peut réserver ?</v-stepper-step>
-        <v-divider></v-divider>
-        <v-stepper-step step="11" :complete="maxStep > 10" :editable="maxStep > 10">Calendrier</v-stepper-step>
+        <v-stepper-step step="9" :complete="maxStep > 8" :editable="maxStep > 8">{{$t('accomodation.stepper.step.9')}}</v-stepper-step>
       </v-stepper-header>
       
       <v-stepper-items>
@@ -45,16 +41,30 @@
         </v-stepper-content>
         
         <v-stepper-content step="2">   
-          <gmaps ref="gmaps" @pickAdress="onPickAdress($event)"></gmaps>      
+          <gmaps ref="gmaps" @onChooseAddress="onPickAdress($event)"></gmaps>      
           </br>
 <!--           <v-text-field label="Appartement, bâtiment, résidence (facultatif)" v-model="accomodation.complementAdresse"></v-text-field> -->
           <v-btn color="primary" @click.native="changeIndex(3)">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         
-        <v-stepper-content step="3">       
+        <v-stepper-content step="3">  
+        
+          Bien          
+          <v-layout row wrap>
+	      	<v-flex v-for="room in listOfRoomsMode" :key="room.value" xs4>
+	        	<v-checkbox v-model="accomodation.room" :label="$t(room.code)" :value="room.value"></v-checkbox>           
+	        </v-flex>
+          </v-layout>
+             
           <!-- Type de bien -->
-<!--           <v-select :items="listOfAccomodationTypes" v-model="accomodation.type" label="Type de bien" item-value="_id" item-text="frname" multi-line bottom></v-select>         -->
+          Type de bien          
+          <v-layout row wrap>
+	      	<v-flex v-for="type in listOfAccomodationTypes" :key="type._id" xs4>
+	        	<v-checkbox v-model="accomodation.type" :label="type.frname" :value="type._id"></v-checkbox>           
+	        </v-flex>
+          </v-layout>
+          
           <v-layout row wrap>         
           <!-- Capacité d'accueil -->
           <v-flex xs12>
@@ -105,8 +115,8 @@
         <v-stepper-content step="4">
           EQUIPEMENTS
           <v-layout row wrap>
-          <v-flex v-for="equipment in listOfEquipments" xs4>
-          	<v-checkbox v-model="accomodation.equipments" :label="equipment.frname" :value="equipment"></v-checkbox>       
+          <v-flex v-for="equipment in listOfEquipments" :key="equipment._id" xs4>
+          	<v-checkbox v-model="accomodation.equipments" :label="equipment.frname" :value="equipment._id"></v-checkbox>       
           </v-flex>
           </v-layout>
           <v-btn color="primary" @click.native="changeIndex(5)">Continue</v-btn>
@@ -116,8 +126,8 @@
         <v-stepper-content step="5">
           ESPACES ACCESSIBLES
           <v-layout row wrap>
-          <v-flex v-for="space in listOfAvailableSpaces" xs4>
-          	<v-checkbox v-model="accomodation.availableSpaces" :label="space.frname" :value="space"></v-checkbox>       
+          <v-flex v-for="space in listOfAvailableSpaces" :key="space._id" xs4>
+          	<v-checkbox v-model="accomodation.spaces" :label="space.frname" :value="space._id"></v-checkbox>       
           </v-flex>
           </v-layout>
           <v-btn color="primary" @click.native="changeIndex(6)">Continue</v-btn>
@@ -125,7 +135,7 @@
         </v-stepper-content>
         
         <v-stepper-content step="6" >
-        <v-jumbotron height="300px">
+        <v-jumbotron height="400px">
 		    <v-container fill-height>
 		      <v-layout align-center>
 		        <v-flex>
@@ -141,9 +151,9 @@
   		
   		<!-- LISTE DES PHOTOS -->	
 		<v-layout row wrap>
-		  	<v-flex xs12 lg4 xl3 v-for="picture in accomodation.pictures" :key="picture.fileName">
+		  	<v-flex xs6 lg4 xl3 v-for="picture in accomodation.pictures" :key="picture.fileName">
 			  	<v-card class="ma-3">		  		
-			  	<v-card-media :src="picture.url" height="200px"></v-card-media>			  	
+			  	<v-card-media :src="picture.data" height="200px"></v-card-media>			  	
 			  	<v-card-actions class="blue">
 			  	  <div class="cut-text white--text">{{picture.fileName}}</div>
                   <v-spacer></v-spacer>
@@ -172,31 +182,17 @@
         </v-stepper-content>
         
          <v-stepper-content step="8">
-          Explications gï¿½nï¿½rales (explications plus prï¿½cises sur les pages concernï¿½es) sur la tarification, calendrier, comment accueillir le visiteur. Explications sur les obligations ï¿½ remplir par
-          le visiteur pour pouvoir louer le bien, typiquement numï¿½ro de tï¿½lï¿½phone vï¿½rifiï¿½, informations de payement, carte d'identitï¿½... Possiblitï¿½ d'ajotuer des contrainte supplï¿½mentaires, ID, Recommandations ..
+			<v-subheader>Règlement</v-subheader>
+          <v-layout row wrap>
+	      	<v-flex v-for="rule in listOfAvailableRules" :key="rule._id" xs4>
+	        	<v-checkbox v-model="accomodation.requirements" :label="rule.frname" :value="rule._id"></v-checkbox>           
+	        </v-flex>
+          </v-layout>
           <v-btn color="primary" @click.native="changeIndex(9)">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         
          <v-stepper-content step="9">
-			REGLEMENT
-          <v-layout row wrap>
-	      	<v-flex v-for="rule in listOfAvailableRules" xs4>
-	        	<v-checkbox v-model="accomodation.requirements" :label="rule.frname" :value="rule"></v-checkbox>           
-	        </v-flex>
-          </v-layout>
-          <v-btn color="primary" @click.native="changeIndex(10)">Continue</v-btn>
-          <v-btn flat>Cancel</v-btn>
-        </v-stepper-content>
-        
-         <v-stepper-content step="10">
-          Rï¿½capitulatif sur qui peut rï¿½server et comment, infos en plus...
-          <v-btn color="primary" @click.native="changeIndex(11)">Continue</v-btn>
-          <v-btn flat>Cancel</v-btn>
-        </v-stepper-content>
-        
-         <v-stepper-content step="11">
-          CALENDRIER
           
           <v-layout row wrap>
 
@@ -223,31 +219,22 @@
           </v-flex>
           
           <!-- Heure d'arrivée -->
-          <v-flex xs12>
+          <v-flex xs6>
          	<v-subheader>Heure limite d'arrivée</v-subheader>
-         	</v-flex>
-          <v-flex xs9>
-         	<v-slider v-model="accomodation.arrival" min="1" max="24" xs9></v-slider>
-         </v-flex>
-          <v-flex xs3>
-            <v-text-field v-model="accomodation.arrival" type="number"></v-text-field>
+          	<v-time-picker v-model="accomodation.arrival"></v-time-picker>
           </v-flex>  
           
           <!-- Heure de départ -->
-          <v-flex xs12>
+          <v-flex xs6>
          	<v-subheader>Heure limite de départ</v-subheader>
-         	</v-flex>
-          <v-flex xs9>
-         	<v-slider v-model="accomodation.departure" min="1" max="24" xs9></v-slider>
-         </v-flex>
-          <v-flex xs3>
-            <v-text-field v-model="accomodation.departure" type="number"></v-text-field>
-          </v-flex>
+          	<v-time-picker v-model="accomodation.departure"></v-time-picker>
+          </v-flex>  
           
           </v-layout>
           
+          <br/>
           
-          <v-btn color="primary" @click="onValidate()">Continue</v-btn>
+          <v-btn color="primary" @click="onValidate()">Valider</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         
@@ -302,7 +289,7 @@ export default {
 	},
 	mounted: function () {
 		//On récupère l'accomodation stockée
-		if (this.$ls.get("accomodation") != null)
+		if (this.$ls.get("accomodation") != null && this.$ls.get('user').id == this.$ls.get("accomodation")._userId)
 			this.restoreAccomodation = true;
 		else
 			this.accomodation._userId = this.$ls.get("user").id;
@@ -317,9 +304,16 @@ export default {
 	},
 	data: function() {
 		return {
+			loading: false,
+			search: null,
+	        select: '',
 			accomodation : new Accomodation(),
 			stepIndex : 1,
 			maxStep : 1,
+			listOfRoomsMode : [
+				{code: "acomodation.room.mode.full", value: 'full'},
+				{code: "acomodation.room.mode.room", value: 'room'},
+			],
 			listOfAccomodationTypes : [],
 			listOfEquipments : [],
 			listOfAvailableSpaces : [],
@@ -333,8 +327,10 @@ export default {
 	},
 	methods: {
 		onValidate() {
+			var vue = this;
 			this.$ls.set("accomodation", this.accomodation);
 			this.$http.post("accomodation",	 {
+				"host" : this.accomodation._userId,
 				"type" : this.accomodation.type,
 				"equipments" : this.accomodation.equipments,
 				"requirements" : this.accomodation.requirements,
@@ -353,11 +349,16 @@ export default {
 				"bedrooms" : this.accomodation.bedrooms,
 				"bathrooms" : this.accomodation.bathrooms,
 				"beds" : this.accomodation.beds,
+				"images" : this.accomodation.pictures,
 			}).then(response => {
 				if (response.status === 200) {
-					snackBar.text = "Modifications enregistrées";
-					snackBar.show = true;
+					this.snackbar.text = "Modifications enregistrées";
+					this.snackbar.show = true;
 					this.$ls.remove("accomodation");
+					setTimeout(function () {
+						vue.snackbar.text = "Nous allons vous rediriger vers le détail";
+						vue.snackbar.show = true;
+					}, 1500);
 				}
 			});
 		},
@@ -410,16 +411,37 @@ export default {
 					isMain = true;
 				accomodRef.push({
 					fileName: imgName,
-					url: e.target.result,
+					data: e.target.result,
 					isMain: isMain,
 				});
             };
             reader.readAsDataURL(files.get('data'));
 		},
 		onPickAdress(adress) {
-			this.accomodation.adress = adresse;
-		}
-		//Déplacer ça dans un composant
+				var comps = Array.from(adress);
+				
+	 			var filterArray = comps.filter(comp => comp.types.includes('postal_code'));
+	 			if (filterArray.length > 0)
+	 				this.accomodation.zipcode = filterArray[0].long_name;
+	 			else
+	 				this.accomodation.zipcode = "";
+	 			
+	 			filterArray = comps.filter(comp => comp.types.includes('locality'));
+	 			if (filterArray.length > 0)
+	 				this.accomodation.city = filterArray[0].long_name;
+	 			else
+	 				this.accomodation.city = "";
+	 			
+	 			filterArray = comps.filter(comp => comp.types.includes('street_number'));
+	 			if (filterArray.length > 0)
+	 				this.accomodation.street = filterArray[0].long_name;
+	 			else
+	 				this.accomodation.street = "";
+	 			
+	 			filterArray = comps.filter(comp => comp.types.includes('route'));
+	 			if (filterArray.length > 0)
+	 				this.accomodation.street += (" " + filterArray[0].long_name);
+		},
 	},
 };
 </script>

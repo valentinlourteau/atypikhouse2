@@ -3,7 +3,6 @@
     <v-text-field id="location-input" label="Adresse du bien" class="controls" type="text"
         	placeholder="Sélectionnez votre adresse"></v-text-field>
           <div id="map" style="height:300px;"></div>
-    <v-btn @click="emitAdress()">Valider</v-btn>
     </div>
 </template>
 
@@ -15,27 +14,28 @@ export default {
         	},
         	initMap() {
 				var map;
+				var vue = this;
 				GoogleMapsLoader.load(function(google) {
 				    map = new google.maps.Map(document.getElementById('map'), {
 				          center: {lat: -34.397, lng: 150.644},
 				          zoom: 8
 				        });
-				    console.log("map " + map)
+// 				    console.log("map " + map)
 				    
 					var input = /** @type {!HTMLInputElement} */(
 				            document.getElementById('location-input'));
-					console.log("input " + input)
+// 					console.log("input " + input)
 					var autocomplete = new google.maps.places.Autocomplete(input);
-					console.log("autocomplete " + autocomplete)
+// 					console.log("autocomplete " + autocomplete)
 
 					var infowindow = new google.maps.InfoWindow();
-					console.log("infowindow " + infowindow)
+// 					console.log("infowindow " + infowindow)
 
 			        var marker = new google.maps.Marker({
 			          map: map,
 			          anchorPoint: new google.maps.Point(0, -29)
 			        });
-					console.log("marker " + marker)
+// 					console.log("marker " + marker)
 			        
 			        autocomplete.addListener('place_changed', function() {
 			            infowindow.close();
@@ -73,6 +73,10 @@ export default {
 			                (place.address_components[2] && place.address_components[2].short_name || '')
 			              ].join(' ');
 			            }
+			            
+			            //on émit l'addresse avec l'addresse, le zipcode, la ville
+			            vue.$emit("onChooseAddress", place.address_components);
+			            
 
 			            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
 			            infowindow.open(map, marker);

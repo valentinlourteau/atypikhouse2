@@ -4,7 +4,7 @@
     <sidenav-bar></sidenav-bar>
     <ah-header></ah-header>
     
-    <v-content>
+    <v-content class="blue lighten-5">
     
     <router-view></router-view>
     

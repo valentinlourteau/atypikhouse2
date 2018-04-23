@@ -5,7 +5,7 @@
 	<div class="container" style="margin-top: 24px;">
 	<v-container>
 		<v-layout row wrap>
-    	<v-flex xs12 sm6 lg4 xl3 v-for="i in 9" style="padding:16px;">
+    	<v-flex xs12 sm6 lg4 xl3 v-for="i in 9" :key="i" style="padding:16px;">
       <v-card >
         <v-card-media src="/static/images/bulle.png" height="200px">
         </v-card-media>
