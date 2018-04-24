@@ -219,13 +219,13 @@
           </v-flex>
           
           <!-- Heure d'arrivée -->
-          <v-flex xs6>
+          <v-flex xs12 md6>
          	<v-subheader>Heure limite d'arrivée</v-subheader>
           	<v-time-picker v-model="accomodation.arrival"></v-time-picker>
           </v-flex>  
           
           <!-- Heure de départ -->
-          <v-flex xs6>
+          <v-flex xs12 md6>
          	<v-subheader>Heure limite de départ</v-subheader>
           	<v-time-picker v-model="accomodation.departure"></v-time-picker>
           </v-flex>  
@@ -350,6 +350,7 @@ export default {
 				"bathrooms" : this.accomodation.bathrooms,
 				"beds" : this.accomodation.beds,
 				"images" : this.accomodation.pictures,
+				"spaces" : this.accomodation.spaces,
 			}).then(response => {
 				if (response.status === 200) {
 					this.snackbar.text = "Modifications enregistrées";
@@ -358,6 +359,9 @@ export default {
 					setTimeout(function () {
 						vue.snackbar.text = "Nous allons vous rediriger vers le détail";
 						vue.snackbar.show = true;
+						setTimeout(function () {
+// 							vue.$router.push()
+						}, 1000)
 					}, 1500);
 				}
 			});

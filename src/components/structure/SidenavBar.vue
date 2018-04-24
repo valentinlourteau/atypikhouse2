@@ -1,8 +1,7 @@
 <template>
 <div>
 
-	<v-navigation-drawer persistent :mini-variant="miniVariant" :clipped="clipped" v-model="drawer" enable-resize-watcher fixed app
-	>
+	<v-navigation-drawer persistent :mini-variant="miniVariant" :clipped="clipped" v-model="drawer" enable-resize-watcher fixed app>
 
 	<div v-on:click="redirectHome()" class="user-view">
 		<div class="background">
