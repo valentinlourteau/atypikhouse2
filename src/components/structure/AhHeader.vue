@@ -2,13 +2,27 @@
 <div >
   
 	<v-toolbar class="primary">
-	    <v-toolbar-side-icon class="hidden-md-and-up"></v-toolbar-side-icon>
-	    <v-toolbar-title>AtypikHouse</v-toolbar-title>
+		<portal-target name="headerToolbarIcon"></portal-target>
+	    <v-toolbar-title @click="$router.push('/')">AtypikHouse</v-toolbar-title>
 	    <v-spacer></v-spacer>
 	    <v-toolbar-items class="hidden-sm-and-down">
 	      <v-btn @click="$router.push('/discover')" flat>Voyager</v-btn>
 	      <v-btn v-if="this.$store.state.user == null" flat @click="showModalAuthenticate = true">Connexion</v-btn>
-	          </v-toolbar-items>
+	    </v-toolbar-items>
+	    
+	    <v-menu :nudge-width="100">
+	    
+	    <v-btn icon slot="activator" dark>
+              <v-icon class="black--text">whatshot</v-icon>
+        </v-btn>
+	    
+        <v-list>
+          <v-list-tile v-for="item in socialNetworks" :key="item.text" @click="redirectOnSocialNewtork(item.url);">
+            <v-list-tile-title v-text="item.text"></v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+	    
 	</v-toolbar>
 
 	<authenticate :showModal="showModalAuthenticate" @close="showModalAuthenticate = false" @createAccount="showModalCreateAccount = true"></authenticate>
@@ -28,6 +42,11 @@ export default {
 		return {
 			showModalAuthenticate: false,
 			showModalCreateAccount: false,
+			socialNetworks: [
+				{text : "Facebook", url : "https://www.facebook.com/AtipykHouse/"},
+				{text : "Twitter", url : "https://twitter.com/AtypikHouseCo"},
+				{text : "Instagram", url : ""},
+			],
 		}
 	},
 	components: {
@@ -36,6 +55,9 @@ export default {
 	},
 	methods: {
 		openModal() {
+		},
+		redirectOnSocialNewtork(url) {
+			window.open(url, '_blank');
 		},
 		onSearchNewHome(e) {
 			if (e.keyCode === 13) {

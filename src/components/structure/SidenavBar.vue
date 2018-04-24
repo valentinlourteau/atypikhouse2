@@ -1,7 +1,11 @@
 <template>
 <div>
 
-	<v-navigation-drawer persistent :mini-variant="miniVariant" :clipped="clipped" v-model="drawer" enable-resize-watcher fixed app>
+	<portal v-if="$store.state.user != null" to="headerToolbarIcon">
+  		<v-toolbar-side-icon class="hidden-lg-and-up" @click.stop="displayDrawer = !displayDrawer"></v-toolbar-side-icon>
+	</portal>
+
+	<v-navigation-drawer v-if="$store.state.user != null" persistent v-model="displayDrawer" app>
 
 	<div v-on:click="redirectHome()" class="user-view">
 		<div class="background">
@@ -50,21 +54,17 @@
 
 export default {
 	mounted: function() {
+		
 	},
+	props: ["display"],
 	data: function() {
 		return {
-			clipped: false,
-		      drawer: true,
-		      fixed: false,
 		      items: [
 		          { title: 'Mon compte', icon: 'account_circle', link: '/account', needUserAuth: false},
 		          { title: 'Mes biens atypiques', icon: 'account_box', link: '/realEstate/home', needUserAuth: true},
 		          { title: 'Mes voyages', icon: 'flight_takeoff', link: '/', needUserAuth: true},
 		        ],
-		      miniVariant: false,
-		      right: true,
-		      rightDrawer: false,
-		      title: 'Vuetify.js',
+		        displayDrawer : true,
 		      avatarSize: '64px',
 		}
 	},
@@ -73,6 +73,7 @@ export default {
 	methods: {
 		onClickDisconnect() {
 			this.$store.commit("onSetUser", null);
+			this.$router.push("/");
 			//M.toast( {html: "On espère vous revoir bientôt !" } );
 		},
 		redirectHome() {

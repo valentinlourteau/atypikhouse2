@@ -11,6 +11,7 @@
     this.equipments = [];
     this.pictures = [];
     this.requirements = [];
+    this.spaces = [];
     this._userId;
     this.actif = false;
   }

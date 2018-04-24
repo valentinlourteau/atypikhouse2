@@ -73,11 +73,13 @@ export default {
 		queryCreateNewUser() {
 			//this.$validator.validateAll();
 	        //if (!this.errors.any()) {
+	        	var vue = this;
+	        	
 			this.$http.post("users", {
-				email: this.newUser.email,
-				password: this.newUser.password,
-				firstname: this.newUser.firstname,
-				lastname: this.newUser.lastname,
+				email: vue.newUser.email,
+				password: vue.newUser.password,
+				firstname: vue.newUser.firstname,
+				lastname: vue.newUser.lastname,
 			}).then(response => {
 				if (response.status == 200) {
 					console.log("user well created");

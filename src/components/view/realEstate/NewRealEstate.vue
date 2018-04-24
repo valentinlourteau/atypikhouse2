@@ -219,7 +219,7 @@
           </v-flex>
           
           <!-- Heure d'arrivée -->
-          <v-flex xs12 md6>
+          <v-flex xs12 md6 lg6>
          	<v-subheader>Heure limite d'arrivée</v-subheader>
           	<v-time-picker v-model="accomodation.arrival"></v-time-picker>
           </v-flex>  
@@ -289,12 +289,11 @@ export default {
 	},
 	mounted: function () {
 		//On récupère l'accomodation stockée
-		if (this.$ls.get("accomodation") != null && this.$ls.get('user').id == this.$ls.get("accomodation")._userId)
-			this.restoreAccomodation = true;
-		else
-			this.accomodation._userId = this.$ls.get("user").id;
+		//TODO remplacer ça par la future route de l'api qui permettra de sauvegarder une accomodation transiante
+		//ce code sert à voir si on propose à l'utilisateur de reprendre sa creation en cours ou de recommencer
 		
-		console.log(this.accomodation)
+		//if (this.$ls.get("accomodation") != null && this.$ls.get('user').id == this.$ls.get("accomodation")._userId)
+// 			this.restoreAccomodation = true;
 		
 		//Chargement des combo
 		ListService.fetchList("accomodationTypes", this.listOfAccomodationTypes);
@@ -328,7 +327,8 @@ export default {
 	methods: {
 		onValidate() {
 			var vue = this;
-			this.$ls.set("accomodation", this.accomodation);
+			console.log(typeof this.accomodation.pictures[0].data)
+// 			this.$ls.set("accomodation", this.accomodation);
 			this.$http.post("accomodation",	 {
 				"host" : this.accomodation._userId,
 				"type" : this.accomodation.type,
@@ -355,7 +355,8 @@ export default {
 				if (response.status === 200) {
 					this.snackbar.text = "Modifications enregistrées";
 					this.snackbar.show = true;
-					this.$ls.remove("accomodation");
+					//TODO
+// 					this.$ls.remove("accomodation");
 					setTimeout(function () {
 						vue.snackbar.text = "Nous allons vous rediriger vers le détail";
 						vue.snackbar.show = true;
@@ -368,12 +369,14 @@ export default {
 		},
 		onRestoreAccomodation(restore) {
 			if (restore) {
-				this.accomodation = this.$ls.get("accomodation");
+				//TODO Récupérer l'accomodation en cours de création
+				//this.accomodation = this.$ls.get("accomodation");
 				this.maxStep = this.accomodation.currentStep;
 				this.stepIndex = this.accomodation.currentStep;
 			}
 			else {
-				this.$ls.remove("accomodation");
+				//TODO Supprimer l'accomodation 
+// 				this.$ls.remove("accomodation");
 				this.accomodation = new Accomodation();
 				this.accomodation._userId = this.$ls.get("user").id;
 			}
@@ -399,7 +402,9 @@ export default {
 			this.accomodation.currentStep = index;
 			//a chaque changement d'étape on fourre l'accomodation dans le localstorage
 			console.log(this.accomodation.pictures.length)
-			this.$ls.set("accomodation", this.accomodation);
+			
+			//TODO IMPORTANT sauvegarder l'accomodation via l'api, en profiter pour créer un service
+// 			this.$ls.set("accomodation", this.accomodation);
 		},
 		onChooseImg(files) {
 			var reader = new FileReader();

@@ -1,30 +1,15 @@
 <template>
   <v-app id="zdededex">
     
-    <sidenav-bar></sidenav-bar>
-    <ah-header></ah-header>
+    <sidenav-bar :display="displayDrawer"></sidenav-bar>
+    <ah-header @onClickSwitchDrawer="displayDrawer = !displayDrawer"></ah-header>
     
     <v-content class="blue lighten-5">
     
     <router-view></router-view>
     
     </v-content>
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-tile @click="right = !right">
-          <v-list-tile-action>
-            <v-icon>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
+    
   </v-app>
 </template>
 
@@ -34,19 +19,9 @@ import AhFooter from './components/structure/AhFooter';
 import sidenavBar from './components/structure/SidenavBar';
 
 export default {
-  data () {
+  data : function() {
     return {
-      clipped: false,
-      drawer: true,
-      fixed: false,
-      items: [{
-        icon: 'bubble_chart',
-        title: 'Inspire'
-      }],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+    	displayDrawer: true,
     }
   },
   name: 'App',

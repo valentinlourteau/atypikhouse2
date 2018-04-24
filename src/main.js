@@ -12,6 +12,7 @@ import vuexI18n from 'vuex-i18n';
 import VueLocalStorage from 'vue-ls';
 import VeeValidate from 'vee-validate';
 import GoogleMapsLoader from 'google-maps';
+import PortalVue from 'portal-vue'
 //components
 import Home from './components/view/Home';
 import Account from './components/view/Account';
@@ -62,6 +63,8 @@ const veeValidateConfig = {
 
 Vue.use(VeeValidate, veeValidateConfig);
 
+Vue.use(PortalVue)
+
 Vue.config.productionTip = false
 
 Vue.config.productionTip = false;
@@ -80,7 +83,7 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
   state: {
-	  user: Vue.ls.get("user"),
+	  user : Vue.ls.get("user"),
   },
   mutations: {
 	  onSetToken(state, token) {
@@ -91,7 +94,7 @@ const store = new Vuex.Store({
 	  onSetUser(state, user) {
 		  Vue.ls.set("user", user);
 		  state.user = user;
-	  }
+	  },
   },
 });
 

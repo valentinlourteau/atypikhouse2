@@ -1,10 +1,6 @@
 import Vue from 'vue';
 
 class ListService {
-
-//	function addListElement(fr, en, flag) {
-//		
-//	}
 	
 	//Permet de chercher une liste de combo depuis l'api. On populate directement la référence de la liste
 	static fetchList(flag, value) {

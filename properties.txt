@@ -1,1 +1,3 @@
 google_api_key = AIzaSyB1h7TjJ_nYVQn09j9JZsdVwD59C7Skp78
+email = atypikhouse.company@gmail.com
+mot2passeEmail = Azerty&1
