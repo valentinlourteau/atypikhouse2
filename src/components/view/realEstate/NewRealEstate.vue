@@ -43,7 +43,6 @@
         <v-stepper-content step="2">   
           <gmaps ref="gmaps" @onChooseAddress="onPickAdress($event)"></gmaps>      
           </br>
-<!--           <v-text-field label="Appartement, bâtiment, résidence (facultatif)" v-model="accomodation.complementAdresse"></v-text-field> -->
           <v-btn color="primary" @click.native="changeIndex(3)">Continue</v-btn>
           <v-btn flat>Cancel</v-btn>
         </v-stepper-content>
@@ -151,7 +150,7 @@
   		
   		<!-- LISTE DES PHOTOS -->	
 		<v-layout row wrap>
-		  	<v-flex xs6 lg4 xl3 v-for="picture in accomodation.pictures" :key="picture.fileName">
+		  	<v-flex xs6 lg4 xl3 v-for="picture in accomodation.images" :key="picture.fileName">
 			  	<v-card class="ma-3">		  		
 			  	<v-card-media :src="picture.data" height="200px"></v-card-media>			  	
 			  	<v-card-actions class="blue">
@@ -243,23 +242,6 @@
     </v-stepper>
 		
 	</div>
-	
-	<!-- Le dialog de récupération du bien déjà commencé mais pas fini (si il y en a un) -->
-	
-	<v-dialog v-model="restoreAccomodation" max-width="500px">
-        <v-card>
-          <v-card-title>
-            REPRENDRE LA CREATION DU BIEN
-          </v-card-title>
-          <v-card-text>
-          	Vous aviez déjà commencé la création d'un bien, voulez vous reprendre la ou vous en étiez ?
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" @click="onRestoreAccomodation(false)" flat>NON</v-btn>
-            <v-btn color="primary" @click="onRestoreAccomodation(true)" flat>OUI</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
       
       <v-snackbar
       :timeout="6000"
@@ -318,7 +300,6 @@ export default {
 			listOfEquipments : [],
 			listOfAvailableSpaces : [],
 			listOfAvailableRules : [],
-			restoreAccomodation : false,
 			snackbar : {
 				show : false,
 				text : "default",
@@ -327,8 +308,7 @@ export default {
 	},
 	methods: {
 		onValidate() {
-			console.log(typeof this.accomodation.pictures[0].data)
-// 			this.$ls.set("accomodation", this.accomodation);
+			var vue = this;
 			this.$http.post("accomodation",	 {
 				"host" : this.accomodation._userId,
 				"type" : this.accomodation.type,
@@ -356,14 +336,8 @@ export default {
 				if (response.status === 200) {
 					this.snackbar.text = "Modifications enregistrées";
 					this.snackbar.show = true;
-					//TODO
-// 					this.$ls.remove("accomodation");
 					setTimeout(function () {
-						this.snackbar.text = "Nous allons vous rediriger vers le détail";
-						this.snackbar.show = true;
-						setTimeout(function () {
-// 							vue.$router.push()
-						}, 1000)
+						vue.$router.push('/realEstate/detail/' + response.body.accomodation._id)
 					}, 1500);
 				}
 			});
@@ -409,7 +383,7 @@ export default {
 			} 
 			//Sinon je fais un put pour modifier l'accomodation
 			else {
-				this.$http.put("accomodation" , this.accomodation).then(response => {
+				this.$http.put("accomodation/" + this.accomodation._id , this.accomodation).then(response => {
 					if (response.status.body == 200)
 						console.log("etape validée et sauvegardée avec succès")
 				})
@@ -419,7 +393,7 @@ export default {
 			var reader = new FileReader();
 			//on fait une variable tampon pour pouvoir l'utiliser dans le onload 
 			//car je n'arrive pas à utiliser directement la variable de data dans la callback
-			var accomodRef = this.accomodation.pictures;
+			var accomodRef = this.accomodation.images;
 			reader.onload = function (e) {
 				let isMain = false;
 				let imgName = files.get('data').name;

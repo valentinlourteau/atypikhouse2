@@ -19,6 +19,7 @@ import Account from './components/view/Account';
 import Discover from './components/view/Discover';
 import RealEstate from './components/view/realEstate/RealEstate';
 import NewRealEstate from './components/view/realEstate/NewRealEstate';
+import RealEstateDetail from './components/view/realEstate/RealEstateDetail';
 //utils
 import TD from './class/utils/TokenDecrypter';
 
@@ -78,6 +79,8 @@ const router = new VueRouter({
     { path: '/realEstate/home', component: RealEstate},
     { path: '/realEstate/new', component: NewRealEstate},
     { path: '/realEstate/new/:accomodationId', component: NewRealEstate},
+    { path: '/realEstate/edit/:accomodationId', component: NewRealEstate},
+    { path: '/realEstate/detail/:accomodationId', component: RealEstateDetail},
   ],
   mode: 'history'
 });
