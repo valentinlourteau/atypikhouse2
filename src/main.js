@@ -77,6 +77,7 @@ const router = new VueRouter({
     { path: '/discover', component: Discover},
     { path: '/realEstate/home', component: RealEstate},
     { path: '/realEstate/new', component: NewRealEstate},
+    { path: '/realEstate/new/:accomodationId', component: NewRealEstate},
   ],
   mode: 'history'
 });

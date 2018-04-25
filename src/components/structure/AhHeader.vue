@@ -45,7 +45,7 @@ export default {
 			socialNetworks: [
 				{text : "Facebook", url : "https://www.facebook.com/AtipykHouse/"},
 				{text : "Twitter", url : "https://twitter.com/AtypikHouseCo"},
-				{text : "Instagram", url : ""},
+// 				{text : "Instagram", url : ""},
 			],
 		}
 	},

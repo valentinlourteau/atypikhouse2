@@ -7,6 +7,7 @@
       color="yellow"
       dark
       slider-color="black"
+      centered
     >
       <v-tab
         v-for="tab in tabs"

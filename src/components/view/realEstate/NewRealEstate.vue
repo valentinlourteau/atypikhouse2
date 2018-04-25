@@ -287,13 +287,14 @@ export default {
 		FileUpload,
 		Gmaps,
 	},
-	mounted: function () {
-		//On récupère l'accomodation stockée
-		//TODO remplacer ça par la future route de l'api qui permettra de sauvegarder une accomodation transiante
-		//ce code sert à voir si on propose à l'utilisateur de reprendre sa creation en cours ou de recommencer
-		
-		//if (this.$ls.get("accomodation") != null && this.$ls.get('user').id == this.$ls.get("accomodation")._userId)
-// 			this.restoreAccomodation = true;
+	created: function () {
+		if (this.$route.params.accomodationId != null) {
+			this.$http.get("accomodation/" + this.$route.params.accomodationId)
+				.then(response => {
+					if (response.status == 200)
+						this.accomodation = response.body.accomodation;
+				});
+		}
 		
 		//Chargement des combo
 		ListService.fetchList("accomodationTypes", this.listOfAccomodationTypes);
@@ -326,7 +327,6 @@ export default {
 	},
 	methods: {
 		onValidate() {
-			var vue = this;
 			console.log(typeof this.accomodation.pictures[0].data)
 // 			this.$ls.set("accomodation", this.accomodation);
 			this.$http.post("accomodation",	 {
@@ -351,6 +351,7 @@ export default {
 				"beds" : this.accomodation.beds,
 				"images" : this.accomodation.pictures,
 				"spaces" : this.accomodation.spaces,
+				"complete" : true,
 			}).then(response => {
 				if (response.status === 200) {
 					this.snackbar.text = "Modifications enregistrées";
@@ -358,8 +359,8 @@ export default {
 					//TODO
 // 					this.$ls.remove("accomodation");
 					setTimeout(function () {
-						vue.snackbar.text = "Nous allons vous rediriger vers le détail";
-						vue.snackbar.show = true;
+						this.snackbar.text = "Nous allons vous rediriger vers le détail";
+						this.snackbar.show = true;
 						setTimeout(function () {
 // 							vue.$router.push()
 						}, 1000)
@@ -396,15 +397,23 @@ export default {
 			this.stepIndex = index;
 			if (index > this.maxStep)
 				this.maxStep = index;
-			if (index == 2) {
-				this.$refs.gmaps.initMap();
-			}
 			this.accomodation.currentStep = index;
-			//a chaque changement d'étape on fourre l'accomodation dans le localstorage
-			console.log(this.accomodation.pictures.length)
-			
-			//TODO IMPORTANT sauvegarder l'accomodation via l'api, en profiter pour créer un service
-// 			this.$ls.set("accomodation", this.accomodation);
+			//Validation de la première étape, je fais un POST, si je reviens en arrière je ne refais pas ça
+			if (index == 2)
+				this.$refs.gmaps.initMap();
+			if (index == 2 && this.maxStep == 2) {
+				this.$http.post("accomodation").then(response => {
+					if (response.status == 200)
+						this.accomodation = response.body.accomodation;
+				})
+			} 
+			//Sinon je fais un put pour modifier l'accomodation
+			else {
+				this.$http.put("accomodation" , this.accomodation).then(response => {
+					if (response.status.body == 200)
+						console.log("etape validée et sauvegardée avec succès")
+				})
+			}
 		},
 		onChooseImg(files) {
 			var reader = new FileReader();
