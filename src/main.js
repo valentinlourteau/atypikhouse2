@@ -25,7 +25,7 @@ import TD from './class/utils/TokenDecrypter';
 
 Vue.use(Vuetify, { theme: {
   primary: '#FFEB3B',
-  secondary: '#9E9E9E',
+  secondary: '#2196F3',
   accent: '#82B1FF',
   error: '#FF5252',
   info: '#2196F3',

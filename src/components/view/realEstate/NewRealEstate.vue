@@ -3,7 +3,7 @@
 <div>
 	<div class="container">
 		
-	<v-stepper v-model="accomodation.currentStep">
+	<v-stepper v-model="accomodation.currentStep" @input="onValidateAllowedToChangeStep()">
 		 
       <v-stepper-header>
         <v-stepper-step step="1" :complete="maxStep > 0" :editable="maxStep > 0">{{$t('accomodation.stepper.step.1')}}</v-stepper-step>
@@ -64,6 +64,7 @@
 	        </v-flex>
           </v-layout>
           
+          <v-form ref="step3">
           <v-layout row wrap>         
           <!-- Capacité d'accueil -->
           <v-flex xs12>
@@ -73,7 +74,7 @@
          <v-slider v-model="accomodation.guests" min="1" max="20"></v-slider>
          </v-flex>
          <v-flex xs3>
-            <v-text-field v-model="accomodation.guests" type="number" v-validate="'required|between:1,20'"></v-text-field>
+            <v-text-field v-model="accomodation.guests" type="number" :rules="accueilRules"></v-text-field>
           </v-flex>      
          <!-- Nombre de lits -->
          <v-flex xs12>
@@ -83,7 +84,7 @@
          	<v-slider v-model="accomodation.beds" min="1" max="20" xs9></v-slider>
          </v-flex>
           <v-flex xs3>
-            <v-text-field v-model="accomodation.beds" type="number" v-validate="'required|between:1,20'"></v-text-field>
+            <v-text-field v-model="accomodation.beds" type="number" :rules="accueilRules"></v-text-field>
           </v-flex>
           <!-- Nombre de chambres --> 
           <v-flex xs12>
@@ -93,7 +94,7 @@
          	<v-slider v-model="accomodation.bedrooms" min="1" max="20" xs9></v-slider>
          </v-flex>
           <v-flex xs3>
-            <v-text-field v-model="accomodation.bedrooms" type="number" v-validate="'required|between:1,20'"></v-text-field>
+            <v-text-field v-model="accomodation.bedrooms" type="number" :rules="accueilRules"></v-text-field>
           </v-flex>  
           <!-- Nombre de salles de bains -->
           <v-flex xs12>
@@ -103,10 +104,11 @@
          	<v-slider v-model="accomodation.bathrooms" min="1" max="20" xs9></v-slider>
          </v-flex>
           <v-flex xs3>
-            <v-text-field v-model="accomodation.bathrooms" type="number" v-validate="'required|between:1,20'"></v-text-field>
+            <v-text-field v-model="accomodation.bathrooms" type="number" :rules="accueilRules"></v-text-field>
           </v-flex>  
                  
-          </v-layout> 
+          </v-layout>
+          </v-form> 
           <v-btn color="primary" @click.native="changeIndex(4)">Continuer</v-btn>
           
         </v-stepper-content>
@@ -305,6 +307,10 @@ export default {
 				show : false,
 				text : "default",
 			},
+			accueilRules : [
+				v => !!v || "l'item est requis",
+		        v => v <= 20 && v > 0  || 'Dois être compris entre 0 et 20'
+			],
 		}
 	},
 	methods: {
@@ -331,26 +337,38 @@ export default {
 			picture.isMain = true;
 		},
 		changeIndex(index) {
-			this.accomodation.currentStep = index;
-			if (index > this.maxStep)
-				this.maxStep = index;
-			//Validation de la première étape, je fais un POST, si je reviens en arrière je ne refais pas ça
-			if (index == 2)
-				this.$refs.gmaps.initMap();
-			if (index == 2 && this.maxStep == 2 && this.accomodation._id == null) {
-				this.$http.post("accomodation").then(response => {
-					if (response.status == 200) {
-						this.accomodation = response.body.accomodation;
-						this.accomodation.currentStep = 2;
-					}
-				})
-			} 
-			//Sinon je fais un put pour modifier l'accomodation
+			
+			var comp = null;
+			comp = this.$refs["step" + (index-1)];
+			
+			if (comp== null || comp.validate()) {
+				console.log("all inputs properly validated or no form")
+				
+				this.accomodation.currentStep = index;
+				if (index > this.maxStep)
+					this.maxStep = index;
+				//Validation de la première étape, je fais un POST, si je reviens en arrière je ne refais pas ça
+				if (index == 2)
+					this.$refs.gmaps.initMap();
+				if (index == 2 && this.maxStep == 2 && this.accomodation._id == null) {
+					this.$http.post("accomodation").then(response => {
+						if (response.status == 200) {
+							this.accomodation = response.body.accomodation;
+							this.accomodation.currentStep = 2;
+						}
+					})
+				} 
+				//Sinon je fais un put pour modifier l'accomodation
+				else {
+					this.$http.put("accomodation/" + this.accomodation._id , this.accomodation).then(response => {
+						if (response.status.body == 200)
+							console.log("etape validée et sauvegardée avec succès")
+					})
+				}
+				
+			}
 			else {
-				this.$http.put("accomodation/" + this.accomodation._id , this.accomodation).then(response => {
-					if (response.status.body == 200)
-						console.log("etape validée et sauvegardée avec succès")
-				})
+				console.log("erreur de validation")
 			}
 		},
 		onChooseImg(files) {
@@ -397,6 +415,9 @@ export default {
 	 			filterArray = comps.filter(comp => comp.types.includes('route'));
 	 			if (filterArray.length > 0)
 	 				this.accomodation.street += (" " + filterArray[0].long_name);
+		},
+		onValidateAllowedToChangeStep() {
+// 			window.alert(this.accomodation.currentStep)
 		},
 	},
 };

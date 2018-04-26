@@ -39,7 +39,7 @@
 			
 		</v-layout>
 
-		<v-btn v-on:click="onAddNewEstate();" fab color="primary" fixed right bottom><v-icon>add</v-icon></v-btn>
+		<v-btn v-on:click="onAddNewEstate();" fab color="secondary" fixed right bottom><v-icon class="black--text">add</v-icon></v-btn>
         
       </v-tab-item>
       
