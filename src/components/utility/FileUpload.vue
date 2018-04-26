@@ -29,7 +29,7 @@
             multiple: {
                 type: Boolean, // not yet possible because of data
                 default: false
-            }
+            },
         },
         data(){
             return {

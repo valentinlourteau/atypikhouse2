@@ -14,6 +14,7 @@
     this.spaces = [];
     this._userId;
     this.actif = false;
+    this.currentStep = 1;
   }
 
 }

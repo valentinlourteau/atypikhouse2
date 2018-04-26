@@ -27,7 +27,7 @@
 			        </v-card-title>
 			        <v-card-actions>
 			          <v-btn v-if="accomodation.complete" flat color="blue" @click="onViewDetail(accomodation)">GERER</v-btn>
-			          <v-btn v-if="!accomodation.isComplete" flat color="blue" @click="onResumeCreation(accomodation)">REPRENDRE LA CREATION</v-btn>
+			          <v-btn v-if="!accomodation.complete" flat color="blue" @click="onResumeCreation(accomodation)">REPRENDRE LA CREATION</v-btn>
 			          <v-spacer></v-spacer>
 			          <v-btn :disabled="!accomodation.complete" @click="setAccomodationActive(accomodation)" icon>
 			          	<v-icon>{{ accomodation.actif ? 'visibility' : 'visibility_off' }}</v-icon>
@@ -90,7 +90,7 @@ export default {
 			this.$router.push('/realEstate/new/' + accomodation._id);
 		},
 		onViewDetail(accomodation) {
-			this.$route.push('/realEstate/detail/' + accomodation._id);
+			this.$router.push('/realEstate/detail/' + accomodation._id);
 		},
 		getTruncatedDescription(accomodation) {
 			length = 86;

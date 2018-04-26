@@ -1,7 +1,7 @@
 <template>
     <div>
     <v-text-field id="location-input" label="Adresse du bien" class="controls" type="text"
-        	placeholder="Sélectionnez votre adresse"></v-text-field>
+        	placeholder="Sélectionnez votre adresse" :v-validate="validator"></v-text-field>
           <div id="map" style="height:300px;"></div>
     </div>
 </template>
@@ -9,6 +9,12 @@
 <script>
 import GoogleMapsLoader from 'google-maps';
 export default {
+		props: {
+			validator: {
+	        	type: String,
+	        	default: ""
+	        },
+		},
         methods : {
         	emitAdresse() {
         	},

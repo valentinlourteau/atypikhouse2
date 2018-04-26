@@ -3,7 +3,7 @@
 <div>
 	<div class="container">
 		
-	<v-stepper v-model="stepIndex">
+	<v-stepper v-model="accomodation.currentStep">
 		 
       <v-stepper-header>
         <v-stepper-step step="1" :complete="maxStep > 0" :editable="maxStep > 0">{{$t('accomodation.stepper.step.1')}}</v-stepper-step>
@@ -36,15 +36,15 @@
           	</p>
           	<p>Pour votre confort, nous enregistrons automatiquement votre annonce au fur et à mesure que vous complétez les étapes, de sorte à pouvoir reprendre la saisie si vous ne pouvez pas tout faire en une fois.</p>          	
           	<p>Voila, vous savez tous ! On commence ?</p>
-          <v-btn color="primary" @click.native="changeIndex(2);">Continue</v-btn>
-          <v-btn flat>Cancel</v-btn>
+          <v-btn color="primary" @click.native="changeIndex(2);">Continuerr</v-btn>
+          
         </v-stepper-content>
         
         <v-stepper-content step="2">   
-          <gmaps ref="gmaps" @onChooseAddress="onPickAdress($event)"></gmaps>      
+          <gmaps ref="gmaps" @onChooseAddress="onPickAdress($event)" validator="required"></gmaps>      
           </br>
-          <v-btn color="primary" @click.native="changeIndex(3)">Continue</v-btn>
-          <v-btn flat>Cancel</v-btn>
+          <v-btn color="primary" @click.native="changeIndex(3)">Continuer</v-btn>
+          
         </v-stepper-content>
         
         <v-stepper-content step="3">  
@@ -107,8 +107,8 @@
           </v-flex>  
                  
           </v-layout> 
-          <v-btn color="primary" @click.native="changeIndex(4)">Continue</v-btn>
-          <v-btn flat>Cancel</v-btn>
+          <v-btn color="primary" @click.native="changeIndex(4)">Continuer</v-btn>
+          
         </v-stepper-content>
         
         <v-stepper-content step="4">
@@ -118,8 +118,8 @@
           	<v-checkbox v-model="accomodation.equipments" :label="equipment.frname" :value="equipment._id"></v-checkbox>       
           </v-flex>
           </v-layout>
-          <v-btn color="primary" @click.native="changeIndex(5)">Continue</v-btn>
-          <v-btn flat>Cancel</v-btn>
+          <v-btn color="primary" @click.native="changeIndex(5)">Continuer</v-btn>
+          
         </v-stepper-content>
         
         <v-stepper-content step="5">
@@ -129,8 +129,8 @@
           	<v-checkbox v-model="accomodation.spaces" :label="space.frname" :value="space._id"></v-checkbox>       
           </v-flex>
           </v-layout>
-          <v-btn color="primary" @click.native="changeIndex(6)">Continue</v-btn>
-          <v-btn flat>Cancel</v-btn>
+          <v-btn color="primary" @click.native="changeIndex(6)">Continuer</v-btn>
+          
         </v-stepper-content>
         
         <v-stepper-content step="6" >
@@ -142,7 +142,7 @@
 		          <span class="subheading">Vous allez pouvoir ajouter ici les photos qui vont rendre votre bien unique, nous en sommes persuadé. N'hésitez pas à prendre des photos de jour, mettant votre bien en valeur. La popularité qu'aura votre bien en dépend largement.</span>
 		          <v-divider class="my-3"></v-divider>
 		          <div class="title mb-3">Vendez leur du rêve !</div>
-		          <file-upload @formData="onChooseImg($event)"></file-upload>
+		          <file-upload accept="image/*" @formData="onChooseImg($event)"></file-upload>
 		        </v-flex>
 		      </v-layout>
 		    </v-container>		
@@ -167,8 +167,8 @@
 		       </v-flex>
 	    </v-layout>     
 	        
-          <v-btn color="primary" @click.native="changeIndex(7)">Continue</v-btn>
-          <v-btn flat>Cancel</v-btn>
+          <v-btn color="primary" @click.native="changeIndex(7)">Continuer</v-btn>
+          
         </v-stepper-content>
         
          <v-stepper-content step="7">
@@ -176,8 +176,8 @@
           	<v-text-field v-model="accomodation.name" label="Titre de l'annonce"></v-text-field>
           	<v-text-field v-model="accomodation.description" label="Description" multi-line></v-text-field>   
           </div>
-          <v-btn color="primary" @click.native="changeIndex(8)">Continue</v-btn>
-          <v-btn flat>Cancel</v-btn>
+          <v-btn color="primary" @click.native="changeIndex(8)">Continuer</v-btn>
+          
         </v-stepper-content>
         
          <v-stepper-content step="8">
@@ -187,8 +187,8 @@
 	        	<v-checkbox v-model="accomodation.requirements" :label="rule.frname" :value="rule._id"></v-checkbox>           
 	        </v-flex>
           </v-layout>
-          <v-btn color="primary" @click.native="changeIndex(9)">Continue</v-btn>
-          <v-btn flat>Cancel</v-btn>
+          <v-btn color="primary" @click.native="changeIndex(9)">Continuer</v-btn>
+          
         </v-stepper-content>
         
          <v-stepper-content step="9">
@@ -234,7 +234,7 @@
           <br/>
           
           <v-btn color="primary" @click="onValidate()">Valider</v-btn>
-          <v-btn flat>Cancel</v-btn>
+          
         </v-stepper-content>
         
       </v-stepper-items>
@@ -273,8 +273,10 @@ export default {
 		if (this.$route.params.accomodationId != null) {
 			this.$http.get("accomodation/" + this.$route.params.accomodationId)
 				.then(response => {
-					if (response.status == 200)
+					if (response.status == 200) {
 						this.accomodation = response.body.accomodation;
+						this.maxStep = this.accomodation.currentStep;
+					}
 				});
 		}
 		
@@ -290,7 +292,6 @@ export default {
 			search: null,
 	        select: '',
 			accomodation : new Accomodation(),
-			stepIndex : 1,
 			maxStep : 1,
 			listOfRoomsMode : [
 				{code: "acomodation.room.mode.full", value: 'full'},
@@ -309,30 +310,8 @@ export default {
 	methods: {
 		onValidate() {
 			var vue = this;
-			this.$http.post("accomodation",	 {
-				"host" : this.accomodation._userId,
-				"type" : this.accomodation.type,
-				"equipments" : this.accomodation.equipments,
-				"requirements" : this.accomodation.requirements,
-				"arrival" : this.accomodation.arrival,
-				"departure" : this.accomodation.departure,
-				"name" : this.accomodation.name,
-				"room" : this.accomodation.room,
-				"description" : this.accomodation.description,
-				"city" : this.accomodation.city,
-				"street" : this.accomodation.street,
-				"apartment" : this.accomodation.apartment,
-				"zipcode" : this.accomodation.zipcode,
-				"durationmax" : this.accomodation.durationmax,
-				"durationmin" : this.accomodation.durationmin,
-				"guests" : this.accomodation.guests,
-				"bedrooms" : this.accomodation.bedrooms,
-				"bathrooms" : this.accomodation.bathrooms,
-				"beds" : this.accomodation.beds,
-				"images" : this.accomodation.pictures,
-				"spaces" : this.accomodation.spaces,
-				"complete" : true,
-			}).then(response => {
+			this.accomodation.complete = true;
+			this.$http.put("accomodation/" + this.accomodation._id , this.accomodation).then(response => {
 				if (response.status === 200) {
 					this.snackbar.text = "Modifications enregistrées";
 					this.snackbar.show = true;
@@ -342,43 +321,28 @@ export default {
 				}
 			});
 		},
-		onRestoreAccomodation(restore) {
-			if (restore) {
-				//TODO Récupérer l'accomodation en cours de création
-				//this.accomodation = this.$ls.get("accomodation");
-				this.maxStep = this.accomodation.currentStep;
-				this.stepIndex = this.accomodation.currentStep;
-			}
-			else {
-				//TODO Supprimer l'accomodation 
-// 				this.$ls.remove("accomodation");
-				this.accomodation = new Accomodation();
-				this.accomodation._userId = this.$ls.get("user").id;
-			}
-			//pour fermer la popup
-			this.restoreAccomodation = false;
-		},
 		onDeleteImg(picture) {
-			this.accomodation.pictures.splice(this.accomodation.pictures.indexOf(picture), 1);
+			this.accomodation.images.splice(this.accomodation.images.indexOf(picture), 1);
 		},
 		onSetPictureIsMain(picture) {
-			for (let picture of this.accomodation.pictures) {
+			for (let picture of this.accomodation.images) {
 				picture.isMain = false;
 			};
 			picture.isMain = true;
 		},
 		changeIndex(index) {
-			this.stepIndex = index;
+			this.accomodation.currentStep = index;
 			if (index > this.maxStep)
 				this.maxStep = index;
-			this.accomodation.currentStep = index;
 			//Validation de la première étape, je fais un POST, si je reviens en arrière je ne refais pas ça
 			if (index == 2)
 				this.$refs.gmaps.initMap();
-			if (index == 2 && this.maxStep == 2) {
+			if (index == 2 && this.maxStep == 2 && this.accomodation._id == null) {
 				this.$http.post("accomodation").then(response => {
-					if (response.status == 200)
+					if (response.status == 200) {
 						this.accomodation = response.body.accomodation;
+						this.accomodation.currentStep = 2;
+					}
 				})
 			} 
 			//Sinon je fais un put pour modifier l'accomodation
