@@ -73,7 +73,7 @@
          <v-slider v-model="accomodation.guests" min="1" max="20"></v-slider>
          </v-flex>
          <v-flex xs3>
-            <v-text-field v-model="accomodation.guests" type="number"></v-text-field>
+            <v-text-field v-model="accomodation.guests" type="number" v-validate="'required|between:1,20'"></v-text-field>
           </v-flex>      
          <!-- Nombre de lits -->
          <v-flex xs12>
@@ -83,7 +83,7 @@
          	<v-slider v-model="accomodation.beds" min="1" max="20" xs9></v-slider>
          </v-flex>
           <v-flex xs3>
-            <v-text-field v-model="accomodation.beds" type="number"></v-text-field>
+            <v-text-field v-model="accomodation.beds" type="number" v-validate="'required|between:1,20'"></v-text-field>
           </v-flex>
           <!-- Nombre de chambres --> 
           <v-flex xs12>
@@ -93,7 +93,7 @@
          	<v-slider v-model="accomodation.bedrooms" min="1" max="20" xs9></v-slider>
          </v-flex>
           <v-flex xs3>
-            <v-text-field v-model="accomodation.bedrooms" type="number"></v-text-field>
+            <v-text-field v-model="accomodation.bedrooms" type="number" v-validate="'required|between:1,20'"></v-text-field>
           </v-flex>  
           <!-- Nombre de salles de bains -->
           <v-flex xs12>
@@ -103,7 +103,7 @@
          	<v-slider v-model="accomodation.bathrooms" min="1" max="20" xs9></v-slider>
          </v-flex>
           <v-flex xs3>
-            <v-text-field v-model="accomodation.bathrooms" type="number"></v-text-field>
+            <v-text-field v-model="accomodation.bathrooms" type="number" v-validate="'required|between:1,20'"></v-text-field>
           </v-flex>  
                  
           </v-layout> 
