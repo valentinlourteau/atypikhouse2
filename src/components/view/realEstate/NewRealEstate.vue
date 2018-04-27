@@ -3,26 +3,26 @@
 <div>
 	<div class="container">
 		
-	<v-stepper v-model="accomodation.currentStep" @input="onValidateAllowedToChangeStep()">
+	<v-stepper ref="test" v-model="accomodation.currentStep" >
 		 
       <v-stepper-header>
-        <v-stepper-step step="1" :complete="maxStep > 0" :editable="maxStep > 0">{{$t('accomodation.stepper.step.1')}}</v-stepper-step>
+        <v-stepper-step step="1" :complete="maxStep > 0">{{$t('accomodation.stepper.step.1')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete="maxStep > 1" :editable="maxStep > 1">{{$t('accomodation.stepper.step.2')}}</v-stepper-step>
+        <v-stepper-step step="2" :complete="maxStep > 1">{{$t('accomodation.stepper.step.2')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="3" :complete="maxStep > 2" :editable="maxStep > 2">{{$t('accomodation.stepper.step.3')}}</v-stepper-step>
+        <v-stepper-step step="3" :complete="maxStep > 2">{{$t('accomodation.stepper.step.3')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="4" :complete="maxStep > 3" :editable="maxStep > 3">{{$t('accomodation.stepper.step.4')}}</v-stepper-step>
+        <v-stepper-step step="4" :complete="maxStep > 3">{{$t('accomodation.stepper.step.4')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="5" :complete="maxStep > 4" :editable="maxStep > 4">{{$t('accomodation.stepper.step.5')}}s</v-stepper-step>
+        <v-stepper-step step="5" :complete="maxStep > 4">{{$t('accomodation.stepper.step.5')}}s</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="6" :complete="maxStep > 5" :editable="maxStep > 5">{{$t('accomodation.stepper.step.6')}}</v-stepper-step>
+        <v-stepper-step step="6" :complete="maxStep > 5" >{{$t('accomodation.stepper.step.6')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="7" :complete="maxStep > 6" :editable="maxStep > 6">{{$t('accomodation.stepper.step.7')}}</v-stepper-step>
+        <v-stepper-step step="7" :complete="maxStep > 6" >{{$t('accomodation.stepper.step.7')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="8" :complete="maxStep > 7" :editable="maxStep > 7">{{$t('accomodation.stepper.step.8')}}</v-stepper-step>
+        <v-stepper-step step="8" :complete="maxStep > 7" >{{$t('accomodation.stepper.step.8')}}</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="9" :complete="maxStep > 8" :editable="maxStep > 8">{{$t('accomodation.stepper.step.9')}}</v-stepper-step>
+        <v-stepper-step step="9" :complete="maxStep > 8" >{{$t('accomodation.stepper.step.9')}}</v-stepper-step>
       </v-stepper-header>
       
       <v-stepper-items>
@@ -43,6 +43,7 @@
         <v-stepper-content step="2">   
           <gmaps ref="gmaps" @onChooseAddress="onPickAdress($event)" validator="required"></gmaps>      
           </br>
+          <v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
           <v-btn color="primary" @click.native="changeIndex(3)">Continuer</v-btn>
           
         </v-stepper-content>
@@ -109,6 +110,7 @@
                  
           </v-layout>
           </v-form> 
+          <v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
           <v-btn color="primary" @click.native="changeIndex(4)">Continuer</v-btn>
           
         </v-stepper-content>
@@ -120,6 +122,7 @@
           	<v-checkbox v-model="accomodation.equipments" :label="equipment.frname" :value="equipment._id"></v-checkbox>       
           </v-flex>
           </v-layout>
+          <v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
           <v-btn color="primary" @click.native="changeIndex(5)">Continuer</v-btn>
           
         </v-stepper-content>
@@ -131,6 +134,7 @@
           	<v-checkbox v-model="accomodation.spaces" :label="space.frname" :value="space._id"></v-checkbox>       
           </v-flex>
           </v-layout>
+          <v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
           <v-btn color="primary" @click.native="changeIndex(6)">Continuer</v-btn>
           
         </v-stepper-content>
@@ -169,15 +173,19 @@
 		       </v-flex>
 	    </v-layout>     
 	        
+          <v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
           <v-btn color="primary" @click.native="changeIndex(7)">Continuer</v-btn>
           
         </v-stepper-content>
         
          <v-stepper-content step="7">
-          <div>
-          	<v-text-field v-model="accomodation.name" label="Titre de l'annonce"></v-text-field>
-          	<v-text-field v-model="accomodation.description" label="Description" multi-line></v-text-field>   
-          </div>
+         	<v-form ref="step7">
+	          <div>
+	          	<v-text-field v-model="accomodation.name" label="Titre de l'annonce" :rules="[v => !!v || 'Le nom est requis']" counter></v-text-field>
+	          	<v-text-field v-model="accomodation.description" label="Description" :rules="[v => !!v || 'La description est requise']" multi-line counter></v-text-field>   
+	          </div>
+          	</v-form> 
+          <v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
           <v-btn color="primary" @click.native="changeIndex(8)">Continuer</v-btn>
           
         </v-stepper-content>
@@ -189,52 +197,56 @@
 	        	<v-checkbox v-model="accomodation.requirements" :label="rule.frname" :value="rule._id"></v-checkbox>           
 	        </v-flex>
           </v-layout>
+          <v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
           <v-btn color="primary" @click.native="changeIndex(9)">Continuer</v-btn>
           
         </v-stepper-content>
         
          <v-stepper-content step="9">
           
-          <v-layout row wrap>
-
-          <!-- Durée minimale de séjour -->
-          <v-flex xs12>
-         	<v-subheader>Durée minimale de séjour (jours)</v-subheader>
-         	</v-flex>
-          <v-flex xs9>
-         	<v-slider v-model="accomodation.durationmin" min="1" max="360" xs9></v-slider>
-         </v-flex>
-          <v-flex xs3>
-            <v-text-field v-model="accomodation.durationmin" type="number"></v-text-field>
-          </v-flex>
-          
-          <!-- Durée maximale de séjour -->
-          <v-flex xs12>
-         	<v-subheader>Durée maximale de séjour (jours)</v-subheader>
-         	</v-flex>
-          <v-flex xs9>
-         	<v-slider v-model="accomodation.durationmax" min="1" max="360" xs9></v-slider>
-         </v-flex>
-          <v-flex xs3>
-            <v-text-field v-model="accomodation.durationmax" type="number"></v-text-field>
-          </v-flex>
-          
-          <!-- Heure d'arrivée -->
-          <v-flex xs12 md6 lg6>
-         	<v-subheader>Heure limite d'arrivée</v-subheader>
-          	<v-time-picker v-model="accomodation.arrival"></v-time-picker>
-          </v-flex>  
-          
-          <!-- Heure de départ -->
-          <v-flex xs12 md6>
-         	<v-subheader>Heure limite de départ</v-subheader>
-          	<v-time-picker v-model="accomodation.departure"></v-time-picker>
-          </v-flex>  
-          
-          </v-layout>
+          <v-form ref="step9">
+	          <v-layout row wrap>
+	
+	          <!-- Durée minimale de séjour -->
+	          <v-flex xs12>
+	         	<v-subheader>Durée minimale de séjour (jours)</v-subheader>
+	         	</v-flex>
+	          <v-flex xs9>
+	         	<v-slider v-model="accomodation.durationmin" min="1" max="360" xs9></v-slider>
+	         </v-flex>
+	          <v-flex xs3>
+	            <v-text-field v-model="accomodation.durationmin" type="number" :rules="[v => v >= 1 && v <= 360 || 'Veuillez saisir une valeur comprise entre 1 et 360']"></v-text-field>
+	          </v-flex>
+	          
+	          <!-- Durée maximale de séjour -->
+	          <v-flex xs12>
+	         	<v-subheader>Durée maximale de séjour (jours)</v-subheader>
+	         	</v-flex>
+	          <v-flex xs9>
+	         	<v-slider v-model="accomodation.durationmax" min="1" max="360" xs9></v-slider>
+	         </v-flex>
+	          <v-flex xs3>
+	            <v-text-field v-model="accomodation.durationmax" type="number" :rules="[v => v >= 1 && v <= 360 || 'Veuillez saisir une valeur comprise entre 1 et 360']"></v-text-field>
+	          </v-flex>
+	          
+	          <!-- Heure d'arrivée -->
+	          <v-flex xs12 md6 lg6>
+	         	<v-subheader>Heure limite d'arrivée</v-subheader>
+	          	<v-time-picker v-model="accomodation.arrival"></v-time-picker>
+	          </v-flex>  
+	          
+	          <!-- Heure de départ -->
+	          <v-flex xs12 md6>
+	         	<v-subheader>Heure limite de départ</v-subheader>
+	          	<v-time-picker v-model="accomodation.departure"></v-time-picker>
+	          </v-flex>  
+	          
+	          </v-layout>
+          </v-form>
           
           <br/>
           
+          <v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
           <v-btn color="primary" @click="onValidate()">Valider</v-btn>
           
         </v-stepper-content>
@@ -272,12 +284,17 @@ export default {
 		Gmaps,
 	},
 	created: function () {
+		var vue = this;
+		this.accomodation.currentStep = 1;
 		if (this.$route.params.accomodationId != null) {
 			this.$http.get("accomodation/" + this.$route.params.accomodationId)
 				.then(response => {
 					if (response.status == 200) {
-						this.accomodation = response.body.accomodation;
-						this.maxStep = this.accomodation.currentStep;
+						//on delay car si le premier bloc du stepper n'a pas eu le temps de s'afficher alors le stepper ne voudra pas changer
+						setTimeout(function() {
+							vue.accomodation = response.body.accomodation;
+							vue.maxStep = vue.accomodation.currentStep;
+						}, 2000)
 					}
 				});
 		}
@@ -315,17 +332,24 @@ export default {
 	},
 	methods: {
 		onValidate() {
-			var vue = this;
-			this.accomodation.complete = true;
-			this.$http.put("accomodation/" + this.accomodation._id , this.accomodation).then(response => {
-				if (response.status === 200) {
-					this.snackbar.text = "Modifications enregistrées";
-					this.snackbar.show = true;
-					setTimeout(function () {
-						vue.$router.push('/realEstate/detail/' + response.body.accomodation._id)
-					}, 1500);
-				}
-			});
+			
+			var comp = null;
+			comp = this.$refs["step" + this.accomodation.currentStep];
+			
+			if (comp== null || comp.validate()) {
+			
+				var vue = this;
+				this.accomodation.complete = true;
+				this.$http.put("accomodation/" + this.accomodation._id , this.accomodation).then(response => {
+					if (response.status === 200) {
+						this.snackbar.text = "Modifications enregistrées";
+						this.snackbar.show = true;
+						setTimeout(function () {
+							vue.$router.push('/realEstate/detail/' + response.body.accomodation._id)
+						}, 1500);
+					}
+				});
+			}
 		},
 		onDeleteImg(picture) {
 			this.accomodation.images.splice(this.accomodation.images.indexOf(picture), 1);
@@ -343,25 +367,32 @@ export default {
 			
 			if (comp== null || comp.validate()) {
 				console.log("all inputs properly validated or no form")
-				
+				console.log("Index : " +index)
 				this.accomodation.currentStep = index;
+				this.$refs.test.inputValue = this.accomodation.currentStep;
 				if (index > this.maxStep)
 					this.maxStep = index;
 				//Validation de la première étape, je fais un POST, si je reviens en arrière je ne refais pas ça
 				if (index == 2)
 					this.$refs.gmaps.initMap();
-				if (index == 2 && this.maxStep == 2 && this.accomodation._id == null) {
+				if (this.accomodation._id == null) {
 					this.$http.post("accomodation").then(response => {
 						if (response.status == 200) {
 							this.accomodation = response.body.accomodation;
-							this.accomodation.currentStep = 2;
+							this.accomodation.currentStep = index;
+							//je fais un put pour enregistrer la currentStep afin de pouvoir faire un push dans le router
+							this.$http.put("accomodation/" + this.accomodation._id , this.accomodation).then(response => {
+								if (response.status == 200)
+									console.log("etape validée et sauvegardée avec succès")
+									this.$router.push('/realEstate/new/' + this.accomodation._id)
+							})
 						}
 					})
 				} 
 				//Sinon je fais un put pour modifier l'accomodation
 				else {
 					this.$http.put("accomodation/" + this.accomodation._id , this.accomodation).then(response => {
-						if (response.status.body == 200)
+						if (response.status == 200)
 							console.log("etape validée et sauvegardée avec succès")
 					})
 				}
@@ -417,8 +448,19 @@ export default {
 	 				this.accomodation.street += (" " + filterArray[0].long_name);
 		},
 		onValidateAllowedToChangeStep() {
-// 			window.alert(this.accomodation.currentStep)
+			if (this.accomodation.currentStep != null) {
+				if (typeof this.accomodation.currentStep == "string") {
+					console.log("c'est une strting")
+				}
+					this.accomodation.currentStep = parseInt(this.accomodation.currentStep);
+					}
+// 			window.alert(typeothis.accomodation.currentStep)
 		},
+		onGoPrevious() {
+			this.accomodation.currentStep -= 1;
+			this.$refs.test.inputValue = this.accomodation.currentStep;
+			console.log(this.accomodation.currentStep)
+		}
 	},
 };
 </script>
