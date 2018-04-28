@@ -256,16 +256,6 @@
     </v-stepper>
 		
 	</div>
-      
-      <v-snackbar
-      :timeout="6000"
-      v-model="snackbar.show"
-      right
-      bottom
-    >
-      {{ snackbar.text }}
-      <v-btn flat color="blue" @click.native="snackbar.show = false">Close</v-btn>
-    </v-snackbar>
 	
 	
 </div>
@@ -320,10 +310,6 @@ export default {
 			listOfEquipments : [],
 			listOfAvailableSpaces : [],
 			listOfAvailableRules : [],
-			snackbar : {
-				show : false,
-				text : "default",
-			},
 			accueilRules : [
 				v => !!v || "l'item est requis",
 		        v => v <= 20 && v > 0  || 'Dois être compris entre 0 et 20'
@@ -342,10 +328,12 @@ export default {
 				this.accomodation.complete = true;
 				this.$http.put("accomodation/" + this.accomodation._id , this.accomodation).then(response => {
 					if (response.status === 200) {
-						this.snackbar.text = "Modifications enregistrées";
-						this.snackbar.show = true;
+						this.$store.commit("snackbar", "Modifications enregistrées");
 						setTimeout(function () {
-							vue.$router.push('/realEstate/detail/' + response.body.accomodation._id)
+							vue.$store.commit("snackbar", "Accès au détail");
+							setTimeout(function () {
+								vue.$router.push('/realEstate/detail/' + response.body.accomodation._id)
+							}, 1000)
 						}, 1500);
 					}
 				});

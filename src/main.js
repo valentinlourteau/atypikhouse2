@@ -40,7 +40,7 @@ Vue.use(VueResource);
 const veeValidateConfig = {
 		  errorBagName: 'errors', // change if property conflicts
 		  fieldsBagName: 'fields', 
-		  delay: 0, 
+		  delay: 1500, 
 		  locale: 'en', 
 		  dictionary: null, 
 		  strict: true, 
@@ -88,8 +88,12 @@ const router = new VueRouter({
 const store = new Vuex.Store({
   state: {
 	  user : Vue.ls.get("user"),
+	  snackbar : "",
   },
   mutations: {
+	  snackbar(state, text) {
+		state.snackbar = new String(text);  
+	  },
 	  onSetToken(state, token) {
 		  Vue.ls.set("token", token);
 		  // On définit les headers
