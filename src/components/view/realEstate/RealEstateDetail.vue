@@ -95,6 +95,33 @@
       
       <!-- Calendrier -->
       <v-tab-item>
+      
+      
+      
+      	<v-layout class="ma-3" row wrap>
+      
+      		<v-flex xs12 md12 class="mb-3">
+      		
+      				<v-date-picker v-model="picker" color="secondary" landscape full-width locale="fr"
+      				></v-date-picker>
+      		
+      		</v-flex>
+      		
+      		<v-flex xs12>
+      		
+      			<v-card>
+					<v-subheader>Jours non autorisés</v-subheader>
+				</v-card>
+
+				<v-card-text>
+				
+				</v-card-text>
+      		
+      		</v-flex>
+      		
+      	</v-layout>
+      	
+      
       </v-tab-item>
       
       <!-- Réservations -->
@@ -123,6 +150,7 @@ export default {
 	},
 	data: function() {
 		return {
+			picker: null,
 			generalInformationsReadMode: true,
 			accomodation : new Accomodation(),
 			initialAccomodation: null,
