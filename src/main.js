@@ -80,7 +80,7 @@ const router = new VueRouter({
     { path: '/realEstate/new', component: NewRealEstate},
     { path: '/realEstate/new/:accomodationId', component: NewRealEstate},
     { path: '/realEstate/edit/:accomodationId', component: NewRealEstate},
-    { path: '/realEstate/detail/:accomodationId', component: RealEstateDetail},
+    { path: '/realEstate/detail', component: RealEstateDetail},
   ],
   mode: 'history'
 });

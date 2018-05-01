@@ -1,3 +1,4 @@
+
 /* La page sur les biens atypiques dont je dispose ... */
 <template>
 <div>
@@ -90,7 +91,7 @@ export default {
 			this.$router.push('/realEstate/new/' + accomodation._id);
 		},
 		onViewDetail(accomodation) {
-			this.$router.push('/realEstate/detail/' + accomodation._id);
+			this.$router.push({path: '/realEstate/detail', query: {accomodationId: accomodation._id, tab: 0}});
 		},
 		getTruncatedDescription(accomodation) {
 			length = 86;

@@ -2,7 +2,7 @@
 <template>
 <div>
 
-	<v-tabs v-model="activeTab" color="yellow" dark slider-color="black" centered>
+	<v-tabs v-model="activeTab" color="yellow" dark slider-color="black" centered @input="onChangeTab($event)">
 		
       <v-tab v-for="tab in tabs" :key="tab.text" ripple>
        <span class="black--text">{{ tab.text }}</span>
@@ -96,30 +96,50 @@
       <!-- Calendrier -->
       <v-tab-item>
       
-      
+      <v-container grid-list-lg>
       
       	<v-layout class="ma-3" row wrap>
+      	
+      		<v-flex xs12>
+      			<v-alert type="info" :value="true">Par défaut, AtypikHouse considère que votre bien est disponible tous les jours. Vous pouvez ajouter bloquer des dates en cliquant directement sur le calendrier.
+      			Ces jours seront ainsi bloqués sur votre calendrier et aucune réservation ne pourra être effectuée ni s'étendre le jour concerné. Notez toutefois que si une réservation a déja été faite, celle ci ne sera pas annulée.
+      			</v-alert>
+      		</v-flex>
       
-      		<v-flex xs12 md12 class="mb-3">
+      		<v-flex xs12 md9 class="mb-3">
       		
-      				<v-date-picker v-model="picker" color="secondary" landscape full-width locale="fr"
+      				<v-date-picker v-model="picker" color="primary" landscape full-width locale="fr" @input="onSelectCalendarDate($event)"
       				></v-date-picker>
       		
       		</v-flex>
       		
-      		<v-flex xs12>
+      		<v-flex xs3>
       		
       			<v-card>
 					<v-subheader>Jours non autorisés</v-subheader>
+					
+					<v-data-iterator :items="items" content-tag="v-list" :content-props="{dense: true}" column wrap loading="primary">
+					
+			            <v-list-tile slot="item" slot-scope="props">
+			              <v-list-tile-content>{{ props.item }}</v-list-tile-content>
+			              <v-spacer></v-spacer>
+				          <v-btn icon>
+				            <v-icon>search</v-icon>
+				          </v-btn>
+				          <v-btn icon>
+				            <v-icon>delete</v-icon>
+				          </v-btn>
+			            </v-list-tile>
+					
+					</v-data-iterator>
+					
 				</v-card>
-
-				<v-card-text>
-				
-				</v-card-text>
       		
       		</v-flex>
       		
       	</v-layout>
+      	
+     </v-container>
       	
       
       </v-tab-item>
@@ -155,6 +175,18 @@ export default {
 			accomodation : new Accomodation(),
 			initialAccomodation: null,
 			activeTab : null,
+			items : [
+				"29/01/2012",
+				"29/01/2013",
+				"29/01/2014",
+				"29/01/2015",
+				"29/01/2015",
+				"29/01/2015",
+				"29/01/2015",
+				"29/01/2015",
+				"29/01/2015",
+				"29/01/2011",
+				],
 			tabs: [
 				{text : "Information générales"},
 				{text : "Calendrier"},
@@ -164,10 +196,12 @@ export default {
 		}
 	},
 	created: function () {
-		this.$http.get("accomodation/" + this.$route.params.accomodationId).then(response => {
-			if (response.status == 200)
+		this.$http.get("accomodation/" + this.$route.query.accomodationId).then(response => {
+			if (response.status == 200) {
 				this.accomodation = response.body.accomodation;
 				this.initialAccomodation = Object.assign({}, response.body.accomodation);
+				this.activeTab = this.$route.query.tab;
+			}
 		});
 	},
  	methods: {
@@ -228,9 +262,20 @@ export default {
             };
             reader.readAsDataURL(files.get('data'));
 		},
+		onSelectCalendarDate(value) {
+			console.log(value)
+		},
+		onChangeTab(event) {
+			if (this.accomodation._id != null)
+				this.$router.push({path: '/realEstate/detail', query: {accomodationId: this.accomodation._id, tab: event}});
+		}
 	},
 };
 </script>
 
-<style>
+<style scoped>
+.date-picker-title__year .picker__title__btn {
+	color: black !important;
+	font-size: 40px !important;
+}
 </style>

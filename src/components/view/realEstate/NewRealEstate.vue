@@ -332,7 +332,7 @@ export default {
 						setTimeout(function () {
 							vue.$store.commit("snackbar", "Accès au détail");
 							setTimeout(function () {
-								vue.$router.push('/realEstate/detail/' + response.body.accomodation._id)
+								vue.$router.push({path: '/realEstate/detail', query: {accomodationId: response.body.accomodation._id, tab: event}});
 							}, 1000)
 						}, 1500);
 					}
