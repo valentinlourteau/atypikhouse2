@@ -12,24 +12,15 @@
       <v-text-field  v-model="newUser.firstname" type="text" class="validate" required="required" label="Prénom"/>
         <v-text-field v-model="newUser.lastname" type="text" class="validate" required="required" label="Nom"/>
       
-      <v-text-field
-          slot="activator"
-          label="Date de naissance"
-          v-model="selectedDate"
-          prepend-icon="event"
-          readonly
-        ></v-text-field>
-        <v-date-picker v-model="selectedDate" no-title scrollable actions></v-date-picker>
-      
       <v-alert value="true" color="success">{{ equalsPasswordSeverity === 'warning' ? 'Les deux mots de passe doivent être égaux' : 'Mot de passe confirmé' }}</v-alert>
       
-      <v-text-field v-validate="{ required: true, regex: '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})' }" 
+      <v-text-field label="Mot de passe" v-validate="{ required: true, regex: '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})' }" 
       name="password1" id="password" v-model="newUser.password" type="password" required="required" />
       
-      <v-text-field v-on:keyup="checkPasswordsAreEquals()" v-validate="{ required: true, regex: '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})' }" 
+      <v-text-field label="Mot de passe : confirmation" v-on:keyup="checkPasswordsAreEquals()" v-validate="{ required: true, regex: '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})' }" 
       name="password2" id="passwordVerif" v-model="verifPassword" type="password" required="required" />
-      
-  </div>
+       
+  	</div>
 
     
     <div slot="footer" class="right-align">
@@ -71,8 +62,6 @@ export default {
 		},
 		//Permet de cr�er un nouvel utilisateur
 		queryCreateNewUser() {
-			//this.$validator.validateAll();
-	        //if (!this.errors.any()) {
 	        	var vue = this;
 	        	
 			this.$http.post("users", {
