@@ -46,10 +46,77 @@
       
       <!-- Calendrier global -->
       <v-tab-item>
-        //TODO
+        
+        <v-container grid-list-lg>
+      
+      	<v-layout class="ma-3" row wrap>
+      	
+      		<v-flex xs12>
+      			<v-alert type="info" :value="true">
+      				Vous pouvez renseigner ici un calendrier qui sera utilisé par défaut pour tos vos biens.
+      				Le calendrier global ne s'applique pas si un bien définit son propre calendrier.
+      			</v-alert>
+      		</v-flex>
+      
+      		<v-flex xs12 md9 class="mb-3">
+      		
+      				<v-date-picker v-model="picker" color="primary" landscape full-width locale="fr" @input="onSelectCalendarDate($event)"
+      				></v-date-picker>
+      		
+      		</v-flex>
+      		
+      		<v-flex xs3>
+      		
+      			<v-card>
+					<v-subheader>Jours non autorisés</v-subheader>
+					
+					<v-data-iterator :items="items" content-tag="v-list" :content-props="{dense: true}" column wrap loading="primary">
+					
+			            <v-list-tile slot="item" slot-scope="props">
+			              <v-list-tile-content>{{ props.item }}</v-list-tile-content>
+			              <v-spacer></v-spacer>
+				          <v-btn icon>
+				            <v-icon>search</v-icon>
+				          </v-btn>
+				          <v-btn icon>
+				            <v-icon>delete</v-icon>
+				          </v-btn>
+			            </v-list-tile>
+					
+					</v-data-iterator>
+					
+					<v-card-actions>
+						<v-btn flat color="primary">Ajouter</v-btn>
+					</v-card-actions>
+					
+				</v-card>
+      		
+      		</v-flex>
+      		
+      	</v-layout>
+      	
+     </v-container>
+        
       </v-tab-item>
       
     </v-tabs>
+    
+    <v-dialog v-model="addForbiddenDate.show">
+    
+    	<v-card>
+    	
+    	<v-card-title>
+    		Ajout d'un jour interdit
+    	</v-card-title>
+    	
+    	<v-card-text>
+    		Voulez vous ajouter le {{ addForbiddenDate.date }} aux jours bloqués, personne ne pourra réserver. Si une réservation existe à cette date,
+    		vous devrez contacter vous même le locataire.
+    	</v-card-text>
+    	
+    	</v-card>
+    	
+    </v-dialog>
     
 		
 </div>
@@ -79,6 +146,23 @@ export default {
 				{text : "Calendrier global"},
 // 				{text : "Statistiques"},
 			],
+			picker : null,
+			addForbiddenDate: {
+				show: false,
+				date: null,
+			},
+			items : [
+				"29/01/2012",
+				"29/01/2013",
+				"29/01/2014",
+				"29/01/2015",
+				"29/01/2015",
+				"29/01/2015",
+				"29/01/2015",
+				"29/01/2015",
+				"29/01/2015",
+				"29/01/2011",
+				],
 		}
 	},
 	computed: {
@@ -104,6 +188,11 @@ export default {
 		},
 		setAccomodationActive(accomodation) {
 			//TODO
+		},
+		onSelectCalendarDate($event) {
+			//ajout d'un nouveau jour interdit
+			this.addForbiddenDate.show = true;
+			this.addForbiddenDate.date = $event;
 		},
 	},
 };
