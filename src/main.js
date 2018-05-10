@@ -17,6 +17,8 @@ import PortalVue from 'portal-vue'
 import Home from './components/view/Home';
 import Account from './components/view/Account';
 import Discover from './components/view/Discover';
+import about from './components/view/About';
+
 import RealEstate from './components/view/realEstate/RealEstate';
 import NewRealEstate from './components/view/realEstate/NewRealEstate';
 import RealEstateDetail from './components/view/realEstate/RealEstateDetail';
@@ -24,7 +26,7 @@ import RealEstateDetail from './components/view/realEstate/RealEstateDetail';
 import TD from './class/utils/TokenDecrypter';
 
 Vue.use(Vuetify, { theme: {
-  primary: '#FFEB3B',
+  primary: '#e7eae3',
   secondary: '#2196F3',
   accent: '#82B1FF',
   error: '#FF5252',
@@ -76,6 +78,11 @@ const router = new VueRouter({
     { path: '/home', component: Home},
     { path: '/account', component: Account},
     { path: '/discover', component: Discover},
+    { path: '/About', component: about},
+
+
+
+
     { path: '/realEstate/home', component: RealEstate},
     { path: '/realEstate/new', component: NewRealEstate},
     { path: '/realEstate/new/:accomodationId', component: NewRealEstate},
@@ -136,3 +143,4 @@ var vue = new Vue({
 })
 
 App.vue
+
