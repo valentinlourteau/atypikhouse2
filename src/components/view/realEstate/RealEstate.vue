@@ -4,7 +4,7 @@
 <div>
 
 		
-		<v-tabs v-model="activeTab" color="yellow" dark slider-color="black" centered>
+		<v-tabs v-model="activeTab" color="yellow" dark slider-color="black" centered @input="onChangeTab($event)">
 		
       <v-tab v-for="tab in tabs" :key="tab.text" ripple>
        <span class="black--text">{{ tab.text }}</span>
@@ -76,9 +76,6 @@
 			              <v-list-tile-content>{{ props.item }}</v-list-tile-content>
 			              <v-spacer></v-spacer>
 				          <v-btn icon>
-				            <v-icon>search</v-icon>
-				          </v-btn>
-				          <v-btn icon>
 				            <v-icon>delete</v-icon>
 				          </v-btn>
 			            </v-list-tile>
@@ -101,18 +98,23 @@
       
     </v-tabs>
     
-    <v-dialog v-model="addForbiddenDate.show">
+    <v-dialog v-model="addForbiddenDate.show" width="400px">
     
     	<v-card>
     	
     	<v-card-title>
-    		Ajout d'un jour interdit
+    		<span class="title">Ajout d'un jour interdit</span>
     	</v-card-title>
     	
     	<v-card-text>
-    		Voulez vous ajouter le {{ addForbiddenDate.date }} aux jours bloqués, personne ne pourra réserver. Si une réservation existe à cette date,
-    		vous devrez contacter vous même le locataire.
+    		Voulez vous ajouter le {{ addForbiddenDate.date }} aux jours bloqués ?
+    		Si une réservation existe à cette date,	vous devrez contacter vous même le locataire.
     	</v-card-text>
+    	
+    	<v-card-actions>
+    		<v-btn flat @click="addForbiddenDate.show = false;">ANNULER</v-btn>
+    		<v-btn flat color="primary" @click="onLockDay()">BLOQUER</v-btn>
+    	</v-card-actions>
     	
     	</v-card>
     	
@@ -135,6 +137,7 @@ export default {
 				this.accomodations = response.body.accomodations;
 			}
 		});
+		this.activeTab = this.$route.query.tab;
 
 	},
 	data: function() {
@@ -194,6 +197,13 @@ export default {
 			this.addForbiddenDate.show = true;
 			this.addForbiddenDate.date = $event;
 		},
+		onLockDay() {
+			//ajout d'un jour bloqué
+			this.addForbiddenDate.show = false;
+		},
+		onChangeTab(event) {
+			this.$router.push({path: '/realEstate/home', query: {tab: event}});
+		}
 	},
 };
 </script>
