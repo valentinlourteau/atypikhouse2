@@ -118,7 +118,8 @@
       			<v-card>
 					<v-subheader>Jours non autorisés</v-subheader>
 					
-					<v-data-iterator :items="items" content-tag="v-list" :content-props="{dense: true}" column wrap loading="primary">
+					<v-data-iterator :items="items" content-tag="v-list" :content-props="{dense: true}" column wrap loading>
+<!-- 					<v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear> -->
 					
 			            <v-list-tile slot="item" slot-scope="props">
 			              <v-list-tile-content>{{ props.item }}</v-list-tile-content>
@@ -196,11 +197,11 @@ export default {
 		}
 	},
 	created: function () {
+		this.activeTab = this.$route.query.tab;
 		this.$http.get("accomodation/" + this.$route.query.accomodationId).then(response => {
 			if (response.status == 200) {
 				this.accomodation = response.body.accomodation;
 				this.initialAccomodation = Object.assign({}, response.body.accomodation);
-				this.activeTab = this.$route.query.tab;
 			}
 		});
 	},
