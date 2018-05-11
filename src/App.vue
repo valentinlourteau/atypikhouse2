@@ -1,5 +1,5 @@
 <template>
-  <v-app id="zdededex">
+  <v-app>
     
     <sidenav-bar :display="displayDrawer"></sidenav-bar>
     <ah-header @onClickSwitchDrawer="displayDrawer = !displayDrawer"></ah-header>

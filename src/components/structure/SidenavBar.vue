@@ -24,7 +24,7 @@
 	</div>
 	
 	<v-list>
-      <v-list-tile v-if="$store.state.user != null && item.needUserAuth || !item.needUserAuth" v-for="item in items" :key="item.title" @click="route(item.link)">
+      <v-list-tile v-for="item in items" :key="item.title" @click="route(item.link)">
         <v-list-tile-action>
           <v-icon >{{ item.icon }}</v-icon>
         </v-list-tile-action>
@@ -61,9 +61,9 @@ export default {
 	data: function() {
 		return {
 		      items: [
-		          { title: 'Mon compte', icon: 'account_circle', link: '/account', needUserAuth: false},
-		          { title: 'Mes biens atypiques', icon: 'account_box', link: '/realEstate/home', needUserAuth: true},
-		          { title: 'Mes voyages', icon: 'flight_takeoff', link: '/', needUserAuth: true},
+		          { title: 'Mon compte', icon: 'account_circle', link: '/account'},
+		          { title: 'Mes biens atypiques', icon: 'home', link: '/realEstate/home'},
+		          { title: 'Mes voyages', icon: 'flight_takeoff', link: '/'},
 		        ],
 		        displayDrawer : true,
 		      avatarSize: '64px',

@@ -95,53 +95,8 @@
       
       <!-- Calendrier -->
       <v-tab-item>
-      
-      <v-container grid-list-lg>
-      
-      	<v-layout class="ma-3" row wrap>
-      	
-      		<v-flex xs12>
-      			<v-alert type="info" :value="true">Par défaut, AtypikHouse considère que votre bien est disponible tous les jours. Vous pouvez ajouter bloquer des dates en cliquant directement sur le calendrier.
-      			Ces jours seront ainsi bloqués sur votre calendrier et aucune réservation ne pourra être effectuée ni s'étendre le jour concerné. Notez toutefois que si une réservation a déja été faite, celle ci ne sera pas annulée.
-      			</v-alert>
-      		</v-flex>
-      
-      		<v-flex xs12 md9 class="mb-3">
-      		
-      				<v-date-picker v-model="picker" color="primary" landscape full-width locale="fr" @input="onSelectCalendarDate($event)"
-      				></v-date-picker>
-      		
-      		</v-flex>
-      		
-      		<v-flex xs3>
-      		
-      			<v-card>
-					<v-subheader>Jours non autorisés</v-subheader>
-					
-					<v-data-iterator :items="items" content-tag="v-list" :content-props="{dense: true}" column wrap loading>
-<!-- 					<v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear> -->
-					
-			            <v-list-tile slot="item" slot-scope="props">
-			              <v-list-tile-content>{{ props.item }}</v-list-tile-content>
-			              <v-spacer></v-spacer>
-				          <v-btn icon>
-				            <v-icon>search</v-icon>
-				          </v-btn>
-				          <v-btn icon>
-				            <v-icon>delete</v-icon>
-				          </v-btn>
-			            </v-list-tile>
-					
-					</v-data-iterator>
-					
-				</v-card>
-      		
-      		</v-flex>
-      		
-      	</v-layout>
-      	
-     </v-container>
-      	
+          
+      <calendar :calendar="accomodation.calendar"></calendar>  
       
       </v-tab-item>
       
@@ -160,6 +115,7 @@
 </template>
 
 <script>
+import Calendar from '../../realEstate/Calendar';
 import Accomodation from '../../../class/entities/Accomodation';
 import ReadWriteField from '../../utility/ReadWriteField';
 import FileUpload from '../../utility/FileUpload';
@@ -167,7 +123,8 @@ import FileUpload from '../../utility/FileUpload';
 export default {
 	components: {
 		ReadWriteField,
-		FileUpload
+		FileUpload,
+		Calendar,
 	},
 	data: function() {
 		return {
