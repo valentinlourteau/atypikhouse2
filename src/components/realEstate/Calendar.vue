@@ -13,6 +13,19 @@
       		
       		<v-flex xs3>
       		
+      			<!-- Activation du calendrier -->
+      			<v-card class="mb-3">
+      				<v-subheader>Activation du calendrier</v-subheader>
+      				
+      				<v-card-text>
+      				<v-switch
+      				:label="selectedCalendar.active ? 'Oui' : 'Non'"
+      				v-model="selectedCalendar.active"></v-switch>
+      				</v-card-text>
+      			
+      			</v-card>
+      		
+      			<!-- Liste des jours bloqués -->
       			<v-card>
 					<v-subheader>Jours bloqués</v-subheader>
 					

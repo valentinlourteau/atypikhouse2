@@ -96,7 +96,7 @@
       <!-- Calendrier -->
       <v-tab-item>
           
-      <calendar :calendar="accomodation.calendar"></calendar>  
+      	<calendar :calendar="accomodation.calendar"></calendar>  
       
       </v-tab-item>
       
@@ -128,23 +128,10 @@ export default {
 	},
 	data: function() {
 		return {
-			picker: null,
 			generalInformationsReadMode: true,
 			accomodation : new Accomodation(),
 			initialAccomodation: null,
 			activeTab : null,
-			items : [
-				"29/01/2012",
-				"29/01/2013",
-				"29/01/2014",
-				"29/01/2015",
-				"29/01/2015",
-				"29/01/2015",
-				"29/01/2015",
-				"29/01/2015",
-				"29/01/2015",
-				"29/01/2011",
-				],
 			tabs: [
 				{text : "Information générales"},
 				{text : "Calendrier"},
@@ -219,9 +206,6 @@ export default {
 				});
             };
             reader.readAsDataURL(files.get('data'));
-		},
-		onSelectCalendarDate(value) {
-			console.log(value)
 		},
 		onChangeTab(event) {
 			if (this.accomodation._id != null)
