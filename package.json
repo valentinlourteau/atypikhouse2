@@ -16,6 +16,7 @@
     "@mdi/font": "^2.3.54",
     "base-64": "^0.1.0",
     "google-maps": "^3.2.1",
+    "moment": "^2.22.1",
     "portal-vue": "^1.3.0",
     "vee-validate": "^2.0.4",
     "vue": "^2.5.2",

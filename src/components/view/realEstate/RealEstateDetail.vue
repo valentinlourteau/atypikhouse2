@@ -96,7 +96,7 @@
       <!-- Calendrier -->
       <v-tab-item>
           
-      	<calendar :calendar="accomodation.calendar"></calendar>  
+      	<calendar :calendar="accomodation.calendar" /> 
       
       </v-tab-item>
       
@@ -106,6 +106,9 @@
       
       <!-- A proximité -->
       <v-tab-item>
+      
+      	<nearby />
+      
       </v-tab-item>
       
     </v-tabs>
@@ -116,6 +119,7 @@
 
 <script>
 import Calendar from '../../realEstate/Calendar';
+import Nearby from '../../realEstate/Nearby';
 import Accomodation from '../../../class/entities/Accomodation';
 import ReadWriteField from '../../utility/ReadWriteField';
 import FileUpload from '../../utility/FileUpload';
@@ -125,6 +129,7 @@ export default {
 		ReadWriteField,
 		FileUpload,
 		Calendar,
+		Nearby,
 	},
 	data: function() {
 		return {
