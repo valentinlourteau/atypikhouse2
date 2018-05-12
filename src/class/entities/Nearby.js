@@ -5,6 +5,14 @@ class Nearby {
   constructor() {
 	this._id;
 	this.approximativeAmount;
+	this.expend = false;
+	this.majDate = new Date();
+	this.name;
+	this.description;
+	this.price;
+	this.range;
+	this.phone;
+	this.website;
   }
 
 }
