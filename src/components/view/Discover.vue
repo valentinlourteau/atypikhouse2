@@ -1,10 +1,12 @@
 /* La page sur les voyages, experiences ... */
 <template>
 <div>
-	<div style="padding:16px 0 8px 16px;margin:0 32px;border-bottom:2px solid #9E9E9E" class="display-1">Voyager</div>
-	<div class="container" style="margin-top: 24px;">
+	<div class="container">
 	<v-container>
-		<v-layout row wrap>
+	
+		<v-text-field prepend-icon="search" v-model="search" :placeholder="getRandomPlaceHolder()" solo></v-text-field>
+	
+		<v-layout v-if="false" row wrap>
     	<v-flex xs12 sm6 lg4 xl3 v-for="i in 9" :key="i" style="padding:16px;">
       <v-card >
         <v-card-media src="/static/images/bulle.png" height="200px">
@@ -31,8 +33,17 @@
 <script>
 
 export default {
-	mounted: function() {
-	}
+	methods: {
+		getRandomPlaceHolder() {
+			return "Une maison sous l'eau";
+		},
+	},
+	data: function() {
+		return {
+			search: null,
+		}
+	},
+	
 };
 </script>
 
