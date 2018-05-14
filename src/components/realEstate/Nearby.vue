@@ -1,9 +1,13 @@
 <template>
 	<div>
 	
-	<v-layout row wrap>
+	<v-alert class="ma-3" :value="true" type="info">Vous pouvez renseigner ici les activités à proximité de votre bien, elles permettront aux voyageurs de se projetter dans votre bien.
+	Ajouter des informations précises et les maintenir à jour est un gage de sérieux pour le voyageur. N'hésitez pas à y mettre vos meilleurs clichés et pourquoi pas une petite anecdote !</v-alert>
+	<v-alert class="ma-3" :value="nearbyList.filter(nearby => nearby.oldInformations).length > 0" type="warning">Une ou plusieurs activités à proximité n'ont pas été mises à jours depuis longtemps !</v-alert>
+	
+	<v-layout row wrap class="mx-2">
 			
-		<v-flex v-for="nearby in nearbyList" :key="nearby._id" xs12 sm4 lg4 xl3 class="pa-2">
+		<v-flex v-for="nearby in nearbyList" :key="nearby._id" xs12 sm4 lg3 xl3 class="pa-2">
 		
 			<v-card>
 			
@@ -11,25 +15,19 @@
 				<v-card-title primary-title>
           			<div>
 			            <div class="headline">{{ nearby.name }}</div>
-			            <span :class="areInformationOlds(nearby.majDate) ? 'red--text' : 'grey--text'">{{ getFormattedDate(nearby.majDate) }}</span>
+			            <span :class="nearby.oldInformations ? 'orange--text' : 'grey--text'">Mis à jour le : {{ getFormattedDate(nearby.majDate) }}</span>
           			</div>
        			 </v-card-title>
        			 
        			  <v-card-actions>
-			          <v-btn color="primary" flat>METTRE A JOUR</v-btn>
+			          <v-btn :color="nearby.oldInformations ? 'orange' : 'secondary'" @click="onEditNearby(nearby)" flat><span style="order:2" :class="nearby.oldInformations ? 'orange--text' : ''">METTRE A JOUR</span>
+			          <v-icon v-if="nearby.oldInformations" style="order:1" class="mr-2 orange--text">warning</v-icon>
+			          </v-btn>
 			          <v-spacer></v-spacer>
 			          <v-btn icon>
 			          	<v-icon>delete</v-icon>
 			          </v-btn>
-			          <v-btn icon @click.native="nearby.expend = !nearby.expend ">
-			            <v-icon>{{ nearby.expend ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-			          </v-btn>
 			        </v-card-actions>
-			        <v-slide-y-transition>
-			          <v-card-text v-show="nearby.expend">
-			          	{{ nearby.description }}
-			          </v-card-text>
-        </v-slide-y-transition>
 			
 			</v-card>
 		
@@ -41,31 +39,31 @@
 		<v-icon color="black">add</v-icon>
 	</v-btn>
 	
-	<v-dialog v-model="showDialogAddNearby" max-width="500px">
+	<v-dialog v-model="showDialogAddNearby" max-width="500px" persistent>
 		
 		<v-card>
-			<v-subheader>Ajout d'une activité</v-subheader>
-			
-			<v-card-text>
-				<v-form ref="newNearbyForm">
+			<form @submit.prevent="handleSubmit">
+				<v-subheader>Activité</v-subheader>
 				
-					<v-text-field v-model="nearby.name" label="Nom de l'activité"></v-text-field>
-					<v-text-field v-model="nearby.description" label="Description de l'activité" multi-line></v-text-field>
-					<v-text-field v-model="nearby.price" label="prix indicatif"></v-text-field>
-					<v-text-field v-model="nearby.range" label="Distance du bien"></v-text-field>
-					<v-text-field v-model="nearby.phone" label="Numéro"></v-text-field>
-					<v-text-field v-model="nearby.website" label="Site web"></v-text-field>
+				<v-card-text>
 					
-					<!-- TODO A ENLEVER A LA FIN CAR CEST UNE VALEUR GEREE PAR L'OUTIL -->
-					<v-text-field v-model="nearby.majDate" label="Date de mise à jour"></v-text-field>
+						<v-text-field v-model="nearby.name" v-validate="'required'" :error-messages="errors.collect('name')" data-vv-name="name" label="Nom de l'activité" required></v-text-field>
+						<v-text-field v-model="nearby.description" v-validate="'required'" :error-messages="errors.collect('description')" data-vv-name="description" label="Description de l'activité" multi-line required></v-text-field>
+						<v-text-field v-model="nearby.price" label="prix indicatif"></v-text-field>
+						<v-text-field v-model="nearby.distance" label="Distance depuis le bien"></v-text-field>
+						<v-text-field v-model="nearby.phone" label="Numéro"></v-text-field>
+						<v-text-field v-model="nearby.website" label="Site web"></v-text-field>
+						
+						<!-- TODO A ENLEVER A LA FIN CAR CEST UNE VALEUR GEREE PAR L'OUTIL -->
+						<v-text-field v-model="nearby.majDate" label="Date de mise à jour"></v-text-field>
+					
+				</v-card-text>
 				
-				</v-form>
-			</v-card-text>
-			
-			<v-card-actions>
-				<v-btn flat @click="showDialogAddNearby = false;">Annuler</v-btn>
-				<v-btn flat color="primary" @click="onSaveNearby()">Ajouter</v-btn>
-			</v-card-actions>
+				<v-card-actions>
+					<v-btn flat @click="showDialogAddNearby = false;">Annuler</v-btn>
+					<v-btn flat color="primary" @click="onSaveNearby()">Valider</v-btn>
+				</v-card-actions>
+			</form>
 		</v-card>
 		
 	</v-dialog>
@@ -82,6 +80,20 @@ export default {
 	},
 	props: [],
 	created: function () {
+		this.nearbyList.push({
+			_id: "D156645645645465456dad",
+			majDate: moment("21/12/2017", "DD/MM/YYYY").toDate(),
+			name: "Canoe kayak",
+			description: "Une superbe activité à faire en famille, vous allez pouvoir nager et faire du boudin créole en sautant sur une plage infestée de dinosaures et de méga zgegs de poule constipée crotte de nez",
+			price: "100€ par personne",
+			distance: "20 km",
+			phone: "06 22 98 63 95",
+			website: "website.com",
+			oldInformations: true,
+		})
+		for (var nearby in this.nearbyList) {
+			this.nearbyList[nearby].oldInformations = this.areInformationOlds(this.nearbyList[nearby]);
+		}
 	},
 	data: function() {
    		return {
@@ -95,21 +107,38 @@ export default {
   			this.showDialogAddNearby = true;
   		},
   		onSaveNearby() {
-  			if (this.$refs.newNearbyForm.validate()) {
-  	  			this.showDialogAddNearby = false;
+  			this.$validator.validateAll().then(result => {
   	  			//TODO A REMETTRE
   	  			//this.nearby.majDate = new Date();
-  	  			this.nearbyList.push(this.nearby);
-  	  			//TODO Appel HTTP pour save un nearby
-  			}
+					if (result) {
+		  	  			if (this.nearby._id == null) {
+		  	  				this.nearbyList.push(this.nearby);
+		  	  	  			//TODO Appel HTTP pour POST un nearby
+		  	  			}
+		  	  			else {
+		  	  	  			//TODO Appel HTTP pour PUT un nearby
+		  	  				this.$store.commit("snackbar", "Modifications enregistrées");
+		  	  			}
+		  	  			this.nearby.oldInformations = this.areInformationOlds(this.nearby);
+		  	  			this.showDialogAddNearby = false;
+					}
+  			})
   		},
-  		areInformationOlds(date) {
-  			var infoDate = moment(date);
+  		areInformationOlds(nearby) {
+  			var infoDate = moment(nearby.majDate);
   			var today = moment(new Date());
-  			return today.diff(infoDate, "days") > 90 ? true : false;
+  			return today.diff(infoDate, "days") > 180 ? true : false;
   		},
   		getFormattedDate(date) {
   			return moment(date).format('DD/MM/YYYY');
+  		},
+  		onEditNearby(nearby) {
+  			this.nearby = nearby;
+  			this.showDialogAddNearby = true;
+  		},
+  		onDeleteNearby(nearby) {
+  			this.nearbyList.remove(nearby);
+  			//TODO Appel HTTP DELETE
   		},
   	},
 };

@@ -13,7 +13,7 @@
       <!-- Mes biens -->
       <v-tab-item>
         
-        <v-layout row wrap>
+        <v-layout row wrap class="mx-2">
 			
 			<v-flex  v-for="accomodation in accomodations" :key="accomodation._id" xs12 sm4 lg4 xl3 class="pa-2">
 			

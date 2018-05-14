@@ -8,14 +8,14 @@
       	
 		<v-layout row wrap>
 		
-		<v-flex xs12 md9>
+		<v-flex xs12>
       		
       				<v-date-picker v-model="picker" color="primary" landscape full-width locale="fr" @input="onSelectCalendarDate($event)"
       				:allowed-dates="getAllowedDates"></v-date-picker>
       		
       		</v-flex>
       		
-      		<v-flex xs3>
+      		<v-flex xs4>
       		
       			<!-- Activation du calendrier -->
       			<v-card class="mb-3">
@@ -28,12 +28,43 @@
       				</v-card-text>
       			
       			</v-card>
+      			
+      		</v-flex>
       		
-      			<!-- Liste des jours bloqués -->
-      			<v-card>
-					<v-subheader>Jours bloqués</v-subheader>
+      			<v-flex xs4>
+      		
+      			<!-- Liste des dates bloqués -->
+      			<v-card class="mb-3">
+					<v-subheader>Jours récurrents bloqués</v-subheader>
 					
-					<v-data-iterator :items="selectedCalendar.lockedDays" content-tag="v-list" :content-props="{dense: true}" no-data-text="Aucune date bloquée" column wrap>
+					<v-menu offset-y>
+					    <v-btn slot="activator" color="primary" flat>Ajouter</v-btn>
+					    
+					    <v-list>
+						    <v-list-tile v-for="item in days" v-if="!selectedCalendar.lockedDays.includes(item)" :key="item" @click="onAddDay(item)">
+						    	<v-list-tile-title>{{ item }}</v-list-tile-title>
+						    </v-list-tile>
+					    </v-list>
+					    
+    				</v-menu>
+					
+					<v-card-text>
+						<div class="text-xs-center">
+							<v-chip v-for="day in selectedCalendar.lockedDays" close>{{ day }}</v-chip>
+						</div>
+					</v-card-text>
+					
+				</v-card>
+				
+				</v-flex>
+				
+				<v-flex xs4>
+      			
+      			<!-- Liste des date bloqués -->
+      			<v-card>
+					<v-subheader>Dates bloqués</v-subheader>
+					
+					<v-data-iterator :items="selectedCalendar.lockedDates" content-tag="v-list" :content-props="{dense: true}" no-data-text="Aucune date bloquée" column wrap>
 					
 			            <v-list-tile slot="item" slot-scope="props">
 			              <v-list-tile-content>{{ props.item }}</v-list-tile-content>
@@ -94,6 +125,7 @@ export default {
 			this.selectedCalendar = {
 					active: true,
 					lockedDays: [],
+					lockedDates: [],
 			};
 		}
 		else {
@@ -108,7 +140,16 @@ export default {
 			show: false,
 			date: null,
 		},
-		getAllowedDates: val => !this.selectedCalendar.lockedDays.includes(moment(val).format('DD/MM/YYYY')) && new Date(val) > new Date(),
+		getAllowedDates: val => !this.selectedCalendar.lockedDates.includes(moment(val).format('DD/MM/YYYY')) && new Date(val) > new Date(),
+		days: [
+			"Lundi",
+			"Mardi",
+			"Mercredi",
+			"Jeudi",
+			"Vendredi",
+			"Samedi",
+			"Dimanche",
+		],
     }
   },
   methods: {
@@ -119,13 +160,16 @@ export default {
 		},
 		onLockDay() {
 			//ajout d'un jour bloqué
-			this.selectedCalendar.lockedDays.push(moment(this.addForbiddenDate.date).format('DD/MM/YYYY'));
-			this.selectedCalendar.lockedDays.sort()
+			this.selectedCalendar.lockedDates.push(moment(this.addForbiddenDate.date).format('DD/MM/YYYY'));
+			this.selectedCalendar.lockedDates.sort()
 			this.addForbiddenDate.show = false;
+		},
+		onAddDay(day) {
+			this.selectedCalendar.lockedDays.push(day);
 		},
 		onDeleteDate(date) {
 			console.log(date)
-			this.selectedCalendar.lockedDays.splice(date);
+			this.selectedCalendar.lockedDates.splice(date);
 		},
 		onSaveCalendar() {
 			//TODO
