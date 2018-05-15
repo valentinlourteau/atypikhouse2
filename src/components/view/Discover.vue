@@ -18,12 +18,11 @@
 							<v-card-title primary-title>
 								<div class="headline" style="width:100%">{{ accomodation.name }}</div>
 								<div class="price" style="width:100%">50€ par nuit</div>
-								<v-divider></v-divider>
-								<div class="grey--text">{{ getTruncatedDescription(accomodation) }}</div>
+								<div class="grey--text" style="width:100%">{{ getTruncatedDescription(accomodation) }}</div>
+								<div class="ah-divider"></div>
 							</v-card-title>
 							<v-card-text>
-								
-							
+							test
 							</v-card-text>
 						</v-card>
 						</v-flex>
@@ -70,6 +69,15 @@ export default {
 </script>
 
 <style>
+.ah-divider {
+	height: 1px;
+	border-top: 1px grey solid;
+	width: 100%;
+	background-color: #0000001e;
+	opacity: 0.2;
+	margin: 12px 0;
+}
+
 .card {
   -webkit-perspective: 1000;
   -webkit-backface-visibility: hidden; 
