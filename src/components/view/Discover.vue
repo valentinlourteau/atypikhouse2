@@ -12,12 +12,16 @@
 			</v-layout>
 						
 						<div class="cards mt-3">
-						<v-flex class="mb-3" v-for="accomodation in accomodations">
+						<v-flex style="display:inline-block;width:100%" class="mb-3" v-for="accomodation in accomodations">
 						<v-card style="width:100%;" >
 							<v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
-							<v-card-title primary-title><div class="headline">{{ accomodation.name }}</div></v-card-title>
+							<v-card-title primary-title>
+								<div class="headline" style="width:100%">{{ accomodation.name }}</div>
+								<div class="price" style="width:100%">50€ par nuit</div>
+								<v-divider></v-divider>
+								<div class="grey--text">{{ getTruncatedDescription(accomodation) }}</div>
+							</v-card-title>
 							<v-card-text>
-							
 								
 							
 							</v-card-text>
@@ -50,7 +54,16 @@ export default {
 				if (response.status == 200)
 					this.accomodations = response.body.accomodations;
 			})
-		}
+		},
+		getTruncatedDescription(accomodation) {
+			length = 86;
+			if (accomodation.description == null)
+				return "";
+			else if (accomodation.description.length > length)
+				return accomodation.description.substring(0, length) + " ...";
+			else
+				return accomodation.description.substring(0, length);
+		},
 	},
 	
 };
@@ -79,13 +92,13 @@ export default {
 
 @media only screen and (min-width: 1264px) {
   .cards {
-    column-count: 4;
+    column-count: 3;
   }
 }
 
 @media only screen and (min-width: 1904px) {
   .cards {
-    column-count: 5;
+    column-count: 4;
   }
 }
 </style>
