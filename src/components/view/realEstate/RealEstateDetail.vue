@@ -96,7 +96,7 @@
       <!-- Calendrier -->
       <v-tab-item>
           
-      	<calendar :calendar="accomodation.calendar" /> 
+      	<calendar :accomodationId="accomodation._id" /> 
       
       </v-tab-item>
       

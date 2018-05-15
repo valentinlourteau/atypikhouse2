@@ -15,22 +15,6 @@
       		
       		</v-flex>
       		
-      		<v-flex xs4>
-      		
-      			<!-- Activation du calendrier -->
-      			<v-card class="mb-3">
-      				<v-subheader>Activation du calendrier</v-subheader>
-      				
-      				<v-card-text>
-      				<v-switch
-      				:label="selectedCalendar.active ? 'Oui' : 'Non'"
-      				v-model="selectedCalendar.active"></v-switch>
-      				</v-card-text>
-      			
-      			</v-card>
-      			
-      		</v-flex>
-      		
       			<v-flex xs4>
       		
       			<!-- Liste des dates bloqués -->
@@ -118,19 +102,12 @@ import moment from 'moment';
 export default {
 	components: {
 	},
-	props: ["calendar"],
+	props: ["accomodationId"],
 	created: function () {
-		this.selectedCalendar = this.calendar;
-		if (typeof this.selectedCalendar == 'undefined') {
-			this.selectedCalendar = {
-					active: true,
-					lockedDays: [],
-					lockedDates: [],
-			};
-		}
-		else {
-			//la on vérifie si c'est un calendrier de type user ou de type accomodation : global / local
-		}
+		this.selectedCalendar = {
+				lockedDays: [],
+				lockedDates: [],
+		};
 	},
 	data: function() {
     return {
@@ -174,7 +151,21 @@ export default {
 		onSaveCalendar() {
 			//TODO
 			//Requête HTTP pour save le calendar
-			this.$store.commit("snackbar", "Calendrier enregistré");
+			
+			if (typeof this.accomodationId == 'undefined') {
+				this.selectedCalendar.global = true;
+			} else {
+				this.selectedCalendar.global = false;
+				this.selectedCalendar.accomodation = this.accomodationId;
+			}
+			console.log(this.selectedCalendar)
+			this.$http.put("calendar", {
+				
+			}).then(response => {
+				if (response.status == 200) {
+					this.$store.commit("snackbar", "Calendrier enregistré");
+				}
+			})
 		},
   },
 };
