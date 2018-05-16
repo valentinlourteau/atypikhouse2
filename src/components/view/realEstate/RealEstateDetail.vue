@@ -107,7 +107,7 @@
       <!-- A proximité -->
       <v-tab-item>
       
-      	<nearby />
+      	<nearby :accomodationId="accomodation._id" />
       
       </v-tab-item>
       

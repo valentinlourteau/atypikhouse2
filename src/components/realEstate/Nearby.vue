@@ -11,7 +11,7 @@
 		
 			<v-card>
 			
-				<v-card-media src="/static/images/bulle.png" height="200px"></v-card-media>
+				<v-card-media :src="nearby.images[0] == null ? '/static/images/no_bkg_state.svg' : nearby.images[0].data" height="200px"></v-card-media>
 				<v-card-title primary-title>
           			<div>
 			            <div class="headline">{{ nearby.name }}</div>
@@ -82,17 +82,17 @@ export default {
 	},
 	props: ["accomodationId"],
 	created: function () {
-		this.nearbyList.push({
-			_id: "D156645645645465456dad",
-			majDate: moment("21/12/2017", "DD/MM/YYYY").toDate(),
-			name: "Canoe kayak",
-			description: "Une superbe activité à faire en famille, vous allez pouvoir nager et faire du boudin créole en sautant sur une plage infestée de dinosaures et de méga zgegs de poule constipée crotte de nez",
-			price: "100€ par personne",
-			distance: "20 km",
-			phone: "06 22 98 63 95",
-			website: "website.com",
-			oldInformations: true,
-		})
+// 		this.nearbyList.push({
+// 			_id: "D156645645645465456dad",
+// 			majDate: moment("21/12/2017", "DD/MM/YYYY").toDate(),
+// 			name: "Canoe kayak",
+// 			description: "Une superbe activité à faire en famille, vous allez pouvoir nager et faire du boudin créole en sautant sur une plage infestée de dinosaures et de méga zgegs de poule constipée crotte de nez",
+// 			price: "100€ par personne",
+// 			distance: "20 km",
+// 			phone: "06 22 98 63 95",
+// 			website: "website.com",
+// 			oldInformations: true,
+// 		})
 		for (var nearby in this.nearbyList) {
 			this.nearbyList[nearby].oldInformations = this.areInformationOlds(this.nearbyList[nearby]);
 		}
@@ -106,29 +106,40 @@ export default {
   	},
   	watch: {
 		'accomodationId': function(newVal, oldVal) {
-				this.$http.get("activity/" + this.accomodationId).then(response => {
-					if (response.status == 200) {
-						this.nearbyList = response.body.calendar;
-					}
-				})
+			//TODO get all activities by accomodation
+// 				this.$http.get("activity/" + this.accomodationId).then(response => {
+// 					if (response.status == 200) {
+// 						this.nearbyList = response.body.calendar;
+// 					}
+// 				})
 		}
 	},
   	methods: {
   		onAddNewNearby() {
   			this.showDialogAddNearby = true;
+  			this.nearby = new Nearby();
   		},
   		onSaveNearby() {
   			this.$validator.validateAll().then(result => {
   	  			//TODO A REMETTRE
   	  			this.nearby.majDate = new Date();
+  	  			this.nearby.accomodation = this.accomodationId;
 					if (result) {
 		  	  			if (this.nearby._id == null) {
-		  	  				this.nearbyList.push(this.nearby);
-		  	  	  			this.$http.post("activity" + this.)
+		  	  	  			this.$http.post("activity", this.nearby).then(response => {
+		  	  	  				if (response.status == 200) {
+		  	  	  					this.$store.commit("snackbar", "Modifications enregistrées");
+				  	  				this.nearbyList.push(response.body.activity);
+		  	  	  				}
+		  	  	  			});
 		  	  			}
 		  	  			else {
-		  	  	  			//TODO Appel HTTP pour PUT un nearby
-		  	  				this.$store.commit("snackbar", "Modifications enregistrées");
+			  	  			this.$http.put("activity/" + this.nearby._id, this.nearby).then(response => {
+		  	  	  				if (response.status == 200) {
+		  	  	  					this.nearby = response.body.activity;
+		  	  	  					this.$store.commit("snackbar", "Modifications enregistrées");
+		  	  	  				}
+		  	  	  			});
 		  	  			}
 		  	  			this.nearby.oldInformations = this.areInformationOlds(this.nearby);
 		  	  			this.showDialogAddNearby = false;

@@ -13,7 +13,8 @@
 						
 						<div class="cards mt-3">
 						<v-flex style="display:inline-block;width:100%" class="mb-3" v-for="accomodation in accomodations">
-						<v-card @click.native="onShowDetail(accomodation)" :class="accomodation.viewDetail==true ? 'absolute' : ''" style="width:100%" >
+						<v-card :class="accomodation.viewDetail==true ? 'absolute' : ''" style="width:100%" >
+						<div v-on:click="onShowDetail(accomodation)" v-if="!accomodation.viewDetail">
 							<v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
 							<v-card-title primary-title>
 								<div class="headline" style="width:100%">{{ accomodation.name }}</div>
@@ -24,6 +25,25 @@
 <!-- 							<v-card-text> -->
 <!-- 							test -->
 <!-- 							</v-card-text> -->
+						</div>
+						
+						<div v-if="selectedAccomodation != null && selectedAccomodation.fetch">
+							<v-carousel hide-controls>
+								<v-carousel-item v-for="(item,i) in selectedAccomodation.images" :src="item.data" :key="i"></v-carousel-item>
+							</v-carousel>
+							<v-card-title primary-title>
+								<div class="display-4" style="width:100%">{{ selectedAccomodation.name }}</div>
+								<div class="grey--text headline" style="width:100%">{{ getTruncatedDescription(selectedAccomodation) }}</div>
+<!-- 								<div class="ah-divider"></div> -->
+							</v-card-title>
+<!-- 							<v-card-text> -->
+<!-- 							test -->
+<!-- 							</v-card-text> -->
+							<v-card-actions>
+								<v-btn @click.native="accomodation.viewDetail=false;selectedAccomodation=null;" color="primary" flat>Fermer</v-btn>
+							</v-card-actions>
+						</div>
+						
 						</v-card>
 						</v-flex>
 						</div>
@@ -36,11 +56,20 @@
 
 export default {
 	created: function() {
+		this.$http.get("accomodation").then(response => {
+			if (response.status == 200) {
+				for (var accomodation in response.body.accomodations) {
+					response.body.accomodations[accomodation].viewDetail = false;
+				}
+				this.accomodations = response.body.accomodations;
+			}
+		})
 	},
 	data: function() {
 		return {
 			search: null,
 			accomodations: [],
+			selectedAccomodation: null,
 		}
 	},
 	methods: {
@@ -68,8 +97,18 @@ export default {
 				return accomodation.description.substring(0, length);
 		},
 		onShowDetail(accomodation) {
-			console.log("je passe")
-			accomodation.viewDetail = true;
+			this.accomodation = null;
+			if (!accomodation.fetch)
+				this.$http.get("accomodation/" + accomodation._id).then(response => {
+					if (response.status == 200) {
+						response.body.accomodation.fetch = true;
+						this.selectedAccomodation = response.body.accomodation;
+					}
+				});
+			if (accomodation.viewDetail != true) {
+				accomodation.viewDetail = true;
+				console.log("je passe")
+			}
 		},
 	},
 	
