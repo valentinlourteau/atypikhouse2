@@ -13,17 +13,17 @@
 						
 						<div class="cards mt-3">
 						<v-flex style="display:inline-block;width:100%" class="mb-3" v-for="accomodation in accomodations">
-						<v-card style="width:100%;" >
+						<v-card @click.native="onShowDetail(accomodation)" :class="accomodation.viewDetail==true ? 'absolute' : ''" style="width:100%" >
 							<v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
 							<v-card-title primary-title>
 								<div class="headline" style="width:100%">{{ accomodation.name }}</div>
 								<div class="price" style="width:100%">50€ par nuit</div>
 								<div class="grey--text" style="width:100%">{{ getTruncatedDescription(accomodation) }}</div>
-								<div class="ah-divider"></div>
+<!-- 								<div class="ah-divider"></div> -->
 							</v-card-title>
-							<v-card-text>
-							test
-							</v-card-text>
+<!-- 							<v-card-text> -->
+<!-- 							test -->
+<!-- 							</v-card-text> -->
 						</v-card>
 						</v-flex>
 						</div>
@@ -50,8 +50,12 @@ export default {
 		imLucky() {
 			//remplacer par un vrai get, du moins voir comment on va quérir la liste des accomodations vis à vis de la recherche 
 			this.$http.get("accomodation").then(response => {
-				if (response.status == 200)
+				if (response.status == 200) {
+					for (var accomodation in response.body.accomodations) {
+						response.body.accomodations[accomodation].viewDetail = false;
+					}
 					this.accomodations = response.body.accomodations;
+				}
 			})
 		},
 		getTruncatedDescription(accomodation) {
@@ -62,6 +66,10 @@ export default {
 				return accomodation.description.substring(0, length) + " ...";
 			else
 				return accomodation.description.substring(0, length);
+		},
+		onShowDetail(accomodation) {
+			console.log("je passe")
+			accomodation.viewDetail = true;
 		},
 	},
 	
@@ -79,8 +87,13 @@ export default {
 }
 
 .card {
+  transition: top, right, left, bottom, width, eight 2000ms;
   -webkit-perspective: 1000;
   -webkit-backface-visibility: hidden; 
+  top: initial;
+  bottom: initial;
+  right: initial;
+  left: initial;
 }
 .cards {
 	column-count: 1;
@@ -108,5 +121,15 @@ export default {
   .cards {
     column-count: 4;
   }
+}
+.content--wrap {
+position:relative;
+}
+.absolute {
+position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 </style>

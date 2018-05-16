@@ -51,7 +51,7 @@
 					<v-data-iterator :items="selectedCalendar.lockedDates" content-tag="v-list" :content-props="{dense: true}" no-data-text="Aucune date bloquée" column wrap>
 					
 			            <v-list-tile slot="item" slot-scope="props">
-			              <v-list-tile-content>{{ props.item }}</v-list-tile-content>
+			              <v-list-tile-content>{{ getFormattedDate(props.item) }}</v-list-tile-content>
 			              <v-spacer></v-spacer>
 				          <v-btn @click="onDeleteDate(props.item)" icon>
 				            <v-icon>delete</v-icon>
@@ -103,11 +103,21 @@ export default {
 	components: {
 	},
 	props: ["accomodationId"],
+	watch: {
+		'accomodationId': function(newVal, oldVal) {
+				this.$http.get("calendar/" + this.accomodationId).then(response => {
+					if (response.status == 200) {
+						this.selectedCalendar = response.body.calendar;
+					}
+				})
+		}
+	},
 	created: function () {
-		this.selectedCalendar = {
-				lockedDays: [],
-				lockedDates: [],
-		};
+		console.log(this.accomodationId)
+			this.selectedCalendar = {
+					lockedDays: [],
+					lockedDates: [],
+			};
 	},
 	data: function() {
     return {
@@ -137,7 +147,7 @@ export default {
 		},
 		onLockDay() {
 			//ajout d'un jour bloqué
-			this.selectedCalendar.lockedDates.push(moment(this.addForbiddenDate.date).format('DD/MM/YYYY'));
+			this.selectedCalendar.lockedDates.push(this.addForbiddenDate.date);
 			this.selectedCalendar.lockedDates.sort()
 			this.addForbiddenDate.show = false;
 		},
@@ -148,6 +158,9 @@ export default {
 			console.log(date)
 			this.selectedCalendar.lockedDates.splice(date);
 		},
+		getFormattedDate(date) {
+			return moment(date).format('DD/MM/YYYY')
+		},
 		onSaveCalendar() {
 			//TODO
 			//Requête HTTP pour save le calendar
@@ -155,12 +168,14 @@ export default {
 			if (typeof this.accomodationId == 'undefined') {
 				this.selectedCalendar.global = true;
 			} else {
-				this.selectedCalendar.global = false;
 				this.selectedCalendar.accomodation = this.accomodationId;
+				this.selectedCalendar.host 
 			}
 			console.log(this.selectedCalendar)
 			this.$http.put("calendar", {
-				
+				"lockedDays" : this.selectedCalendar.lockedDays,
+				"lockedDates" : this.selectedCalendar.lockedDates,
+				"accomodation" : this.selectedCalendar.accomodation
 			}).then(response => {
 				if (response.status == 200) {
 					this.$store.commit("snackbar", "Calendrier enregistré");
