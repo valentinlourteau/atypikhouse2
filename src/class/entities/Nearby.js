@@ -13,6 +13,8 @@ class Nearby {
 	this.range;
 	this.phone;
 	this.website;
+	this.images = [];
+	this.accomodation;
   }
 
 }

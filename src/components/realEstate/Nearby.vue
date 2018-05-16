@@ -53,9 +53,9 @@
 						<v-text-field v-model="nearby.distance" label="Distance depuis le bien"></v-text-field>
 						<v-text-field v-model="nearby.phone" label="Numéro"></v-text-field>
 						<v-text-field v-model="nearby.website" label="Site web"></v-text-field>
-						
+						<file-upload accept="image/*" @formData="onChooseImg($event)"></file-upload>
 						<!-- TODO A ENLEVER A LA FIN CAR CEST UNE VALEUR GEREE PAR L'OUTIL -->
-						<v-text-field v-model="nearby.majDate" label="Date de mise à jour"></v-text-field>
+<!-- 						<v-text-field v-model="nearby.majDate" label="Date de mise à jour"></v-text-field> -->
 					
 				</v-card-text>
 				
@@ -72,13 +72,15 @@
 </template>
 
 <script type="text/javascript">
-import Nearby from '../../class/entities/Nearby'
+import Nearby from '../../class/entities/Nearby';
+import FileUpload from '../utility/FileUpload';
 import moment from 'moment';
 
 export default {
 	components: {
+		FileUpload,
 	},
-	props: [],
+	props: ["accomodationId"],
 	created: function () {
 		this.nearbyList.push({
 			_id: "D156645645645465456dad",
@@ -102,6 +104,15 @@ export default {
    			showDialogAddNearby: false,
     	}
   	},
+  	watch: {
+		'accomodationId': function(newVal, oldVal) {
+				this.$http.get("activity/" + this.accomodationId).then(response => {
+					if (response.status == 200) {
+						this.nearbyList = response.body.calendar;
+					}
+				})
+		}
+	},
   	methods: {
   		onAddNewNearby() {
   			this.showDialogAddNearby = true;
@@ -109,11 +120,11 @@ export default {
   		onSaveNearby() {
   			this.$validator.validateAll().then(result => {
   	  			//TODO A REMETTRE
-  	  			//this.nearby.majDate = new Date();
+  	  			this.nearby.majDate = new Date();
 					if (result) {
 		  	  			if (this.nearby._id == null) {
 		  	  				this.nearbyList.push(this.nearby);
-		  	  	  			//TODO Appel HTTP pour POST un nearby
+		  	  	  			this.$http.post("activity" + this.)
 		  	  			}
 		  	  			else {
 		  	  	  			//TODO Appel HTTP pour PUT un nearby
@@ -140,6 +151,25 @@ export default {
   			this.nearbyList.remove(nearby);
   			//TODO Appel HTTP DELETE
   		},
+  		onChooseImg(files) {
+			var reader = new FileReader();
+			//on fait une variable tampon pour pouvoir l'utiliser dans le onload 
+			//car je n'arrive pas à utiliser directement la variable de data dans la callback
+			var accomodRef = this.nearby.images;
+			reader.onload = function (e) {
+				let isMain = false;
+				let imgName = files.get('data').name;
+				//si l'image est la première alors isMain = true;
+				if (accomodRef.length == 0)
+					isMain = true;
+				accomodRef.push({
+					fileName: imgName,
+					data: e.target.result,
+					isMain: isMain,
+				});
+            };
+            reader.readAsDataURL(files.get('data'));
+		},
   	},
 };
 
