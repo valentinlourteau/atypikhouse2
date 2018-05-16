@@ -1,7 +1,7 @@
 /* La page sur les voyages, experiences ... */
 <template>
 	<div>
-		<v-container>
+		<v-container v-if="selectedAccomodation == null">
 			<v-layout class="mx-auto" row wrap>
 			<v-flex xs6 offset-xs3 align-center>
 				<v-text-field prepend-icon="search" v-model="search" :placeholder="getRandomPlaceHolder()" solo></v-text-field>
@@ -13,8 +13,8 @@
 						
 						<div class="cards mt-3">
 						<v-flex style="display:inline-block;width:100%" class="mb-3" v-for="accomodation in accomodations">
-						<v-card :class="accomodation.viewDetail==true ? 'absolute' : ''" style="width:100%" >
-						<div v-on:click="onShowDetail(accomodation)" v-if="!accomodation.viewDetail">
+						<v-card style="width:100%" >
+						<div v-on:click="onShowDetail(accomodation)">
 							<v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
 							<v-card-title primary-title>
 								<div class="headline" style="width:100%">{{ accomodation.name }}</div>
@@ -27,28 +27,16 @@
 <!-- 							</v-card-text> -->
 						</div>
 						
-						<div v-if="selectedAccomodation != null && selectedAccomodation.fetch">
-							<v-carousel hide-controls>
-								<v-carousel-item v-for="(item,i) in selectedAccomodation.images" :src="item.data" :key="i"></v-carousel-item>
-							</v-carousel>
-							<v-card-title primary-title>
-								<div class="display-4" style="width:100%">{{ selectedAccomodation.name }}</div>
-								<div class="grey--text headline" style="width:100%">{{ getTruncatedDescription(selectedAccomodation) }}</div>
-<!-- 								<div class="ah-divider"></div> -->
-							</v-card-title>
-<!-- 							<v-card-text> -->
-<!-- 							test -->
-<!-- 							</v-card-text> -->
-							<v-card-actions>
-								<v-btn @click.native="accomodation.viewDetail=false;selectedAccomodation=null;" color="primary" flat>Fermer</v-btn>
-							</v-card-actions>
-						</div>
-						
 						</v-card>
 						</v-flex>
 						</div>
 					
-		</v-container>	
+		</v-container>
+		
+		<v-container v-if="selectedAccomodation != null">
+		
+		</v-container>		
+			
 	</div>
 </template>
 
@@ -163,12 +151,5 @@ export default {
 }
 .content--wrap {
 position:relative;
-}
-.absolute {
-position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
 }
 </style>
