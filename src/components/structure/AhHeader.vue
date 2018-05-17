@@ -4,9 +4,12 @@
 	<v-toolbar class="primary">
 		<portal-target name="headerToolbarIcon"></portal-target>
 	    <v-toolbar-title :class="$store.state.user != null ? 'hidden-lg-and-up' : ''" @click="$router.push('/')">AtypikHouse</v-toolbar-title>
-	    <v-toolbar-title v-if="$store.state.user != null" class="hidden-md-and-down" style="margin-left:300px;" @click="$router.push('/')">AtypikHouse</v-toolbar-title>
+	    <v-toolbar-title v-if="$store.state.user != null" class="hidden-md-and-down"  style="margin-left:300px;" @click="$router.push('/')">AtypikHouse</v-toolbar-title>
 	    <v-spacer></v-spacer>
 	    <v-toolbar-items class="hidden-sm-and-down">
+	    
+	    
+	      <v-btn @click="$router.push('/About')" flat>Qui sommes-nous?</v-btn>
 	      <v-btn @click="$router.push('/discover')" flat>Voyager</v-btn>
 	      <v-btn v-if="this.$store.state.user == null" flat @click="showModalAuthenticate = true">Connexion</v-btn>
 	    </v-toolbar-items>
@@ -64,6 +67,8 @@ export default {
 			if (e.keyCode === 13) {
 				//a implementer
 		        this.$router.push('discover');
+		        
+
 		      }
 		},
 	},
