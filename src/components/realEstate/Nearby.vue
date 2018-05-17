@@ -55,7 +55,7 @@
 						<v-text-field v-model="nearby.website" label="Site web"></v-text-field>
 						<file-upload accept="image/*" @formData="onChooseImg($event)"></file-upload>
 						<!-- TODO A ENLEVER A LA FIN CAR CEST UNE VALEUR GEREE PAR L'OUTIL -->
-<!-- 						<v-text-field v-model="nearby.majDate" label="Date de mise à jour"></v-text-field> -->
+						<v-text-field v-model="nearby.majDate" label="Date de mise à jour"></v-text-field>
 					
 				</v-card-text>
 				
@@ -122,13 +122,15 @@ export default {
   		onSaveNearby() {
   			this.$validator.validateAll().then(result => {
   	  			//TODO A REMETTRE
-  	  			this.nearby.majDate = new Date();
+//   	  			this.nearby.majDate = new Date();
   	  			this.nearby.accomodation = this.accomodationId;
 					if (result) {
 		  	  			if (this.nearby._id == null) {
 		  	  	  			this.$http.post("activity", this.nearby).then(response => {
 		  	  	  				if (response.status == 200) {
 		  	  	  					this.$store.commit("snackbar", "Modifications enregistrées");
+		  	  	  					response.body.activity.oldInformations = this.areInformationOlds(response.body.activity);
+		  	  	  					console.log(response.body.activity)
 				  	  				this.nearbyList.push(response.body.activity);
 		  	  	  				}
 		  	  	  			});
@@ -137,11 +139,11 @@ export default {
 			  	  			this.$http.put("activity/" + this.nearby._id, this.nearby).then(response => {
 		  	  	  				if (response.status == 200) {
 		  	  	  					this.nearby = response.body.activity;
+		  			  	  			this.nearby.oldInformations = this.areInformationOlds(this.nearby);
 		  	  	  					this.$store.commit("snackbar", "Modifications enregistrées");
 		  	  	  				}
 		  	  	  			});
 		  	  			}
-		  	  			this.nearby.oldInformations = this.areInformationOlds(this.nearby);
 		  	  			this.showDialogAddNearby = false;
 					}
   			})
@@ -149,6 +151,7 @@ export default {
   		areInformationOlds(nearby) {
   			var infoDate = moment(nearby.majDate);
   			var today = moment(new Date());
+  			console.log(today.diff(infoDate, "days"));
   			return today.diff(infoDate, "days") > 180 ? true : false;
   		},
   		getFormattedDate(date) {
