@@ -1,6 +1,6 @@
 {
-  "name": "atypikhouse2",
-  "short_name": "atypikhouse2",
+  "name": "AtypikHouse",
+  "short_name": "AtypikHouse",
   "icons": [
     {
       "src": "/static/img/icons/android-chrome-192x192.png",

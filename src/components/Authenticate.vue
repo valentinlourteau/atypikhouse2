@@ -56,7 +56,9 @@ export default {
     			this.$store.commit("onSetToken", response.body.token);
     			this.$store.commit("onSetUser", new TD(response.body.token).data);
          		this.$emit("close");
-    			//M.toast({html: 'Vous êtes bien connecté'});
+         		var welcomeMessage = "Bienvenue ";
+         		var user = this.$store.state.user.firstname == null ? "bel inconnu" : this.$store.state.user.firstname;
+    			this.$store.commit("snackbar", welcomeMessage + user);
     		}
     		else {
     		}

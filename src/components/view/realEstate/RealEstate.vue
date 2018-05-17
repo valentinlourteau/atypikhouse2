@@ -4,7 +4,7 @@
 <div>
 
 		
-		<v-tabs v-model="activeTab" color="primary" dark slider-color="black" centered>
+		<v-tabs v-model="activeTab" color="yellow" dark slider-color="black" centered @input="onChangeTab($event)">
 		
       <v-tab v-for="tab in tabs" :key="tab.text" ripple>
        <span class="black--text">{{ tab.text }}</span>
@@ -13,7 +13,7 @@
       <!-- Mes biens -->
       <v-tab-item>
         
-        <v-layout row wrap>
+        <v-layout row wrap class="mx-2">
 			
 			<v-flex  v-for="accomodation in accomodations" :key="accomodation._id" xs12 sm4 lg4 xl3 class="pa-2">
 			
@@ -46,7 +46,9 @@
       
       <!-- Calendrier global -->
       <v-tab-item>
-        //TODO
+        
+      	<calendar :calendar="$store.state.user.calendar"></calendar>
+        
       </v-tab-item>
       
     </v-tabs>
@@ -57,9 +59,13 @@
 
 <script>
 import Accomodation from '../../../class/entities/Accomodation';
+import Calendar from '../../realEstate/Calendar';
 import AccomodationService from '../../../class/services/AccomodationService';
 
 export default {
+	components: {
+		Calendar,
+	},
 	created: function () {
 // 		AccomodationService.findAll(this.accomodations);
 
@@ -68,6 +74,7 @@ export default {
 				this.accomodations = response.body.accomodations;
 			}
 		});
+		this.activeTab = this.$route.query.tab;
 
 	},
 	data: function() {
@@ -105,6 +112,9 @@ export default {
 		setAccomodationActive(accomodation) {
 			//TODO
 		},
+		onChangeTab(event) {
+			this.$router.push({path: '/realEstate/home', query: {tab: event}});
+		}
 	},
 };
 </script>
