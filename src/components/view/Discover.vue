@@ -2,7 +2,6 @@
 <template>
 <div>
 	<div style="padding:16px 0 8px 16px;margin:0 32px;border-bottom:2px solid #9E9E9E" class="display-1">Voyager</div>
-	<div class="container" style="margin-top: 24px;">
 	<v-container>
 		<v-layout row wrap>
     	<v-flex xs12 sm6 lg4 xl3 v-for="i in 9" :key="i" style="padding:16px;">
@@ -24,7 +23,6 @@
   </v-layout>
   </v-container>
 	
-	</div>
 </div>
 </template>
 

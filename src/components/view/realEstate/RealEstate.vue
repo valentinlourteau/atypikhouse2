@@ -4,7 +4,7 @@
 <div>
 
 		
-		<v-tabs v-model="activeTab" color="yellow" dark slider-color="black" centered>
+		<v-tabs v-model="activeTab" color="primary" dark slider-color="black" centered>
 		
       <v-tab v-for="tab in tabs" :key="tab.text" ripple>
        <span class="black--text">{{ tab.text }}</span>

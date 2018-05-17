@@ -26,7 +26,7 @@ import RealEstateDetail from './components/view/realEstate/RealEstateDetail';
 import TD from './class/utils/TokenDecrypter';
 
 Vue.use(Vuetify, { theme: {
-  primary: '#e7eae3',
+  primary: '#ffeb3b',
   secondary: '#2196F3',
   accent: '#82B1FF',
   error: '#FF5252',
@@ -79,10 +79,6 @@ const router = new VueRouter({
     { path: '/account', component: Account},
     { path: '/discover', component: Discover},
     { path: '/About', component: about},
-
-
-
-
     { path: '/realEstate/home', component: RealEstate},
     { path: '/realEstate/new', component: NewRealEstate},
     { path: '/realEstate/new/:accomodationId', component: NewRealEstate},
