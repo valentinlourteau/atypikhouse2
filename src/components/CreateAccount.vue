@@ -12,7 +12,7 @@
       <v-text-field  v-model="newUser.firstname" type="text" class="validate" required="required" label="Prénom"/>
         <v-text-field v-model="newUser.lastname" type="text" class="validate" required="required" label="Nom"/>
       
-      <v-alert value="true" color="success">{{ equalsPasswordSeverity === 'warning' ? 'Les deux mots de passe doivent être égaux' : 'Mot de passe confirmé' }}</v-alert>
+      <v-alert :value="true" :type="equalsPasswordSeverity.type">{{ equalsPasswordSeverity.message }}</v-alert>
       
       <v-text-field label="Mot de passe" v-validate="{ required: true, regex: '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})' }" 
       name="password1" id="password" v-model="newUser.password" type="password" required="required" />
@@ -34,6 +34,8 @@
 <script>
 import Modal from './Modal';
 import User from '../class/entities/User';
+import TD from '../class/utils/TokenDecrypter';
+
 export default {
 	data: function () {
 		return {
@@ -41,7 +43,10 @@ export default {
 			selectedDate: null,
 			newUser: new User(),
 			verifPassword: "",
-			equalsPasswordSeverity: 'warning',
+			equalsPasswordSeverity: {
+				type: 'info',
+				message: 'Veuillez valider le mot de passe',
+			},
 		}
 	},
 	props: ["showModal"],
@@ -49,18 +54,29 @@ export default {
 		Modal,
 	},
 	watch: { 
+		"showModal": function(newVal, oldVal) {
+			if (newVal) {
+				this.isUserTooYoung = false;
+				this.selectedDate = null;
+				this.newUser = new User();
+				this.verifPassword = "";
+				this.equalsPasswordSeverity.type = 'info';
+				this.equalsPasswordSeverity.message = 'Veuillez valider le mot de passe';
+			}
+		},
     },
 	methods: {
-		//Permet de v�rifier que les mots de passe saisis respectent une s�curit� minimale
+		//Permet de vérifier que les mots de passe saisis respectent une sécurité minimale
 		checkPasswordsAreEquals() {
 			if (this.verifPassword === this.newUser.password) {
-				console.log("je change l'icone");
-				this.equalsPasswordSeverity = 'success';
+				this.equalsPasswordSeverity.type = 'success';
+				this.equalsPasswordSeverity.message = 'Mot de passe confirmé';
 			}
 			else if (this.verifPassword !== this.newUser.password && this.equalsPasswordSeverity)
 				this.equalsPasswordSeverity = 'warning';
+				this.equalsPasswordSeverity = 'Les deux mots de passe doivent être égaux';
 		},
-		//Permet de cr�er un nouvel utilisateur
+		//Permet de créer un nouvel utilisateur
 		queryCreateNewUser() {
 	        	var vue = this;
 	        	
@@ -73,13 +89,27 @@ export default {
 				if (response.status == 200) {
 					console.log("user well created");
 					this.$emit("close");
-// 					M.toast( { html: 'Bienvenue parmis nous ' + this.newUser.firstname + ' !' } )
+					this.$store.commit("snackbar", "Compte créé !")
 					setTimeout(function () {
-// 						M.toast(  { html: 'Ton compte a bien �t� cr�e' } );
-					}, 2000);
+
+						vue.$http.post("auth/login", {
+				    		"email": vue.newUser.email,
+				    		"password": vue.newUser.password,
+				    	}).then(response => {
+				    		if (response.status === 200) {
+				    			vue.$store.commit("onSetToken", response.body.token);
+				    			vue.$store.commit("onSetUser", new TD(response.body.token).data);
+				    			vue.$emit("close");
+				         		var welcomeMessage = "Bienvenue ";
+				         		var user = vue.$store.state.user.firstname == null ? "bel inconnu" : vue.$store.state.user.firstname;
+				         		vue.$store.commit("snackbar", welcomeMessage + user);
+				    		}
+				    		else {
+				    		}
+				    	});
+						
+					}, 1500);
 				}
-				else
-					console.log("a problem happened")
 			})
 			
 	        //}
