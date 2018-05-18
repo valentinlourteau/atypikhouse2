@@ -12,7 +12,8 @@ import vuexI18n from 'vuex-i18n';
 import VueLocalStorage from 'vue-ls';
 import VeeValidate from 'vee-validate';
 import GoogleMapsLoader from 'google-maps';
-import PortalVue from 'portal-vue'
+import PortalVue from 'portal-vue';
+import VueLodash from 'vue-lodash';
 //components
 import Home from './components/view/Home';
 import Account from './components/view/Account';
@@ -24,6 +25,8 @@ import NewRealEstate from './components/view/realEstate/NewRealEstate';
 import RealEstateDetail from './components/view/realEstate/RealEstateDetail';
 //utils
 import TD from './class/utils/TokenDecrypter';
+
+Vue.use(VueLodash, {name : 'lodash'});
 
 Vue.use(Vuetify, { theme: {
   primary: '#ffeb3b',

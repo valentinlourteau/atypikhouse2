@@ -69,12 +69,13 @@ export default {
 		//Permet de vérifier que les mots de passe saisis respectent une sécurité minimale
 		checkPasswordsAreEquals() {
 			if (this.verifPassword === this.newUser.password) {
-				this.equalsPasswordSeverity.type = 'success';
 				this.equalsPasswordSeverity.message = 'Mot de passe confirmé';
+				this.equalsPasswordSeverity.type = 'success';
 			}
-			else if (this.verifPassword !== this.newUser.password && this.equalsPasswordSeverity)
-				this.equalsPasswordSeverity = 'warning';
-				this.equalsPasswordSeverity = 'Les deux mots de passe doivent être égaux';
+			else if (this.verifPassword !== this.newUser.password && this.equalsPasswordSeverity) {
+				this.equalsPasswordSeverity.type = 'warning';
+				this.equalsPasswordSeverity.message = 'Les deux mots de passe doivent être égaux';
+			}
 		},
 		//Permet de créer un nouvel utilisateur
 		queryCreateNewUser() {

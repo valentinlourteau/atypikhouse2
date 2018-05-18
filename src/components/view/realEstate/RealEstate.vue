@@ -4,7 +4,7 @@
 <div>
 
 		
-		<v-tabs v-model="activeTab" color="yellow" dark slider-color="black" centered @input="onChangeTab($event)">
+	<v-tabs v-model="activeTab" color="yellow" dark slider-color="black" centered @input="onChangeTab($event)">
 		
       <v-tab v-for="tab in tabs" :key="tab.text" ripple>
        <span class="black--text">{{ tab.text }}</span>
@@ -15,7 +15,7 @@
         
         <v-layout row wrap class="mx-2">
 			
-			<v-flex  v-for="accomodation in accomodations" :key="accomodation._id" xs12 sm4 lg4 xl3 class="pa-2">
+			<v-flex v-for="accomodation in accomodations" :key="accomodation._id" xs12 sm4 lg4 xl3 class="pa-2">
 			
 				<v-card >
 			        <v-card-media :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data" height="200px">
@@ -40,14 +40,14 @@
 			
 		</v-layout>
 
-		<v-btn v-on:click="onAddNewEstate();" fab color="secondary" fixed right bottom><v-icon class="black--text">add</v-icon></v-btn>
+		<v-btn v-on:click="onAddNewEstate();" fab color="primary" fixed right bottom><v-icon class="black--text">add</v-icon></v-btn>
         
       </v-tab-item>
       
       <!-- Calendrier global -->
       <v-tab-item>
         
-      	<calendar :calendar="$store.state.user.calendar"></calendar>
+      	<calendar></calendar>
         
       </v-tab-item>
       

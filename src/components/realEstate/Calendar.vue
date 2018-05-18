@@ -17,7 +17,7 @@
       		
       			<v-flex xs4>
       		
-      			<!-- Liste des dates bloqués -->
+      			<!-- Liste des jours bloqués -->
       			<v-card class="mb-3">
 					<v-subheader>Jours récurrents bloqués</v-subheader>
 					
@@ -25,8 +25,8 @@
 					    <v-btn slot="activator" color="primary" flat>Ajouter</v-btn>
 					    
 					    <v-list>
-						    <v-list-tile v-for="item in days" v-if="!selectedCalendar.lockedDays.includes(item)" :key="item" @click="onAddDay(item)">
-						    	<v-list-tile-title>{{ item }}</v-list-tile-title>
+						    <v-list-tile v-for="item in days" v-if="!selectedCalendar.lockedDays.includes(item)" :key="item.iso" @click="onAddDay(item)">
+						    	<v-list-tile-title>{{ item.frname }}</v-list-tile-title>
 						    </v-list-tile>
 					    </v-list>
 					    
@@ -34,7 +34,7 @@
 					
 					<v-card-text>
 						<div class="text-xs-center">
-							<v-chip v-for="day in selectedCalendar.lockedDays" close>{{ day }}</v-chip>
+							<v-chip v-for="day in selectedCalendar.lockedDays" @input="onDeleteDay(day)" close>{{ day.frname }}</v-chip>
 						</div>
 					</v-card-text>
 					
@@ -108,12 +108,16 @@ export default {
 				this.$http.get("calendar/" + this.accomodationId).then(response => {
 					if (response.status == 200) {
 						this.selectedCalendar = response.body.calendar;
+						//traitement des lockedDays, a voir si on remplace en BDD par le format iso
+						for (var lockedDay in this.selectedCalendar.lockedDays) {
+							console.log(this.selectedCalendar.lockedDays[lockedDay])
+							this.selectedCalendar.lockedDays[lockedDay] = this.lodash.find(this.days, 'frname', this.selectedCalendar.lockedDays[lockedDay]);
+						}
 					}
 				})
 		}
 	},
 	created: function () {
-		console.log(this.accomodationId)
 			this.selectedCalendar = {
 					lockedDays: [],
 					lockedDates: [],
@@ -127,15 +131,15 @@ export default {
 			show: false,
 			date: null,
 		},
-		getAllowedDates: val => !this.selectedCalendar.lockedDates.includes(moment(val).format('DD/MM/YYYY')) && new Date(val) > new Date(),
+		getAllowedDates: val => !this.lodash.map(this.selectedCalendar.lockedDays, 'iso').includes(moment(val).isoWeekday()) && !this.selectedCalendar.lockedDates.includes(val) && new Date(val) > new Date(),
 		days: [
-			"Lundi",
-			"Mardi",
-			"Mercredi",
-			"Jeudi",
-			"Vendredi",
-			"Samedi",
-			"Dimanche",
+			{frname : "Lundi", iso : 1},
+			{frname : "Mardi", iso : 2},
+			{frname : "Mercredi", iso : 3},
+			{frname : "jeudi", iso : 4},
+			{frname : "Vendredi", iso : 5},
+			{frname : "Samedi", iso : 6},
+			{frname : "Dimanche", iso : 7},
 		],
     }
   },
@@ -155,11 +159,14 @@ export default {
 			this.selectedCalendar.lockedDays.push(day);
 		},
 		onDeleteDate(date) {
-			console.log(date)
 			this.selectedCalendar.lockedDates.splice(date);
 		},
+		onDeleteDay(day) {
+			var index = this.selectedCalendar.lockedDays.indexOf(day);
+			this.selectedCalendar.lockedDays.splice(index, 1);
+		},
 		getFormattedDate(date) {
-			return moment(date).format('DD/MM/YYYY')
+			return moment(date).format('DD/MM/YYYY');
 		},
 		onSaveCalendar() {
 			//TODO
@@ -173,7 +180,7 @@ export default {
 			}
 			console.log(this.selectedCalendar)
 			this.$http.put("calendar", {
-				"lockedDays" : this.selectedCalendar.lockedDays,
+				"lockedDays" : this.lodash.map(this.selectedCalendar.lockedDays, 'frname'),
 				"lockedDates" : this.selectedCalendar.lockedDates,
 				"accomodation" : this.selectedCalendar.accomodation
 			}).then(response => {
