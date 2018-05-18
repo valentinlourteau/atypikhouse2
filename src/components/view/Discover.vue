@@ -11,12 +11,12 @@
 			</v-flex>
 			</v-layout>
 						
-						<v-flex	v-for="accomodation in accomodations" v-bind:class="{xs12 : accomodation.showDetail}" xs3>
-							<v-card>
+						<v-flex	v-for="accomodation in accomodations" @click="onViewDetail(accomodation)" :key="accomodation._id" v-bind:class="{xs12: accomodation.viewDetail}" class="xs3">
+							<v-card >
 							
-								<div v-if="!accomodation.showDetail">
+								<div v-if="!accomodation.viewDetail">
 								
-									<div v-on:click="onShowDetail(accomodation)">
+									<div >
 										<v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
 										<v-card-title primary-title>
 											<div class="headline" style="width:100%">{{ accomodation.name }}</div>
@@ -28,7 +28,7 @@
 								</div>
 								
 								<!-- si jamais je clique sur une carte pour afficher le détail -->
-								<div v-else>
+								<div v-if="accomodation.viewDetail">
 									<v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
 								</div>
 							
@@ -47,6 +47,10 @@ export default {
 		this.$http.get("accomodation").then(response => {
 			if (response.status == 200) {
 				this.accomodations = response.body.accomodations;
+				for (var accomodation in this.accomodations) {
+					console.log(this.accomodations[accomodation])
+					this.$set(this.accomodations[accomodation], 'viewDetail', false)
+				}
 			}
 		})
 	},
@@ -66,6 +70,9 @@ export default {
 			this.$http.get("accomodation").then(response => {
 				if (response.status == 200) {
 					this.accomodations = response.body.accomodations;
+					for (var accomodation in this.accomodations) {
+						this.accomodations[accomodation].viewDetail = true;
+					}
 				}
 			})
 		},
@@ -78,17 +85,16 @@ export default {
 			else
 				return accomodation.description.substring(0, length);
 		},
-		onShowDetail(accomodation) {
-			accomodation.showDetail = true;
-			if (!accomodation.fetch)
-				this.$http.get("accomodation/" + accomodation._id).then(response => {
-					if (response.status == 200) {
-						console.log("je fetch")
-						response.body.accomodation.fetch = true;
-					}
-				});
-			else
-				console.log("bien déjà fetch")
+		onViewDetail(accomodation) {
+// 			var index = this.accomodations.indexOf(accomodation);
+			console.log("click")
+			accomodation.viewDetail = true;
+// 			this.accomodations[index] = accomodation;
+// 				this.$http.get("accomodation/" + accomodation._id).then(response => {
+// 					if (response.status == 200) {
+// 						this.accomodation = response.body.accomodation;
+// 					}
+// 				});
 		},
 	},
 	
