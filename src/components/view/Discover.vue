@@ -11,7 +11,7 @@
 			</v-flex>
 			</v-layout>
 						
-						<v-flex	v-for="accomodation in accomodations" @click="onViewDetail(accomodation)" :key="accomodation._id" v-bind:class="{xs12: accomodation.viewDetail}" class="xs3">
+						<v-flex style="transition: flex-basis, max-width, width 5s"	v-for="accomodation in accomodations" @click="onViewDetail(accomodation)" :key="accomodation._id" v-bind:class="{xs12: accomodation.viewDetail}" class="xs3">
 							<v-card >
 							
 								<div v-if="!accomodation.viewDetail">
@@ -29,7 +29,19 @@
 								
 								<!-- si jamais je clique sur une carte pour afficher le détail -->
 								<div v-if="accomodation.viewDetail">
-									<v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
+<!-- 									<v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media> -->
+									<v-container grid-list-lg>
+										<v-layout row wrap>
+											<v-flex v-for="(pic, index) in accomodation.images" v-bind:style="{max-width : index % 2 == 0 ? 30% : 2°, flex-basis : }">
+												<img height="auto" style="width:100%" :src="pic.data"></img>
+											</v-flex>
+										</v-layout>
+									</v-container>
+									
+									<v-card-text>
+									
+									</v-card-text>
+									
 								</div>
 							
 							</v-card>
@@ -48,7 +60,6 @@ export default {
 			if (response.status == 200) {
 				this.accomodations = response.body.accomodations;
 				for (var accomodation in this.accomodations) {
-					console.log(this.accomodations[accomodation])
 					this.$set(this.accomodations[accomodation], 'viewDetail', false)
 				}
 			}
@@ -58,6 +69,14 @@ export default {
 		return {
 			search: null,
 			accomodations: [],
+			style20: {
+				width: 20%,
+			    basis: 20%
+			},
+			style30: {
+			    max-width: 30%,
+			    flex-basis: 30%
+			},
 		}
 	},
 	methods: {
@@ -86,15 +105,22 @@ export default {
 				return accomodation.description.substring(0, length);
 		},
 		onViewDetail(accomodation) {
-// 			var index = this.accomodations.indexOf(accomodation);
-			console.log("click")
-			accomodation.viewDetail = true;
-// 			this.accomodations[index] = accomodation;
-// 				this.$http.get("accomodation/" + accomodation._id).then(response => {
-// 					if (response.status == 200) {
-// 						this.accomodation = response.body.accomodation;
-// 					}
-// 				});
+				this.$http.get("accomodation/" + accomodation._id).then(response => {
+					console.log("accomodation")
+					console.log(accomodation)
+					if (response.status == 200) {
+						//Permet de supprimer tous les champs sauf viewDetail qu'on a besoin de suivre pour mettre les valeurs du détail
+							  Object.keys(accomodation).forEach(function(key) {
+								if (key != 'viewDetail')
+							    	delete accomodation[key];
+							  });
+							  Object.keys(response.body.accomodation).forEach(function(key) {
+							    accomodation[key] = response.body.accomodation[key];
+							  });
+							accomodation.viewDetail = true;
+					
+					}
+				});
 		},
 	},
 	

@@ -110,8 +110,7 @@ export default {
 						this.selectedCalendar = response.body.calendar;
 						//traitement des lockedDays, a voir si on remplace en BDD par le format iso
 						for (var lockedDay in this.selectedCalendar.lockedDays) {
-							console.log(this.selectedCalendar.lockedDays[lockedDay])
-							this.selectedCalendar.lockedDays[lockedDay] = this.lodash.find(this.days, 'frname', this.selectedCalendar.lockedDays[lockedDay]);
+							this.selectedCalendar.lockedDays[lockedDay] = this.lodash.find(this.days, {'frname' : this.selectedCalendar.lockedDays[lockedDay]});
 						}
 					}
 				})
@@ -168,10 +167,7 @@ export default {
 		getFormattedDate(date) {
 			return moment(date).format('DD/MM/YYYY');
 		},
-		onSaveCalendar() {
-			//TODO
-			//Requête HTTP pour save le calendar
-			
+		onSaveCalendar() {			
 			if (typeof this.accomodationId == 'undefined') {
 				this.selectedCalendar.global = true;
 			} else {
