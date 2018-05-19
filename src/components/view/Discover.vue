@@ -32,7 +32,7 @@
 <!-- 									<v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media> -->
 									<v-container grid-list-lg>
 										<v-layout row wrap>
-											<v-flex v-for="(pic, index) in accomodation.images" v-bind:style="{max-width : index % 2 == 0 ? 30% : 2°, flex-basis : }">
+											<v-flex v-for="(pic, index) in accomodation.images" v-bind:class="{flex30 : index % 2 == 0, flex20 : index % 2 != 0}">
 												<img height="auto" style="width:100%" :src="pic.data"></img>
 											</v-flex>
 										</v-layout>
@@ -69,14 +69,6 @@ export default {
 		return {
 			search: null,
 			accomodations: [],
-			style20: {
-				width: 20%,
-			    basis: 20%
-			},
-			style30: {
-			    max-width: 30%,
-			    flex-basis: 30%
-			},
 		}
 	},
 	methods: {
@@ -135,5 +127,13 @@ export default {
 	background-color: #0000001e;
 	opacity: 0.2;
 	margin: 12px 0;
+}
+.flex20 {
+	max-width:20%;
+	flex-basis:20%;
+}
+.flex30 {
+	max-width:30%;
+	flex-basis:30%;
 }
 </style>
