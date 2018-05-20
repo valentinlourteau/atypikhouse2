@@ -34,7 +34,7 @@
 					
 					<v-card-text>
 						<div class="text-xs-center">
-							<v-chip v-for="day in selectedCalendar.lockedDays" @input="onDeleteDay(day)" close>{{ day.frname }}</v-chip>
+							<v-chip v-for="day in selectedCalendar.lockedDays" :key="day.iso" @input="onDeleteDay(day)" close>{{ day.frname }}</v-chip>
 						</div>
 					</v-card-text>
 					

@@ -25,8 +25,7 @@
 	      
 	      	<read-write-field :read="generalInformationsReadMode" v-model="accomodation.name" label="Nom" :rules="[v => !!v || 'Le nom est requis',
 	      	v => v.length < 20 || 'Le nom doit être inférieur à 20 caractères']"></read-write-field>
-	      	<read-write-field :read="generalInformationsReadMode" v-model="accomodation.description" label="Description" :rules="[v => !!v || 'Le nom est requis',
-	      	v => v.length < 500 || 'La description doit être inférieure à 500 caractères']"></read-write-field>
+	      	<read-write-field :read="generalInformationsReadMode" v-model="accomodation.description" label="Description" :rules="[v => !!v || 'La description est requise']"></read-write-field>
 	      	<read-write-field :read="generalInformationsReadMode" v-model="accomodation.type" label="Type de bien"></read-write-field>
 	      	
 	      	<v-divider></v-divider>

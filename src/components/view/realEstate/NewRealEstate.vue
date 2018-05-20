@@ -264,7 +264,7 @@
 <script>
 import GoogleMapsLoader from 'google-maps';
 import Accomodation from '../../../class/entities/Accomodation';
-import FileUpload from '../../utility/fileUpload';
+import FileUpload from '../../utility/FileUpload';
 import Gmaps from '../../utility/Gmaps';
 import ListService from '../../../class/services/ListService';
 

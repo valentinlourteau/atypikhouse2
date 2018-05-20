@@ -14,6 +14,8 @@ import VeeValidate from 'vee-validate';
 import GoogleMapsLoader from 'google-maps';
 import PortalVue from 'portal-vue';
 import VueLodash from 'vue-lodash';
+import 'viewerjs/dist/viewer.css';
+import Viewer from 'v-viewer';
 //components
 import Home from './components/view/Home';
 import Account from './components/view/Account';
@@ -27,6 +29,7 @@ import RealEstateDetail from './components/view/realEstate/RealEstateDetail';
 import TD from './class/utils/TokenDecrypter';
 
 Vue.use(VueLodash, {name : 'lodash'});
+Vue.use(Viewer)
 
 Vue.use(Vuetify, { theme: {
   primary: '#ffeb3b',
