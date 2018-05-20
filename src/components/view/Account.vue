@@ -45,19 +45,33 @@
           label="Adresse mail"
         ></v-text-field>
       </v-flex>
-      <v-flex xs12>
-        <v-text-field
-          v-model="password"
-          :append-icon="viewPassword ? 'visibility' : 'visibility_off'"
-          :append-icon-cb="() => (viewPassword = !viewPassword)"
-          :type="viewPassword ? 'password' : 'text'"
-          name="input-10-1"
-          label="Enter your password"
-          hint="At least 8 characters"
-          min="8"
-          counter
-        ></v-text-field>
-      </v-flex>
+      
+         <v-layout row justify-center>
+    <v-dialog v-model="showModal" persistent max-width="500px" @close="$emit('close')">
+      <v-btn slot="activator" color="primary"  class="black--text" dark> Modifier mot de passe</v-btn>
+      <v-card>
+        <v-card-title>
+          <span class="headline " >Modifier le mot de passe </span>
+        </v-card-title>
+        
+        
+         <v-flex xs12>
+         <v-card-text>
+                <v-text-field v-model="password.old" label="Ancien mot de passe" type="password" required></v-text-field>
+                <v-text-field v-model="password.nouv" label="Nouveau mot de passe" type="password" required></v-text-field>
+                <v-text-field label="Confirmer le nouveau mot de passe" type="password" required></v-text-field>
+         </v-card-text>
+                
+              </v-flex>
+              <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn  flat @click="$emit('close')" >Annuler</v-btn>
+          <v-btn color="blue" flat @click="onClickValidPsw()">Valider</v-btn>
+        </v-card-actions>
+              </v-card>
+              </v-dialog>
+              </v-layout>
+              
     </v-layout>
     </v-card-text>
     
@@ -87,11 +101,14 @@
 
      
 </div>
+
 </template>
 
 <script>
 import User from '../../class/entities/User';
 import ReadWriteField from '../utility/ReadWriteField';
+import Modal from '../Modal';
+import TD from '../../class/utils/TokenDecrypter';
 
 export default {
 	components: {
@@ -99,6 +116,15 @@ export default {
 	},
 	data: function() {
 		return {
+			isUserTooYoung: false,
+			selectedDate: null,
+			newUser: new User(),
+			verifPassword: "",
+			equalsPasswordSeverity: {
+				type: 'info',
+				message: 'Veuillez valider le mot de passe',
+			},
+			showModal: false,
 			user: Object.assign({}, this.$store.state.user),
 			active: null,
 			viewPassword : false,
@@ -107,6 +133,10 @@ export default {
 				{text : "Entreprise"},
 				{text : "Modes de payements"},
 			],
+			password: {
+				old: "",
+				nouv: "",
+			},
 		}
 	},
 	
@@ -116,12 +146,29 @@ export default {
 			console.log(this.$store.state.user);
 		},
 		onUpdateUser() {
+
 			this.$http.put("users", this.user).then(response => {
-				if (response.status == 200)
-					console.log("premier");
-				this.$store.commit("snackbar", "Modifications effectuées");
+				if (response.status == 200) {
+					this.$store.commit("snackbar", "Modifications effectuées");
+					this.$store.commit("onSetUser", new TD(response.body.token).data);
+					//ici il faut rajouter un commit pour remplacer l'user dans le local storage,
+					//parce que si je rafraichis mon navigateur je récupère l'ancienne version de l'user !
+				}
+			
 			})
 			console.log("deuxieme");
+		},
+		
+		onClickValidPsw(){
+			this.$http.put("users/password", {
+				"oldPassword" : this.password.old,
+				"newPassword" :this.password.nouv 
+			}).then(response => {
+				if (response.status == 200) {
+					this.$store.commit("snackbar", "Mot de passe modifés");
+				}
+				
+			}) 
 		},
 	}
 	
