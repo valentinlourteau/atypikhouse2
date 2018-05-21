@@ -47,26 +47,30 @@
 									
 										<v-layout row unwrap>
 											<v-flex style="display:flex;" xs12 md6><v-btn class="mx-auto" outline large flat>CONTACTER</v-btn></v-flex>
-											<v-flex style="display:flex;" xs12 md6><v-btn @click="accomodation.showLocationProcess = !accomodation.showLocationProcess;" class="mx-auto" color="secondary" outline large flat>
+											<v-flex style="display:flex;" xs12 md6><v-btn @click="onStartProcessBookAccomodation(accomodation)" class="mx-auto" color="secondary" outline large flat>
 											<v-icon>{{ accomodation.showLocationProcess ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>RESERVER</v-btn></v-flex>
 										</v-layout>				
 									</v-card-text>
 									
 									<v-slide-y-transition>
-							          <v-card-text v-show="accomodation.showLocationProcess">
+							          <v-card-text v-show="accomodation.showLocationProcess && accomodation.calendar != null">
 							          
-							          <!-- Date de début -->
-									  <v-date-picker color="secondary" v-model="reservationWishedInterval.dateDebut"></v-date-picker>
-									  <v-date-picker color="secondary" v-model="reservationWishedInterval.dateFin"></v-date-picker>
+							          <v-container v-if="accomodation.showLocationProcess && accomodation.calendar != null" grid-list-md>
+							          	<v-layout row wrap>
+							          		
+							          		<v-flex xs6 offset-xs3>
+									          <HotelDatePicker :startingDateValue="accomodation.reservation.startDate" :endingDateValue="accomodation.reservation.endDate" 
+									          format="DD/MM/YYYY" :minNights="accomodation.durationmin" :maxNights="accomodation.durationmax" 
+									          :disabledDates="getLockedDates(accomodation)" :disabledDaysOfWeek="getLockedDays(accomodation)"
+									           @checkInChanged="accomodation.reservation.startDate = $event" @checkOutChanged="accomodation.reservation.endDate = $event"/>
+							          		</v-flex>
+							          		
+							          	</v-layout>
+							          </v-container>
+							          
 							          
 							          </v-card-text>
 							        </v-slide-y-transition>
-									
-<!-- 									<v-card-actions> -->
-<!-- 										<v-spacer /> -->
-<!-- 										<v-btn flat>CONTACTER</v-btn> -->
-<!-- 										<v-btn color="secondary" flat>RESERVER</v-btn> -->
-<!-- 									</v-card-actions> -->
 									
 								</div>
 							
@@ -79,8 +83,13 @@
 </template>
 
 <script>
+import HotelDatePicker from 'vue-hotel-datepicker';
+import moment from 'moment';
 
 export default {
+	components: {
+		HotelDatePicker,
+	},
 	created: function() {
 		this.$http.get("accomodation").then(response => {
 			if (response.status == 200) {
@@ -96,11 +105,17 @@ export default {
 	data: function() {
 		return {
 			search: null,
-			reservationWishedInterval: {
-				dateDebut: "",
-				dateFin: "",
-			},
 			accomodations: [],
+			//les traductions parce que le calendar est stocké en FR
+			daysTraduction: [
+				{fr: 'Lundi', en: 'Monday'},
+				{fr: 'Mardi', en: 'Tuesday'},
+				{fr: 'Mercredi', en: 'Wednesday'},
+				{fr: 'Jeudi', en: 'Thursday'},
+				{fr: 'Vendredi', en: 'Friday'},
+				{fr: 'Samedi', en: 'Saturday'},
+				{fr: 'Dimanche', en: 'Sunday'},
+			]
 		}
 	},
 	methods: {
@@ -139,7 +154,7 @@ export default {
 					if (response.status == 200) {
 						//Permet de supprimer tous les champs sauf viewDetail qu'on a besoin de suivre pour mettre les valeurs du détail
 							  Object.keys(accomodation).forEach(function(key) {
-								if (key != 'viewDetail')
+								if (key != 'viewDetail' && key != 'showLocationProcess')
 							    	delete accomodation[key];
 							  });
 							  Object.keys(response.body.accomodation).forEach(function(key) {
@@ -151,12 +166,52 @@ export default {
 					}
 				});
 		},
+		onStartProcessBookAccomodation(accomodation) {
+			accomodation.showLocationProcess = !accomodation.showLocationProcess;
+			this.$set(accomodation, 'calendar', null);
+			this.$set(accomodation, 'reservation', {
+				startDate: null,
+				endDate: null
+			});
+			//je charge le calendrier des dates bloquées
+			//TODO concaténer avec les jours déjà réservés
+			if (accomodation.showLocationProcess && typeof accomodation.calendar != null) {
+				this.$http.get("calendar/" + accomodation._id).then(response => {
+					if (response.status == 200)
+						accomodation.calendar = response.body.calendar;
+				})
+			}
+		},
+		getLockedDates(accomodation) {
+			console.log("dates : " + typeof accomodation.calendar)
+			if (accomodation.calendar != null) {
+				return this.lodash.map(accomodation.calendar.lockedDates).map(function(date) {return moment(date).format('YYYY-MM-DD')})
+			}
+		},
+		getLockedDays(accomodation) {
+			var vue = this;
+			console.log("days : " + typeof accomodation.calendar)
+			if (accomodation.calendar != null) {
+				var lockedDays = this.lodash.map(accomodation.calendar.lockedDays).map(function(day) {
+					return vue.lodash.find(vue.daysTraduction, {'fr' : day}).en;
+				});
+				console.log(lockedDays)
+				return lockedDays
+			}
+		},
 	},
 	
 };
 </script>
 
 <style scss>
+
+.datepicker__clear-button, .datepicker__close-button {
+color: #2196F3 !important;
+}
+.datepicker {
+	transform: translateY(-418px);
+}
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity 5s;

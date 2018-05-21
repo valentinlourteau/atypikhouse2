@@ -158,7 +158,8 @@ export default {
 			this.selectedCalendar.lockedDays.push(day);
 		},
 		onDeleteDate(date) {
-			this.selectedCalendar.lockedDates.splice(date);
+			var index = this.selectedCalendar.lockedDates.indexOf(date);
+			this.selectedCalendar.lockedDates.splice(index, 1);
 		},
 		onDeleteDay(day) {
 			var index = this.selectedCalendar.lockedDays.indexOf(day);
