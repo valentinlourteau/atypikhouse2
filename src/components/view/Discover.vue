@@ -57,13 +57,33 @@
 							          
 							          <v-container v-if="accomodation.showLocationProcess && accomodation.calendar != null" grid-list-md>
 							          	<v-layout row wrap>
-							          		
-							          		<v-flex xs6 offset-xs3>
-									          <HotelDatePicker :startingDateValue="accomodation.reservation.startDate" :endingDateValue="accomodation.reservation.endDate" 
-									          format="DD/MM/YYYY" :minNights="accomodation.durationmin" :maxNights="accomodation.durationmax" 
-									          :disabledDates="getLockedDates(accomodation)" :disabledDaysOfWeek="getLockedDays(accomodation)"
-									           @checkInChanged="accomodation.reservation.startDate = $event" @checkOutChanged="accomodation.reservation.endDate = $event"/>
-							          		</v-flex>
+							          	
+							          	<v-stepper v-model="accomodation.step" vertical>
+							          	
+										    <v-stepper-step :complete="accomodation.step > 1" step="1">
+										      Choix des dates
+										    </v-stepper-step>
+										    <v-stepper-content  v-show="accomodation.step == 1" step="1">
+										      <HotelDatePicker :startingDateValue="accomodation.reservation.startDate" :endingDateValue="accomodation.reservation.endDate" 
+										          format="DD/MM/YYYY" :minNights="accomodation.durationmin" :maxNights="accomodation.durationmax" 
+										          :disabledDates="getLockedDates(accomodation)" :disabledDaysOfWeek="getLockedDays(accomodation)"
+										           @checkInChanged="accomodation.reservation.startDate = $event" @checkOutChanged="accomodation.reservation.endDate = $event"/>
+										      <v-btn color="primary" @click.native="onGoStep2(accomodation)">Continue</v-btn>
+										      <v-btn flat>Cancel</v-btn>
+										    </v-stepper-content>
+										    
+										    <v-stepper-step  :complete="accomodation.step > 2" step="2">
+										      Montant
+										    </v-stepper-step>
+										    <v-stepper-content step="2">
+
+											<div v-show="accomodation.step == 2">
+										      <v-btn color="primary" @click.native="accomodation.step = 3">Continue</v-btn>
+										      <v-btn @click="accomodation.step = 1" flat>Cancel</v-btn>
+										    </div>
+										    </v-stepper-content>
+									    
+									  </v-stepper>
 							          		
 							          	</v-layout>
 							          </v-container>
@@ -168,6 +188,7 @@ export default {
 		},
 		onStartProcessBookAccomodation(accomodation) {
 			accomodation.showLocationProcess = !accomodation.showLocationProcess;
+			this.$set(accomodation, 'step', 1);
 			this.$set(accomodation, 'calendar', null);
 			this.$set(accomodation, 'reservation', {
 				startDate: null,
@@ -199,6 +220,9 @@ export default {
 				return lockedDays
 			}
 		},
+		onGoStep2(accomodation) {
+			accomodation.step = 2;
+		},
 	},
 	
 };
@@ -208,6 +232,12 @@ export default {
 
 .datepicker__clear-button, .datepicker__close-button {
 color: #2196F3 !important;
+}
+.stepper {
+	box-shadow: none;
+}
+.stepper, .stepper__wrapper {
+	overflow: visible;
 }
 .datepicker {
 	transform: translateY(-418px);
