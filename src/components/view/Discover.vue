@@ -11,6 +11,8 @@
 			</v-flex>
 			</v-layout>
 						
+						<v-container grid-list-md>
+						<v-layout row wrap>
 						<v-flex style="transition: all 250ms"v-for="accomodation in accomodations"  :key="accomodation._id" v-bind:class="{xs12: accomodation.viewDetail}" class="xs3">
 							<v-card >
 							
@@ -73,7 +75,7 @@
 										    </v-stepper-content>
 										    
 										    <v-stepper-step  :complete="accomodation.step > 2" step="2">
-										      Montant
+										      Nombre de voyageurs
 										    </v-stepper-step>
 										    <v-stepper-content step="2">
 
@@ -96,6 +98,8 @@
 							
 							</v-card>
 						</v-flex>
+						</v-layout>
+						</v-container>
 					
 		</v-container>
 			
