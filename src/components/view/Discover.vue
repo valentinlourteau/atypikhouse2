@@ -84,6 +84,27 @@
 										      <v-btn @click="accomodation.step = 1" flat>Cancel</v-btn>
 										    </div>
 										    </v-stepper-content>
+										    
+										    <v-stepper-step  :complete="accomodation.step > 3" step="3">
+										      Règlement
+										    </v-stepper-step>
+										    <v-stepper-content step="3">
+
+											<div v-show="accomodation.step == 3">
+											
+											<PayPal
+											  amount="50"
+											  currency="EUR"
+											  :client="credentials"
+											  env="sandbox">
+											</PayPal>
+											
+										      <v-btn color="primary" @click.native="accomodation.step = 3">Continue</v-btn>
+										      <v-btn @click="accomodation.step = 1" flat>Cancel</v-btn>
+										    </div>
+										    </v-stepper-content>
+										    
+										    
 									    
 									  </v-stepper>
 							          		
@@ -107,12 +128,14 @@
 </template>
 
 <script>
+import PayPal from 'vue-paypal-checkout';
 import HotelDatePicker from 'vue-hotel-datepicker';
 import moment from 'moment';
 
 export default {
 	components: {
 		HotelDatePicker,
+		PayPal
 	},
 	created: function() {
 		this.$http.get("accomodation").then(response => {
@@ -139,7 +162,10 @@ export default {
 				{fr: 'Vendredi', en: 'Friday'},
 				{fr: 'Samedi', en: 'Saturday'},
 				{fr: 'Dimanche', en: 'Sunday'},
-			]
+			],
+			credentials: {
+		        sandbox: 'ASRh-BZAq7jdqDlHHU7gspeJA9Ok-eeHvVYqtMIe9YJMpmbGdjS5yvLDK3JyGBMJdLwgBUt4kFkNEg03'
+		    },
 		}
 	},
 	methods: {
