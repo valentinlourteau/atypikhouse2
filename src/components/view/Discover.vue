@@ -48,13 +48,12 @@
 									<v-card-text>
 									
 										<v-layout row unwrap>
-											<v-flex style="display:flex;" xs12 md6><v-btn class="mx-auto" outline large flat>CONTACTER</v-btn></v-flex>
+											<v-flex style="display:flex;" xs12 md6><v-btn @click="onContactOwner(accomodation)" class="mx-auto" outline large flat>CONTACTER</v-btn></v-flex>
 											<v-flex style="display:flex;" xs12 md6><v-btn @click="onStartProcessBookAccomodation(accomodation)" class="mx-auto" color="secondary" outline large flat>
 											<v-icon>{{ accomodation.showLocationProcess ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>RESERVER</v-btn></v-flex>
 										</v-layout>				
 									</v-card-text>
 									
-									<v-slide-y-transition>
 							          <v-card-text v-show="accomodation.showLocationProcess && accomodation.calendar != null">
 							          
 							          <v-container v-if="accomodation.showLocationProcess && accomodation.calendar != null" grid-list-md>
@@ -107,7 +106,7 @@
 
 											<div v-show="accomodation.step == 3">
 											
-												<v-jumbotron color="grey lighten-2">
+												<v-jumbotron>
 												    <v-container fill-height>
 												      <v-layout align-center>
 												        <v-flex>
@@ -115,7 +114,7 @@
 												          <span class="subheading">Vous êtes sur le point de finaliser la réservation d'un bien. Nous vous remercions de la confiance que vous accordez, à nous comme
 												          au propriétaire.</span>
 												          <v-divider class="my-3"></v-divider>
-												          <div class="title mb-3">Montant à payer : {{ accomodation.reservation.totalAmount }}</div>
+												          <div class="title mb-3">Montant à payer : {{ accomodation.reservation.totalAmount }} €</div>
 												          
 																<PayPal
 																  :amount="accomodation.reservation.price"
@@ -130,11 +129,6 @@
 												    </v-container>
 												  </v-jumbotron>
 												
-												
-											
-												
-											
-										    	<v-btn color="primary" @click.native="accomodation.step = 3">Valider</v-btn>
 										      	<v-btn @click="accomodation.step = 2" flat>Retour</v-btn>
 										    </div>
 										    </v-stepper-content>
@@ -148,7 +142,6 @@
 							          
 							          
 							          </v-card-text>
-							        </v-slide-y-transition>
 									
 								</div>
 							
@@ -201,6 +194,8 @@ export default {
 		        sandbox: 'ASRh-BZAq7jdqDlHHU7gspeJA9Ok-eeHvVYqtMIe9YJMpmbGdjS5yvLDK3JyGBMJdLwgBUt4kFkNEg03'
 		    },
 		    AHTaxe : 5,
+		    //La boite de dialogue pour contacter un propriétaire
+		    onContactOwnerDialog : false,
 		}
 	},
 	methods: {
@@ -273,12 +268,15 @@ export default {
 				})
 			}
 		},
+		onContactOwner(accomodation) {
+			this.onContactOwnerDialog = true;
+		},
 		onChooseVisitorsBeforePay(accomodation) {
 			//TODO Définir la tarification ici
 // 			accomodation.reservation.price = accomodation.reservation.nbVoyageurs * accomodation.tarification
 			accomodation.reservation.price = "324";
 			accomodation.reservation.taxe = (accomodation.reservation.price * this.AHTaxe) / 100;
-			accomodation.reservation.totalAmount = accomodation.reservation.price + accomodation.reservation.taxe;
+			accomodation.reservation.totalAmount = (parseFloat(accomodation.reservation.price) + parseFloat(accomodation.reservation.taxe)).toString();
 			accomodation.step = 3;
 		},
 		userHasPaid(accomodation) {
