@@ -11,7 +11,7 @@
 			</v-flex>
 			</v-layout>
 						
-						<v-container grid-list-md>
+						<v-container grid-list-lg>
 						<v-layout row wrap>
 						<v-flex style="transition: all 250ms"v-for="accomodation in accomodations"  :key="accomodation._id" v-bind:class="{xs12: accomodation.viewDetail}" class="xs3">
 							<v-card >
@@ -65,23 +65,40 @@
 										    <v-stepper-step :complete="accomodation.step > 1" step="1">
 										      Choix des dates
 										    </v-stepper-step>
-										    <v-stepper-content  v-show="accomodation.step == 1" step="1">
+										    <v-stepper-content step="1">
+										    <div v-show="accomodation.step == 1">
+										    
 										      <HotelDatePicker :startingDateValue="accomodation.reservation.startDate" :endingDateValue="accomodation.reservation.endDate" 
 										          format="DD/MM/YYYY" :minNights="accomodation.durationmin" :maxNights="accomodation.durationmax" 
 										          :disabledDates="getLockedDates(accomodation)" :disabledDaysOfWeek="getLockedDays(accomodation)"
 										           @checkInChanged="accomodation.reservation.startDate = $event" @checkOutChanged="accomodation.reservation.endDate = $event"/>
-										      <v-btn color="primary" @click.native="onGoStep2(accomodation)">Continue</v-btn>
-										      <v-btn flat>Cancel</v-btn>
+										      <v-btn :disabled="accomodation.reservation.endDate == null" color="primary" @click.native="onGoStep2(accomodation)">Continue</v-btn>
+										    
+										    </div>
 										    </v-stepper-content>
 										    
 										    <v-stepper-step  :complete="accomodation.step > 2" step="2">
 										      Nombre de voyageurs
 										    </v-stepper-step>
 										    <v-stepper-content step="2">
-
-											<div v-show="accomodation.step == 2">
-										      <v-btn color="primary" @click.native="accomodation.step = 3">Continue</v-btn>
-										      <v-btn @click="accomodation.step = 1" flat>Cancel</v-btn>
+										    <div v-show="accomodation.step == 2">
+										    
+										    <v-container fluid>
+									        <v-layout row wrap>
+									          <v-flex xs9>										    	
+									          <v-slider label="Voyageurs" v-model="accomodation.reservation.nbVoyageurs" :max="accomodation.guests"></v-slider>
+									          </v-flex>
+									          <v-flex xs3>
+									            <v-text-field v-model="accomodation.reservation.nbVoyageurs" type="number"></v-text-field>
+									          </v-flex>
+									          </v-layout>
+									          </v-container>
+										    
+										    
+										    
+										    	<v-btn color="primary" @click.native="onChooseVisitorsBeforePay(accomodation)">Continue</v-btn>
+										    	<v-btn @click="accomodation.step = 1" flat>Retour</v-btn>
+										      
 										    </div>
 										    </v-stepper-content>
 										    
@@ -92,15 +109,15 @@
 
 											<div v-show="accomodation.step == 3">
 											
-											<PayPal
-											  amount="50"
-											  currency="EUR"
-											  :client="credentials"
-											  env="sandbox">
-											</PayPal>
+												<PayPal
+												  :amount="accomodation.reservation.price"
+												  currency="EUR"
+												  :client="credentials"
+												  env="sandbox">
+												</PayPal>
 											
-										      <v-btn color="primary" @click.native="accomodation.step = 3">Continue</v-btn>
-										      <v-btn @click="accomodation.step = 1" flat>Cancel</v-btn>
+										    	<v-btn color="primary" @click.native="accomodation.step = 3">Valider</v-btn>
+										      	<v-btn @click="accomodation.step = 2" flat>Retour</v-btn>
 										    </div>
 										    </v-stepper-content>
 										    
@@ -142,9 +159,8 @@ export default {
 			if (response.status == 200) {
 				this.accomodations = response.body.accomodations;
 				for (var accomodation in this.accomodations) {
-// 					this.$set(this.accomodations[accomodation], 'viewDetail', false)
+					this.$set(this.accomodations[accomodation], 'viewDetail', false)
 					this.$set(this.accomodations[accomodation], 'showLocationProcess', false)
-					this.$set(this.accomodations[accomodation], 'viewDetail', true)
 				}
 			}
 		})
@@ -222,7 +238,9 @@ export default {
 			this.$set(accomodation, 'calendar', null);
 			this.$set(accomodation, 'reservation', {
 				startDate: null,
-				endDate: null
+				endDate: null,
+				nbVoyageurs: 1,
+				price: "",
 			});
 			//je charge le calendrier des dates bloquées
 			//TODO concaténer avec les jours déjà réservés
@@ -232,6 +250,9 @@ export default {
 						accomodation.calendar = response.body.calendar;
 				})
 			}
+		},
+		onChooseVisitorsBeforePay(accomodation) {
+			accomodation.reservation.price
 		},
 		getLockedDates(accomodation) {
 			console.log("dates : " + typeof accomodation.calendar)
