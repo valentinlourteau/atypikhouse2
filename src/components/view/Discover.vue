@@ -82,19 +82,17 @@
 										    </v-stepper-step>
 										    <v-stepper-content step="2">
 										    <div v-show="accomodation.step == 2">
-										    
-										    <v-container fluid>
-									        <v-layout row wrap>
-									          <v-flex xs9>										    	
-									          <v-slider label="Voyageurs" v-model="accomodation.reservation.nbVoyageurs" :max="accomodation.guests"></v-slider>
-									          </v-flex>
-									          <v-flex xs3>
-									            <v-text-field v-model="accomodation.reservation.nbVoyageurs" type="number"></v-text-field>
-									          </v-flex>
-									          </v-layout>
-									          </v-container>
-										    
-										    
+											    
+											    <v-container fluid>
+											        <v-layout row wrap>
+												          <v-flex xs9>										    	
+												          <v-slider label="Voyageurs" v-model="accomodation.reservation.nbVoyageurs" min="1" :max="accomodation.guests"></v-slider>
+												          </v-flex>
+												          <v-flex xs3>
+												            <v-text-field v-model="accomodation.reservation.nbVoyageurs" type="number"></v-text-field>
+												          </v-flex>
+											          </v-layout>
+										        </v-container>
 										    
 										    	<v-btn color="primary" @click.native="onChooseVisitorsBeforePay(accomodation)">Continue</v-btn>
 										    	<v-btn @click="accomodation.step = 1" flat>Retour</v-btn>
@@ -103,18 +101,38 @@
 										    </v-stepper-content>
 										    
 										    <v-stepper-step  :complete="accomodation.step > 3" step="3">
-										      R�glement
+										       Règlement
 										    </v-stepper-step>
 										    <v-stepper-content step="3">
 
 											<div v-show="accomodation.step == 3">
 											
-												<PayPal
-												  :amount="accomodation.reservation.price"
-												  currency="EUR"
-												  :client="credentials"
-												  env="sandbox">
-												</PayPal>
+												<v-jumbotron color="grey lighten-2">
+												    <v-container fill-height>
+												      <v-layout align-center>
+												        <v-flex>
+												          <h3 class="display-3">C'est presque fini !</h3>
+												          <span class="subheading">Vous êtes sur le point de finaliser la réservation d'un bien. Nous vous remercions de la confiance que vous accordez, à nous comme
+												          au propriétaire.</span>
+												          <v-divider class="my-3"></v-divider>
+												          <div class="title mb-3">Montant à payer : {{ accomodation.reservation.totalAmount }}</div>
+												          
+																<PayPal
+																  :amount="accomodation.reservation.price"
+																  currency="EUR"
+																  :client="credentials"
+																  env="sandbox"
+																  @payment-completed="userHasPaid(accomodation)">
+																</PayPal>
+
+												        </v-flex>
+												      </v-layout>
+												    </v-container>
+												  </v-jumbotron>
+												
+												
+											
+												
 											
 										    	<v-btn color="primary" @click.native="accomodation.step = 3">Valider</v-btn>
 										      	<v-btn @click="accomodation.step = 2" flat>Retour</v-btn>
@@ -182,6 +200,7 @@ export default {
 			credentials: {
 		        sandbox: 'ASRh-BZAq7jdqDlHHU7gspeJA9Ok-eeHvVYqtMIe9YJMpmbGdjS5yvLDK3JyGBMJdLwgBUt4kFkNEg03'
 		    },
+		    AHTaxe : 5,
 		}
 	},
 	methods: {
@@ -241,6 +260,9 @@ export default {
 				endDate: null,
 				nbVoyageurs: 1,
 				price: "",
+				AHTaxe: 0,
+				status: "attente",
+				totalAmount: 0,
 			});
 			//je charge le calendrier des dates bloquées
 			//TODO concaténer avec les jours déjà réservés
@@ -252,7 +274,17 @@ export default {
 			}
 		},
 		onChooseVisitorsBeforePay(accomodation) {
-			accomodation.reservation.price
+			//TODO Définir la tarification ici
+// 			accomodation.reservation.price = accomodation.reservation.nbVoyageurs * accomodation.tarification
+			accomodation.reservation.price = "324";
+			accomodation.reservation.taxe = (accomodation.reservation.price * this.AHTaxe) / 100;
+			accomodation.reservation.totalAmount = accomodation.reservation.price + accomodation.reservation.taxe;
+			accomodation.step = 3;
+		},
+		userHasPaid(accomodation) {
+			accomodation.reservation.status = "paid";
+			//TODO requête http post reservation, si un utilisateur a déjà réservé entre temps on reçoit un message qui indique cela
+			//router redirection vers le détail d'un voyage en cas de succès
 		},
 		getLockedDates(accomodation) {
 			console.log("dates : " + typeof accomodation.calendar)
