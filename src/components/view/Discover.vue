@@ -13,7 +13,7 @@
 						
 						<v-container grid-list-lg>
 						<v-layout row wrap>
-						<v-flex style="transition: all 250ms"v-for="accomodation in accomodations"  :key="accomodation._id" v-bind:class="{xs12: accomodation.viewDetail}" class="xs3">
+						<v-flex style="transition: all 250ms" v-for="accomodation in accomodations"  :key="accomodation._id" v-bind:class="{xs12: accomodation.viewDetail}" class="xs3">
 							<v-card >
 							
 								<div @click="onViewDetail(accomodation)" style="cursor:pointer;" v-if="!accomodation.viewDetail">
@@ -35,7 +35,7 @@
 									<v-container grid-list-lg>
 										<v-layout v-viewer align-center row wrap>
 											<v-flex v-for="(pic, index) in accomodation.images" :key="index" v-bind:class="{flex30 : index % 2 == 0, flex20 : index % 2 != 0}">
-												<img height="auto" style="width:100%;cursor:pointer;" :src="pic.data"></img>
+												<img height="auto" style="width:100%;cursor:pointer;" :src="pic.data" />
 											</v-flex>
 										</v-layout>
 									</v-container>
@@ -160,177 +160,191 @@
 </template>
 
 <script>
-import PayPal from 'vue-paypal-checkout';
-import HotelDatePicker from 'vue-hotel-datepicker';
-import moment from 'moment';
-import ContactForm from '../ContactForm';
+import PayPal from "vue-paypal-checkout";
+import HotelDatePicker from "vue-hotel-datepicker";
+import moment from "moment";
+import ContactForm from "../ContactForm";
 
 export default {
-	components: {
-		HotelDatePicker,
-		PayPal,
-		ContactForm,
-	},
-	created: function() {
-		this.$http.get("accomodation").then(response => {
-			if (response.status == 200) {
-				this.accomodations = response.body.accomodations;
-				for (var accomodation in this.accomodations) {
-					this.$set(this.accomodations[accomodation], 'viewDetail', false)
-					this.$set(this.accomodations[accomodation], 'showLocationProcess', false)
-				}
-			}
-		})
-	},
-	data: function() {
-		return {
-			search: null,
-			accomodations: [],
-			//les traductions parce que le calendar est stocké en FR
-			daysTraduction: [
-				{fr: 'Lundi', en: 'Monday'},
-				{fr: 'Mardi', en: 'Tuesday'},
-				{fr: 'Mercredi', en: 'Wednesday'},
-				{fr: 'Jeudi', en: 'Thursday'},
-				{fr: 'Vendredi', en: 'Friday'},
-				{fr: 'Samedi', en: 'Saturday'},
-				{fr: 'Dimanche', en: 'Sunday'},
-			],
-			credentials: {
-		        sandbox: 'ASRh-BZAq7jdqDlHHU7gspeJA9Ok-eeHvVYqtMIe9YJMpmbGdjS5yvLDK3JyGBMJdLwgBUt4kFkNEg03'
-		    },
-		    AHTaxe : 5,
-		    //La boite de dialogue pour contacter un propriétaire
-		    contactOwner : false,
-		}
-	},
-	methods: {
-		getRandomPlaceHolder() {
-			return "Une maison sous l'eau";
-		},
-		imLucky() {
-			this.selectedAccomodation = null;
-			//remplacer par un vrai get, du moins voir comment on va quérir la liste des accomodations vis à vis de la recherche 
-			this.$http.get("accomodation").then(response => {
-				if (response.status == 200) {
-					this.accomodations = response.body.accomodations;
-					for (var accomodation in this.accomodations) {
-						this.accomodations[accomodation].viewDetail = true;
-					}
-				}
-			})
-		},
-		getTruncatedDescription(accomodation) {
-			length = 86;
-			if (accomodation.description == null)
-				return "";
-			else if (accomodation.description.length > length)
-				return accomodation.description.substring(0, length) + " ...";
-			else
-				return accomodation.description.substring(0, length);
-		},
-		onViewDetail(accomodation) {
-			if (accomodation.fetch)
-				accomodation.viewDetail = true;
-			
-			else
-				this.$http.get("accomodation/" + accomodation._id).then(response => {
-					console.log("accomodation")
-					console.log(accomodation)
-					if (response.status == 200) {
-						//Permet de supprimer tous les champs sauf viewDetail qu'on a besoin de suivre pour mettre les valeurs du détail
-							  Object.keys(accomodation).forEach(function(key) {
-								if (key != 'viewDetail' && key != 'showLocationProcess')
-							    	delete accomodation[key];
-							  });
-							  Object.keys(response.body.accomodation).forEach(function(key) {
-							    accomodation[key] = response.body.accomodation[key];
-							  });
-							accomodation.fetch = true;
-							accomodation.viewDetail = true;
-					
-					}
-				});
-		},
-		onStartProcessBookAccomodation(accomodation) {
-			accomodation.showLocationProcess = !accomodation.showLocationProcess;
-			this.$set(accomodation, 'step', 1);
-			this.$set(accomodation, 'calendar', null);
-			this.$set(accomodation, 'reservation', {
-				startDate: null,
-				endDate: null,
-				nbVoyageurs: 1,
-				price: "",
-				AHTaxe: 0,
-				status: "attente",
-				totalAmount: 0,
-			});
-			//je charge le calendrier des dates bloquées
-			//TODO concaténer avec les jours déjà réservés
-			if (accomodation.showLocationProcess && typeof accomodation.calendar != null) {
-				this.$http.get("calendar/" + accomodation._id).then(response => {
-					if (response.status == 200)
-						accomodation.calendar = response.body.calendar;
-				})
-			}
-		},
-		onContactOwner(accomodation) {
-			this.contactOwner = true;
-		},
-		onChooseVisitorsBeforePay(accomodation) {
-			//TODO Définir la tarification ici
-// 			accomodation.reservation.price = accomodation.reservation.nbVoyageurs * accomodation.tarification
-			accomodation.reservation.price = "324";
-			accomodation.reservation.taxe = (accomodation.reservation.price * this.AHTaxe) / 100;
-			accomodation.reservation.totalAmount = (parseFloat(accomodation.reservation.price) + parseFloat(accomodation.reservation.taxe)).toString();
-			accomodation.step = 3;
-		},
-		userHasPaid(accomodation) {
-			accomodation.reservation.status = "paid";
-			//TODO requête http post reservation, si un utilisateur a déjà réservé entre temps on reçoit un message qui indique cela
-			//router redirection vers le détail d'un voyage en cas de succès
-		},
-		getLockedDates(accomodation) {
-			console.log("dates : " + typeof accomodation.calendar)
-			if (accomodation.calendar != null) {
-				return this.lodash.map(accomodation.calendar.lockedDates).map(function(date) {return moment(date).format('YYYY-MM-DD')})
-			}
-		},
-		getLockedDays(accomodation) {
-			var vue = this;
-			console.log("days : " + typeof accomodation.calendar)
-			if (accomodation.calendar != null) {
-				var lockedDays = this.lodash.map(accomodation.calendar.lockedDays).map(function(day) {
-					return vue.lodash.find(vue.daysTraduction, {'fr' : day}).en;
-				});
-				console.log(lockedDays)
-				return lockedDays
-			}
-		},
-		onGoStep2(accomodation) {
-			accomodation.step = 2;
-		},
-	},
-	
+  components: {
+    HotelDatePicker,
+    PayPal,
+    ContactForm
+  },
+  created: function() {
+    this.$http.get("accomodation").then(response => {
+      if (response.status == 200) {
+        this.accomodations = response.body.accomodations;
+        for (var accomodation in this.accomodations) {
+          this.$set(this.accomodations[accomodation], "viewDetail", false);
+          this.$set(
+            this.accomodations[accomodation],
+            "showLocationProcess",
+            false
+          );
+        }
+      }
+    });
+  },
+  data: function() {
+    return {
+      search: null,
+      accomodations: [],
+      //les traductions parce que le calendar est stocké en FR
+      daysTraduction: [
+        { fr: "Lundi", en: "Monday" },
+        { fr: "Mardi", en: "Tuesday" },
+        { fr: "Mercredi", en: "Wednesday" },
+        { fr: "Jeudi", en: "Thursday" },
+        { fr: "Vendredi", en: "Friday" },
+        { fr: "Samedi", en: "Saturday" },
+        { fr: "Dimanche", en: "Sunday" }
+      ],
+      credentials: {
+        sandbox:
+          "ASRh-BZAq7jdqDlHHU7gspeJA9Ok-eeHvVYqtMIe9YJMpmbGdjS5yvLDK3JyGBMJdLwgBUt4kFkNEg03"
+      },
+      AHTaxe: 5,
+      //La boite de dialogue pour contacter un propriétaire
+      contactOwner: false
+    };
+  },
+  methods: {
+    getRandomPlaceHolder() {
+      return "Une maison sous l'eau";
+    },
+    imLucky() {
+      this.selectedAccomodation = null;
+      //remplacer par un vrai get, du moins voir comment on va quérir la liste des accomodations vis à vis de la recherche
+      this.$http.get("accomodation").then(response => {
+        if (response.status == 200) {
+          this.accomodations = response.body.accomodations;
+          for (var accomodation in this.accomodations) {
+            this.accomodations[accomodation].viewDetail = true;
+          }
+        }
+      });
+    },
+    getTruncatedDescription(accomodation) {
+      length = 86;
+      if (accomodation.description == null) return "";
+      else if (accomodation.description.length > length)
+        return accomodation.description.substring(0, length) + " ...";
+      else return accomodation.description.substring(0, length);
+    },
+    onViewDetail(accomodation) {
+      if (accomodation.fetch) accomodation.viewDetail = true;
+      else
+        this.$http.get("accomodation/" + accomodation._id).then(response => {
+          console.log("accomodation");
+          console.log(accomodation);
+          if (response.status == 200) {
+            //Permet de supprimer tous les champs sauf viewDetail qu'on a besoin de suivre pour mettre les valeurs du détail
+            Object.keys(accomodation).forEach(function(key) {
+              if (key != "viewDetail" && key != "showLocationProcess")
+                delete accomodation[key];
+            });
+            Object.keys(response.body.accomodation).forEach(function(key) {
+              accomodation[key] = response.body.accomodation[key];
+            });
+            accomodation.fetch = true;
+            accomodation.viewDetail = true;
+          }
+        });
+    },
+    onStartProcessBookAccomodation(accomodation) {
+      accomodation.showLocationProcess = !accomodation.showLocationProcess;
+      this.$set(accomodation, "step", 1);
+      this.$set(accomodation, "calendar", null);
+      this.$set(accomodation, "reservation", {
+        startDate: null,
+        endDate: null,
+        nbVoyageurs: 1,
+        price: "",
+        AHTaxe: 0,
+        status: "attente",
+        totalAmount: 0
+      });
+      //je charge le calendrier des dates bloquées
+      //TODO concaténer avec les jours déjà réservés
+      if (
+        accomodation.showLocationProcess &&
+        typeof accomodation.calendar != null
+      ) {
+        this.$http.get("calendar/" + accomodation._id).then(response => {
+          if (response.status == 200)
+            accomodation.calendar = response.body.calendar;
+        });
+      }
+    },
+    onContactOwner(accomodation) {
+      this.contactOwner = true;
+    },
+    onChooseVisitorsBeforePay(accomodation) {
+      //TODO Définir la tarification ici
+      // 			accomodation.reservation.price = accomodation.reservation.nbVoyageurs * accomodation.tarification
+      accomodation.reservation.price = "324";
+      accomodation.reservation.taxe =
+        accomodation.reservation.price * this.AHTaxe / 100;
+      accomodation.reservation.totalAmount = (
+        parseFloat(accomodation.reservation.price) +
+        parseFloat(accomodation.reservation.taxe)
+      ).toString();
+      accomodation.step = 3;
+    },
+    userHasPaid(accomodation) {
+      accomodation.reservation.status = "paid";
+      //TODO requête http post reservation, si un utilisateur a déjà réservé entre temps on reçoit un message qui indique cela
+      //router redirection vers le détail d'un voyage en cas de succès
+    },
+    getLockedDates(accomodation) {
+      console.log("dates : " + typeof accomodation.calendar);
+      if (accomodation.calendar != null) {
+        return this.lodash
+          .map(accomodation.calendar.lockedDates)
+          .map(function(date) {
+            return moment(date).format("YYYY-MM-DD");
+          });
+      }
+    },
+    getLockedDays(accomodation) {
+      var vue = this;
+      console.log("days : " + typeof accomodation.calendar);
+      if (accomodation.calendar != null) {
+        var lockedDays = this.lodash
+          .map(accomodation.calendar.lockedDays)
+          .map(function(day) {
+            return vue.lodash.find(vue.daysTraduction, { fr: day }).en;
+          });
+        console.log(lockedDays);
+        return lockedDays;
+      }
+    },
+    onGoStep2(accomodation) {
+      accomodation.step = 2;
+    }
+  }
 };
 </script>
 
 <style scss>
-
-.datepicker__clear-button, .datepicker__close-button {
-color: #2196F3 !important;
+.datepicker__clear-button,
+.datepicker__close-button {
+  color: #2196f3 !important;
 }
 .stepper {
-	box-shadow: none;
+  box-shadow: none;
 }
-.stepper, .stepper__wrapper {
-	overflow: visible;
+.stepper,
+.stepper__wrapper {
+  overflow: visible;
 }
 .datepicker {
-	transform: translateY(-418px);
+  transform: translateY(-418px);
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
@@ -338,19 +352,19 @@ color: #2196F3 !important;
 }
 
 .ah-divider {
-	height: 1px;
-	border-top: 1px grey solid;
-	width: 100%;
-	background-color: #0000001e;
-	opacity: 0.2;
-	margin: 12px 0;
+  height: 1px;
+  border-top: 1px grey solid;
+  width: 100%;
+  background-color: #0000001e;
+  opacity: 0.2;
+  margin: 12px 0;
 }
 .flex20 {
-	max-width:20%;
-	flex-basis:20%;
+  max-width: 20%;
+  flex-basis: 20%;
 }
 .flex30 {
-	max-width:30%;
-	flex-basis:30%;
+  max-width: 30%;
+  flex-basis: 30%;
 }
 </style>

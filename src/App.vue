@@ -24,36 +24,38 @@
 </template>
 
 <script>
-import AhHeader from './components/structure/AhHeader';
-import AhFooter from './components/structure/AhFooter';
-import sidenavBar from './components/structure/SidenavBar';
+import AhHeader from "./components/structure/AhHeader";
+import AhFooter from "./components/structure/AhFooter";
+import sidenavBar from "./components/structure/SidenavBar";
 
 export default {
-  	mounted: function () {
-  		this.$store.watch((store) => {
-  			this.snackbar.show = false;
-  			 return this.$store.state.snackbar;
-  		}, (newValue, oldValue) => {
-  			this.snackbar.text = newValue.toString();
-  			this.snackbar.show = true;
-  		})
-	},
-  	data : function() {
+  mounted: function() {
+    this.$store.watch(
+      store => {
+        this.snackbar.show = false;
+        return this.$store.state.snackbar;
+      },
+      (newValue, oldValue) => {
+        this.snackbar.text = newValue.toString();
+        this.snackbar.show = true;
+      }
+    );
+  },
+  data: function() {
     return {
-    	displayDrawer: true,
-    	snackbar: {
-    		show: false,
-    		text: "",
-    	},
-    }
+      displayDrawer: true,
+      snackbar: {
+        show: false,
+        text: ""
+      }
+    };
   },
-  methods: {
-  },
-  name: 'App',
+  methods: {},
+  name: "App",
   components: {
-	  AhHeader,
-	  AhFooter,
-	  sidenavBar,
+    AhHeader,
+    AhFooter,
+    sidenavBar
   }
-}
+};
 </script>
