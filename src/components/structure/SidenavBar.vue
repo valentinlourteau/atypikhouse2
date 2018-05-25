@@ -24,7 +24,8 @@
 	</div>
 	
 	<v-list>
-      <v-list-tile v-for="item in items" :key="item.title" @click="route(item.link)">
+		<div v-for="item in items" :key="item.title">
+      <v-list-tile @click="route(item.link)">
         <v-list-tile-action>
           <v-icon >{{ item.icon }}</v-icon>
         </v-list-tile-action>
@@ -33,9 +34,10 @@
         </v-list-tile-content>
       </v-list-tile>
       
-      <v-divider></v-divider>
-      
-      <v-list-tile v-if="$store.state.user != null" @click="onClickDisconnect();">
+      <v-divider v-if="item.divider"></v-divider>
+		</div>
+
+		      <v-list-tile v-if="$store.state.user != null" @click="onClickDisconnect();">
         <v-list-tile-action>
           <v-icon >exit_to_app</v-icon>
         </v-list-tile-action>
@@ -43,6 +45,7 @@
           <v-list-tile-title>Deconnexion</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
+
       
     </v-list>
 	
@@ -52,57 +55,77 @@
 </template>
 
 <script type="text/javascript">
-
 export default {
-	mounted: function() {
-		
-	},
-	props: ["display"],
-	data: function() {
-		return {
-		      items: [
-		          { title: 'Mon compte', icon: 'account_circle', link: '/account'},
-		          { title: 'Mes biens atypiques', icon: 'home', link: '/realEstate/home'},
-		          { title: 'Mes voyages', icon: 'flight_takeoff', link: '/'},
-		        ],
-		        displayDrawer : true,
-		      avatarSize: '64px',
-		}
-	},
-	components: {
-	},
-	methods: {
-		onClickDisconnect() {
-			this.$store.commit("onSetUser", null);
-			this.$router.push("/");
-			//M.toast( {html: "On espère vous revoir bientôt !" } );
-		},
-		redirectHome() {
-			this.$router.push('/');
-		},
-		route(link) {
-			this.$router.push(link);
-		}
-	},
-	computed: {
-	},
+  mounted: function() {},
+  props: ["display"],
+  data: function() {
+    return {
+      items: [
+        {
+          title: "Mon compte",
+          icon: "account_circle",
+          link: "/account",
+          divider: false
+        },
+        {
+          title: "Mes biens atypiques",
+          icon: "home",
+          link: "/realEstate/home",
+          divider: false
+        },
+        {
+          title: "Mes voyages",
+          icon: "flight_takeoff",
+          link: "/",
+          divider: true
+        },
+        {
+          title: "Messagerie",
+          icon: "message",
+          link: "/messages",
+          divider: false
+        },
+        {
+          title: "Notifications",
+          icon: "flight_takeoff",
+          link: "/",
+          divider: true
+        }
+      ],
+      displayDrawer: true,
+      avatarSize: "64px"
+    };
+  },
+  components: {},
+  methods: {
+    onClickDisconnect() {
+      this.$store.commit("onSetUser", null);
+      this.$router.push("/");
+    },
+    redirectHome() {
+      this.$router.push("/");
+    },
+    route(link) {
+      this.$router.push(link);
+    }
+  },
+  computed: {}
 };
-
 </script>
 
 <style>
 .user-view {
-	position: relative;
-	padding: 32px 32px 0;
+  position: relative;
+  padding: 32px 32px 0;
 }
 
 .background {
-	overflow: hidden;
-	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	bottom: 0;
-	z-index: -1;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
 }
 </style>

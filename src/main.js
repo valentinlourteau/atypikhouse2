@@ -16,15 +16,15 @@ import PortalVue from 'portal-vue';
 import VueLodash from 'vue-lodash';
 import 'viewerjs/dist/viewer.css';
 import Viewer from 'v-viewer';
-//components
+//pages
 import Home from './components/view/Home';
 import Account from './components/view/Account';
 import Discover from './components/view/Discover';
 import about from './components/view/About';
-
 import RealEstate from './components/view/realEstate/RealEstate';
 import NewRealEstate from './components/view/realEstate/NewRealEstate';
 import RealEstateDetail from './components/view/realEstate/RealEstateDetail';
+import Messages from './components/view/Messages'
 //utils
 import TD from './class/utils/TokenDecrypter';
 
@@ -89,7 +89,8 @@ const router = new VueRouter({
     { path: '/realEstate/new', component: NewRealEstate},
     { path: '/realEstate/new/:accomodationId', component: NewRealEstate},
     { path: '/realEstate/edit/:accomodationId', component: NewRealEstate},
-    { path: '/realEstate/detail', component: RealEstateDetail},
+	{ path: '/realEstate/detail', component: RealEstateDetail},
+	{ path: '/messages', component: Messages},
   ],
   mode: 'history'
 });

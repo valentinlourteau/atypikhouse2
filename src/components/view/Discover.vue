@@ -66,6 +66,8 @@
 										    </v-stepper-step>
 										    <v-stepper-content step="1">
 										    <div v-show="accomodation.step == 1">
+
+                                              <!-- Affichage du prix par nuité -->
 										    
 										      <HotelDatePicker :startingDateValue="accomodation.reservation.startDate" :endingDateValue="accomodation.reservation.endDate" 
 										          format="DD/MM/YYYY" :minNights="accomodation.durationmin" :maxNights="accomodation.durationmax" 
@@ -90,6 +92,30 @@
 												          <v-flex xs3>
 												            <v-text-field v-model="accomodation.reservation.nbVoyageurs" type="number"></v-text-field>
 												          </v-flex>
+
+                                                          <v-flex xs12>
+                                                            <v-divider></v-divider>
+                                                          </v-flex>
+
+                                                          <v-flex xs12>
+                                                            <v-list>
+                                                              <v-list-tile>
+                                                                <v-list-tile-content>
+                                                                  <v-list-tile-title>{{ accomodation.reservation.price }} €</v-list-tile-title>
+                                                                  <v-list-tile-sub-title>Montant du séjour sur la base du nombre de voyageurs</v-list-tile-sub-title>
+                                                                </v-list-tile-content>
+                                                              </v-list-tile>
+
+                                                              <v-list-tile>
+                                                                <v-list-tile-content>
+                                                                  <v-list-tile-title>{{ accomodation.reservation.AHTaxe }} €</v-list-tile-title>
+                                                                  <v-list-tile-sub-title>Frais de gestion AtypikHouse</v-list-tile-sub-title>
+                                                                </v-list-tile-content>
+                                                              </v-list-tile>
+
+                                                            </v-list>
+                                                          </v-flex>
+
 											          </v-layout>
 										        </v-container>
 										    
@@ -142,7 +168,6 @@
 							          
 							          
 							          </v-card-text>
-							          
 							          
 									  <contact-form :showModal="contactOwner" @close="contactOwner = false;" :sender="$store.state.user" receiver="accomodation.host"></contact-form>
 									
@@ -204,6 +229,7 @@ export default {
         sandbox:
           "ASRh-BZAq7jdqDlHHU7gspeJA9Ok-eeHvVYqtMIe9YJMpmbGdjS5yvLDK3JyGBMJdLwgBUt4kFkNEg03"
       },
+      //La taxe AH, en %
       AHTaxe: 5,
       //La boite de dialogue pour contacter un propriétaire
       contactOwner: false
@@ -260,7 +286,7 @@ export default {
         startDate: null,
         endDate: null,
         nbVoyageurs: 1,
-        price: "",
+        price: "0",
         AHTaxe: 0,
         status: "attente",
         totalAmount: 0
