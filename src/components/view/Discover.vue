@@ -142,6 +142,9 @@
 							          
 							          
 							          </v-card-text>
+							          
+							          
+									  <contact-form :showModal="contactOwner" @close="contactOwner = false;" :sender="$store.state.user" receiver="accomodation.host"></contact-form>
 									
 								</div>
 							
@@ -151,6 +154,7 @@
 						</v-container>
 					
 		</v-container>
+		
 			
 	</div>
 </template>
@@ -159,11 +163,13 @@
 import PayPal from 'vue-paypal-checkout';
 import HotelDatePicker from 'vue-hotel-datepicker';
 import moment from 'moment';
+import ContactForm from '../ContactForm';
 
 export default {
 	components: {
 		HotelDatePicker,
-		PayPal
+		PayPal,
+		ContactForm,
 	},
 	created: function() {
 		this.$http.get("accomodation").then(response => {
@@ -195,7 +201,7 @@ export default {
 		    },
 		    AHTaxe : 5,
 		    //La boite de dialogue pour contacter un propriétaire
-		    onContactOwnerDialog : false,
+		    contactOwner : false,
 		}
 	},
 	methods: {
@@ -269,7 +275,7 @@ export default {
 			}
 		},
 		onContactOwner(accomodation) {
-			this.onContactOwnerDialog = true;
+			this.contactOwner = true;
 		},
 		onChooseVisitorsBeforePay(accomodation) {
 			//TODO Définir la tarification ici

@@ -20,6 +20,8 @@
       <v-tab-item>
       
        <v-container fluid>
+       <v-layout row wrap>
+       <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <v-card>
       <v-card-text>
     <v-layout row wrap>
@@ -59,13 +61,13 @@
          <v-card-text>
                 <v-text-field v-model="password.old" label="Ancien mot de passe" type="password" required></v-text-field>
                 <v-text-field v-model="password.nouv" label="Nouveau mot de passe" type="password" required></v-text-field>
-                <v-text-field label="Confirmer le nouveau mot de passe" type="password" required></v-text-field>
+                <v-text-field v-model="password.nouvConf" label="Confirmer le nouveau mot de passe" type="password" required></v-text-field>
          </v-card-text>
                 
               </v-flex>
               <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn  flat @click="$emit('close')" >Annuler</v-btn>
+          <v-btn flat @click="showModal =  false">Annuler</v-btn>
           <v-btn color="blue" flat @click="onClickValidPsw()">Valider</v-btn>
         </v-card-actions>
               </v-card>
@@ -81,6 +83,8 @@
     </v-card-actions>
     
     </v-card>
+    </v-flex>
+    </v-layout>
     </v-container>
     <v-layout align-center>
     <v-flex xs12 sm1 text-xs-center>
@@ -116,26 +120,19 @@ export default {
 	},
 	data: function() {
 		return {
-			isUserTooYoung: false,
-			selectedDate: null,
-			newUser: new User(),
-			verifPassword: "",
-			equalsPasswordSeverity: {
-				type: 'info',
-				message: 'Veuillez valider le mot de passe',
-			},
 			showModal: false,
 			user: Object.assign({}, this.$store.state.user),
 			active: null,
 			viewPassword : false,
 			tabs: [
 				{text : "Informations personnelles"},
-				{text : "Entreprise"},
-				{text : "Modes de payements"},
+// 				{text : "Entreprise"},
+// 				{text : "Modes de payements"},
 			],
 			password: {
 				old: "",
 				nouv: "",
+				nouvConf: "",
 			},
 		}
 	},
@@ -151,8 +148,6 @@ export default {
 				if (response.status == 200) {
 					this.$store.commit("snackbar", "Modifications effectuées");
 					this.$store.commit("onSetUser", new TD(response.body.token).data);
-					//ici il faut rajouter un commit pour remplacer l'user dans le local storage,
-					//parce que si je rafraichis mon navigateur je récupère l'ancienne version de l'user !
 				}
 			
 			})
@@ -160,9 +155,12 @@ export default {
 		},
 		
 		onClickValidPsw(){
+			if (this.password.nouv != this.password.nouvConf) {
+				//Afficher une erreur
+			}
 			this.$http.put("users/password", {
 				"oldPassword" : this.password.old,
-				"newPassword" :this.password.nouv 
+				"newPassword" : this.password.nouv
 			}).then(response => {
 				if (response.status == 200) {
 					this.$store.commit("snackbar", "Mot de passe modifés");
