@@ -24,9 +24,9 @@
 	</div>
 	
 	<v-list>
-		<div v-for="item in items" v-if="item.if" :key="item.title">
+		<div v-if="item.if" v-for="item in items" :key="item.title">
 
-      <v-list-tile :to="item.link" active-class="yellow--text black">
+      <v-list-tile v-if="item.items == null" :to="item.link" active-class="yellow--text black">
         <v-list-tile-action v-if="item.badge == null">
           <v-icon >{{ item.icon }}</v-icon>
         </v-list-tile-action>
@@ -40,6 +40,27 @@
           <v-list-tile-title>{{ item.title }}</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
+
+	  <v-list-group v-else
+          sub-group
+          no-action
+          value="true"
+      >
+          <v-list-tile  slot="activator">
+            <v-list-tile-title>Administration</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile
+            v-for="(admin, i) in item.items"
+            :key="i"
+			:to="admin.link"
+			active-class="yellow--text black"
+          >
+            <v-list-tile-title v-text="admin.title"></v-list-tile-title>
+            <v-list-tile-action>
+              <v-icon v-text="admin.icon"></v-icon>
+          </v-list-tile-action>
+        </v-list-tile>
+      </v-list-group>
       
       <v-divider v-if="item.divider"></v-divider>
 		</div>
@@ -72,38 +93,62 @@ export default {
           title: "Mon compte",
           icon: "account_circle",
           link: "/account",
-          if: true,
+          if: (!this.$store.state.admin),
           divider: false
         },
         {
           title: "Mes biens atypiques",
           icon: "home",
           link: "/realEstate/home",
-          if: true,
+          if: (!this.$store.state.admin),
           divider: false
         },
         {
           title: "Mes voyages",
           icon: "flight_takeoff",
           link: "/",
-          if: true,
+          if: (!this.$store.state.admin),
           divider: true
         },
         {
           title: "Messages",
           icon: "message",
           link: "/messages",
-          if: true,
+          if: (!this.$store.state.admin),
           divider: false
         },
         {
           title: "Notifications",
           icon: "notification_important",
           link: "/notifications",
+          if: (!this.$store.state.admin),
           badge: 6,
-          if: true,
           divider: true
         },
+        {
+          title: "Administrateur",
+          icon: "",
+					link: "/manager",
+					//TODO remettre admin à true pour voir ça
+          if: (!this.$store.state.admin),
+          items: [
+            {
+              title: "Utilisateurs",
+              icon: "supervised_user_circle",
+              link: "/aduser"
+            },
+            {
+              title: "Etat des services",
+              icon: "power",
+              link: "/alerte"
+            },
+            {
+              title: "Paramètres d'un bien",
+              icon: "input",
+              link: "/input"
+            }
+          ]
+        }
       ],
       displayDrawer: true,
       avatarSize: "64px"
@@ -112,18 +157,18 @@ export default {
   components: {},
   methods: {
     onClickDisconnect() {
-      console.log("je me deco")
+      console.log("je me deco");
       this.$store.commit("onSetUser", null);
       this.$router.push("/");
     },
     redirectHome() {
       this.$router.push("/");
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style>
+<style scss>
 .user-view {
   position: relative;
   padding: 32px 32px 0;
@@ -137,5 +182,8 @@ export default {
   left: 0;
   bottom: 0;
   z-index: -1;
+}
+.list__tile--active .icon {
+		color: #ffeb3b !important;
 }
 </style>

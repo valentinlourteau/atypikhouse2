@@ -14,7 +14,7 @@
     </v-flex>
 </v-container>
  <v-dialog v-model="dialog">
-   <v-btn slot="activator"  fab dark dark class="mb-4">
+   <v-btn slot="activator"  fab dark class="mb-4">
  <v-icon>add</v-icon>
  </v-btn>
       <v-card>
@@ -80,113 +80,101 @@
   </div>
 </template>
 <script>
+export default {
+  data: () => ({
+    dialog: false,
+    headers: [
+      {
+        text: "First Name",
+        align: "left",
+        sortable: false,
+        value: "firstname"
+      },
+      { text: "Last Name", value: "lastname" },
+      { text: "Adresse e-mail", value: "Addmail" },
+      { text: "Matricule", value: "matricule" },
+      { text: "Poste", value: "poste" },
+      { text: "Actions", value: "name", sortable: false }
+    ],
+    aduser: [],
+    editedIndex: -1,
+    editedItem: {
+      firstname: "",
+      lastname: "",
+      addmail: "",
+      matricule: "",
+      poste: ""
+    },
+    defaultItem: {
+      firstname: "",
+      lastname: "",
+      addmail: "",
+      matricule: "",
+      poste: ""
+    }
+  }),
 
- export default {
-    data: () => ({
-      dialog: false,
-      headers: [
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1
+        ? "Nouveau utilisateur"
+        : "Modifier un utilisateur";
+    }
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
+  },
+
+  created() {
+    this.initialize();
+  },
+  methods: {
+    initialize() {
+      this.aduser = [
         {
-          text: 'First Name',
-          align: 'left',
-          sortable: false,
-          value: 'firstname'
-        },
-        { text: 'Last Name', value: 'lastname' },
-        { text: 'Adresse e-mail', value: 'Addmail' },
-        { text: 'Matricule', value: 'matricule' },
-        { text: 'Poste', value: 'poste' },
-        { text: 'Actions', value: 'name', sortable: false }
-      ],
-      aduser: [],
-      editedIndex: -1,
-      editedItem: {
-        firstname: '',
-        lastname: '',
-        addmail: '',
-        matricule: '',
-        poste: ''
-      },
-      defaultItem: {
-        firstname: '',
-        lastname: '',
-        addmail: '',
-        matricule: '',
-        poste:''
-      }
-    }),
-
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'Nouveau utilisateur' : 'Modifier un utilisateur'
-      }
-    },
-
-    watch: {
-      dialog (val) {
-        val || this.close()
-      }
-    },
-
-    created () {
-      this.initialize()
-    },
-    methods: {
-        initialize () {
-          this.aduser = [
-                                
-            
-            {
-            	 firstname: 'Hammami',
-                 lastname: 'mohamed',
-                 addmail:'hammamimedamine02@gmail.com',
-                 matricule: '2810',
-                 poste: '1'
-            }
-          ]
-        },
-
-
-      editItem (item) {
-        this.editedIndex = this.aduser.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        const index = this.aduser.indexOf(item)
-        confirm('') && this.aduser.splice(index, 1)
-      },
-
-      close () {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.aduser[this.editedIndex], this.editedItem)
-        } else {
-          this.aduser.push(this.editedItem)
+          firstname: "Hammami",
+          lastname: "mohamed",
+          addmail: "hammamimedamine02@gmail.com",
+          matricule: "2810",
+          poste: "1"
         }
-        this.close()
-      }
- }
-  }
+      ];
+    },
 
+    editItem(item) {
+      this.editedIndex = this.aduser.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      const index = this.aduser.indexOf(item);
+      confirm("") && this.aduser.splice(index, 1);
+    },
+
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.aduser[this.editedIndex], this.editedItem);
+      } else {
+        this.aduser.push(this.editedItem);
+      }
+      this.close();
+    }
+  }
+};
 </script>
 
 
 <style>
-
-
-
-
-
-
-
-
-
 </style>
