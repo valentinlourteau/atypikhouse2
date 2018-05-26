@@ -13,7 +13,7 @@
 						
 						<v-container grid-list-lg>
 						<v-layout row wrap>
-						<v-flex style="transition: all 250ms" v-for="accomodation in accomodations"  :key="accomodation._id" v-bind:class="{xs12: accomodation.viewDetail}" class="xs3">
+						<v-flex style="transition: all 250ms" v-for="accomodation in accomodations"  :key="accomodation._id" v-bind:class="{'md12 lg12 xl12': accomodation.viewDetail}" class="xs12 md4 lg3 xl2">
 							<v-card >
 							
 								<div @click="onViewDetail(accomodation)" style="cursor:pointer;" v-if="!accomodation.viewDetail">
