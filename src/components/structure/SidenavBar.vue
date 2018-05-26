@@ -44,6 +44,7 @@
         </v-list-tile-content>
       </v-list-tile>
       
+      
     </v-list>
 	
 	</v-navigation-drawer>
@@ -64,6 +65,9 @@ export default {
 		          { title: 'Mon compte', icon: 'account_circle', link: '/account'},
 		          { title: 'Mes biens atypiques', icon: 'home', link: '/realEstate/home'},
 		          { title: 'Mes voyages', icon: 'flight_takeoff', link: '/'},
+		          { title: 'Administrateur', link: '/manager'},
+
+
 		        ],
 		        displayDrawer : true,
 		      avatarSize: '64px',

@@ -21,6 +21,11 @@ import Home from './components/view/Home';
 import Account from './components/view/Account';
 import Discover from './components/view/Discover';
 import about from './components/view/About';
+import Manager from './components/view/Manager';
+import AdUser from './components/view/AdUser';
+import Alerte from './components/view/Alerte';
+
+
 
 import RealEstate from './components/view/realEstate/RealEstate';
 import NewRealEstate from './components/view/realEstate/NewRealEstate';
@@ -83,6 +88,9 @@ const router = new VueRouter({
     { path: '/', component: Home },
     { path: '/home', component: Home},
     { path: '/account', component: Account},
+    { path: '/aduser', component:AdUser},
+    { path: '/alerte', component:Alerte},
+    { path: '/manager', component: Manager},
     { path: '/discover', component: Discover},
     { path: '/About', component: about},
     { path: '/realEstate/home', component: RealEstate},
