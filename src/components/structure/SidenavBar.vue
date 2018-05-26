@@ -1,7 +1,7 @@
 <template>
 <div>
 
-	<portal v-if="$store.state.user != null" to="headerToolbarIcon">
+	<portal class="margin-left:none;" v-if="$store.state.user != null" to="headerToolbarIcon">
   		<v-toolbar-side-icon class="hidden-lg-and-up" @click.stop="displayDrawer = !displayDrawer"></v-toolbar-side-icon>
 	</portal>
 
@@ -24,10 +24,17 @@
 	</div>
 	
 	<v-list>
-		<div v-for="item in items" :key="item.title">
-      <v-list-tile @click="route(item.link)">
-        <v-list-tile-action>
+		<div v-for="item in items" v-if="item.if" :key="item.title">
+
+      <v-list-tile :to="item.link" active-class="yellow--text black">
+        <v-list-tile-action v-if="item.badge == null">
           <v-icon >{{ item.icon }}</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-action v-else>
+          <v-badge color="secondary" right>
+            <span slot="badge" class="black--text">6</span>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-badge>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>{{ item.title }}</v-list-tile-title>
@@ -37,12 +44,12 @@
       <v-divider v-if="item.divider"></v-divider>
 		</div>
 
-		      <v-list-tile v-if="$store.state.user != null" @click="onClickDisconnect();">
+    <v-list-tile v-if="$store.state.user != null" @click="onClickDisconnect">
         <v-list-tile-action>
           <v-icon >exit_to_app</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>Deconnexion</v-list-tile-title>
+          <v-list-tile-title>Déconnexion</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
 
@@ -65,32 +72,38 @@ export default {
           title: "Mon compte",
           icon: "account_circle",
           link: "/account",
+          if: true,
           divider: false
         },
         {
           title: "Mes biens atypiques",
           icon: "home",
           link: "/realEstate/home",
+          if: true,
           divider: false
         },
         {
           title: "Mes voyages",
           icon: "flight_takeoff",
           link: "/",
+          if: true,
           divider: true
         },
         {
-          title: "Messagerie",
+          title: "Messages",
           icon: "message",
           link: "/messages",
+          if: true,
           divider: false
         },
         {
           title: "Notifications",
-          icon: "flight_takeoff",
-          link: "/",
+          icon: "notification_important",
+          link: "/notifications",
+          badge: 6,
+          if: true,
           divider: true
-        }
+        },
       ],
       displayDrawer: true,
       avatarSize: "64px"
@@ -99,17 +112,14 @@ export default {
   components: {},
   methods: {
     onClickDisconnect() {
+      console.log("je me deco")
       this.$store.commit("onSetUser", null);
       this.$router.push("/");
     },
     redirectHome() {
       this.$router.push("/");
     },
-    route(link) {
-      this.$router.push(link);
-    }
   },
-  computed: {}
 };
 </script>
 

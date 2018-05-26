@@ -53,7 +53,7 @@
       <v-btn slot="activator" color="primary"  class="black--text" dark> Modifier mot de passe</v-btn>
       <v-card>
         <v-card-title>
-          <span class="headline " >Modifier le mot de passe </span>
+          <span class="headline">Modifier le mot de passe </span>
         </v-card-title>
         
         
@@ -78,7 +78,6 @@
     </v-card-text>
     
     <v-card-actions>
-    <v-btn  flat>Modifier</v-btn>
     <v-btn @click="onUpdateUser()" color="secondary" flat>Enregistrer</v-btn>
     </v-card-actions>
     
@@ -146,7 +145,7 @@ export default {
 
 			this.$http.put("users", this.user).then(response => {
 				if (response.status == 200) {
-					this.$store.commit("snackbar", "Modifications effectuées");
+					this.$store.commit("snackbar", "Modifications effectuï¿½es");
 					this.$store.commit("onSetUser", new TD(response.body.token).data);
 				}
 			
@@ -163,7 +162,7 @@ export default {
 				"newPassword" : this.password.nouv
 			}).then(response => {
 				if (response.status == 200) {
-					this.$store.commit("snackbar", "Mot de passe modifés");
+					this.$store.commit("snackbar", "Mot de passe modifï¿½s");
 				}
 				
 			}) 

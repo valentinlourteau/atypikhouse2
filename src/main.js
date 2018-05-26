@@ -25,6 +25,7 @@ import RealEstate from './components/view/realEstate/RealEstate';
 import NewRealEstate from './components/view/realEstate/NewRealEstate';
 import RealEstateDetail from './components/view/realEstate/RealEstateDetail';
 import Messages from './components/view/Messages'
+import Notifications from './components/view/Notifications'
 //utils
 import TD from './class/utils/TokenDecrypter';
 
@@ -91,6 +92,7 @@ const router = new VueRouter({
     { path: '/realEstate/edit/:accomodationId', component: NewRealEstate},
 	{ path: '/realEstate/detail', component: RealEstateDetail},
 	{ path: '/messages', component: Messages},
+	{ path: '/notifications', component: Notifications},
   ],
   mode: 'history'
 });

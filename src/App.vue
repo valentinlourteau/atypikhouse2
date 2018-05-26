@@ -19,6 +19,8 @@
     </v-snackbar>
     
     </v-content>
+
+    <ah-footer></ah-footer>
     
   </v-app>
 </template>

@@ -2,16 +2,24 @@
 <div >
   
 	<v-toolbar class="primary">
-		<portal-target name="headerToolbarIcon"></portal-target>
+		<portal-target style="margin-left:0px;" name="headerToolbarIcon"></portal-target>
 	    <v-toolbar-title :class="$store.state.user != null ? 'hidden-lg-and-up' : ''" @click="$router.push('/')">AtypikHouse</v-toolbar-title>
 	    <v-toolbar-title v-if="$store.state.user != null" class="hidden-md-and-down"  style="margin-left:300px;" @click="$router.push('/')">AtypikHouse</v-toolbar-title>
 	    <v-spacer></v-spacer>
+
+		<!-- La toolbar en mode desktop -->
 	    <v-toolbar-items class="hidden-sm-and-down">
 	    
 	    
 	      <v-btn @click="$router.push('/About')" flat>Qui sommes-nous?</v-btn>
 	      <v-btn @click="$router.push('/discover')" flat>Voyager</v-btn>
 	      <v-btn v-if="this.$store.state.user == null" flat @click="showModalAuthenticate = true">Connexion</v-btn>
+	    </v-toolbar-items>
+
+		<!-- La toolbar en mode mobile -->
+		<v-toolbar-items class="hidden-md-and-up">
+			<v-spacer></v-spacer>
+			<v-btn v-if="this.$store.state.user == null" @click="showModalAuthenticate = true" icon flat><v-icon>account_box</v-icon></v-btn>
 	    </v-toolbar-items>
 	    
 	    <v-menu :nudge-width="100">
