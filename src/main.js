@@ -21,6 +21,7 @@ import Home from './components/view/Home';
 import Account from './components/view/Account';
 import Discover from './components/view/Discover';
 import about from './components/view/About';
+import Inputs from './components/view/admin/Inputs';
 import Manager from './components/view/Manager';
 import AdUser from './components/view/AdUser';
 import Alerte from './components/view/Alerte';
@@ -99,6 +100,7 @@ const router = new VueRouter({
 	{ path: '/realEstate/detail', component: RealEstateDetail},
 	{ path: '/messages', component: Messages},
 	{ path: '/notifications', component: Notifications},
+	{ path: '/admin/inputs', component: Inputs},
   ],
   mode: 'history'
 });

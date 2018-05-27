@@ -145,7 +145,7 @@ export default {
             {
               title: "Paramètres d'un bien",
               icon: "input",
-              link: "/input"
+              link: "/admin/inputs"
             }
           ]
         }
