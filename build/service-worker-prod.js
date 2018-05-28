@@ -14,6 +14,7 @@
     );
 
   window.addEventListener('load', function() {
+    console.log("je passe dans load du service worker")
       if ('serviceWorker' in navigator &&
           (window.location.protocol === 'https:' || isLocalhost)) {
         navigator.serviceWorker.register('service-worker.js')
