@@ -1,4 +1,3 @@
-
 /* La page sur les biens atypiques dont je dispose ... */
 <template>
 <div>

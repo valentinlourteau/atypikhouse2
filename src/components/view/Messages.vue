@@ -5,7 +5,9 @@
         <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
           <v-card>
 
-            
+            <v-card-title>
+                <span class="headline">Messagerie</span>
+            </v-card-title>
 
           </v-card>
         </v-flex>

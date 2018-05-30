@@ -135,7 +135,7 @@ export default {
             {
               title: "Utilisateurs",
               icon: "supervised_user_circle",
-              link: "/aduser"
+              link: "/manageUsers"
             },
             {
               title: "Etat des services",

@@ -23,7 +23,7 @@ import Discover from './components/view/Discover';
 import about from './components/view/About';
 import Inputs from './components/view/admin/Inputs';
 import Manager from './components/view/Manager';
-import AdUser from './components/view/AdUser';
+import ManageUsers from './components/view/ManageUsers';
 import Alerte from './components/view/Alerte';
 import RealEstate from './components/view/realEstate/RealEstate';
 import NewRealEstate from './components/view/realEstate/NewRealEstate';
@@ -88,7 +88,7 @@ const router = new VueRouter({
     { path: '/', component: Home },
     { path: '/home', component: Home},
     { path: '/account', component: Account},
-    { path: '/aduser', component:AdUser},
+    { path: '/manageUsers', component:ManageUsers},
     { path: '/alerte', component:Alerte},
     { path: '/manager', component: Manager},
     { path: '/discover', component: Discover},
