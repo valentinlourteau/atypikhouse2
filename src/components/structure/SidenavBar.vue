@@ -140,7 +140,7 @@ export default {
             {
               title: "Etat des services",
               icon: "power",
-              link: "/alerte"
+              link: "/health-check"
             },
             {
               title: "Paramètres d'un bien",
