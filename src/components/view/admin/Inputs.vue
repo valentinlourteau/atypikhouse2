@@ -95,11 +95,14 @@ export default {
   },
   methods: {
     onChangeFlag(flag) {
+      var vue = this;
       this.selectedFlag = flag;
       this.$http.get("list/" + flag).then(response => {
         if (response.status == 200) {
-          console.log(response.body.list.length);
-          [].splice.apply(this.listItems, [0, this.listItems.length].concat(response.body.list));
+          this.listItems.length = 0;
+          response.body.list.forEach(function(element) {
+            vue.listItems.push(element);
+          });
         }
       });
     },
