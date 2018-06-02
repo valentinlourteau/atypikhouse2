@@ -11,7 +11,7 @@
             <v-list two-line>
               <template v-for="(item, index) in conversations">
                 <v-divider :key="index"></v-divider>
-                <v-list-tile :key="item.receiver._id">
+                <v-list-tile :key="item.receiver._id" @click="onViewDetail(item)">
 
                   <v-list-tile-content>
                     <v-list-tile-title>{{item.receiver.firstname}} {{item.receiver.lastname}}</v-list-tile-title>
@@ -69,7 +69,12 @@ export default {
       messages: [],
       conversations: []
     };
-  }
+  },
+  methods: {
+    onViewDetail(conv) {
+
+    },
+  },
 };
 </script>
 <style>
