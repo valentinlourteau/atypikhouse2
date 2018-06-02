@@ -32,8 +32,8 @@
 								<!-- si jamais je clique sur une carte pour afficher le détail -->
 								<div v-if="accomodation.viewDetail">	
 									<v-btn @click="accomodation.viewDetail = false;" color="primary" top absolute right fab><v-icon class="black--text">undo</v-icon></v-btn>	
-									<v-container grid-list-lg>
-										<v-layout v-viewer align-center row wrap>
+									<v-container v-viewer grid-list-lg>
+										<v-layout  align-center row wrap>
 											<v-flex v-for="(pic, index) in accomodation.images" :key="index" v-bind:class="{flex30 : index % 2 == 0, flex20 : index % 2 != 0}">
 												<img height="auto" style="width:100%;cursor:pointer;" :src="pic.data" />
 											</v-flex>
