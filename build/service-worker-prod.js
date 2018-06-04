@@ -53,4 +53,11 @@
         });
       }
   });
+
+  //Ajouter la popup pour installer la pwa
+  window.addEventListener('beforeinstallprompt', function(event) {
+    console.log("before install prompt")
+    event.prompt();
+  })
+
 })();
