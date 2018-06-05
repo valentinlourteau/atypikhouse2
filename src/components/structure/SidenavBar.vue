@@ -106,7 +106,7 @@ export default {
         {
           title: "Mes voyages",
           icon: "flight_takeoff",
-          link: "/",
+          link: "/mytrips",
           if: (!this.$store.state.admin),
           divider: true
         },

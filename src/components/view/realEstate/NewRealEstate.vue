@@ -28,7 +28,7 @@
       <v-stepper-items>
       
         <v-stepper-content step="1">
-          	<h1 class="display-2">Bienvenue sur la création d'un bien atypique.</h1>
+          	<h1 class="display-2">	sur la création d'un bien atypique.</h1>
           	<h2 class="display-1">Vous allez contribuer à l'enrichissement de notre offre, nous vous en remercions.</h2>
           	<v-divider></v-divider>
           	<p>Nous sommes fier de vous permettre de promouvoir notre passion pour la découverte, le voyage, et nous pensons que les logements atypiques contribuent à ces valeurs.
