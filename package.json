@@ -15,6 +15,7 @@
   "dependencies": {
     "@mdi/font": "^2.3.54",
     "base-64": "^0.1.0",
+    "eslint": "^4.19.1",
     "google-maps": "^3.3.0",
     "moment": "^2.22.1",
     "moment-random": "^1.0.3",
@@ -29,6 +30,7 @@
     "vue-paypal-checkout": "^3.1.2",
     "vue-resource": "^1.5.0",
     "vue-router": "^3.0.1",
+    "vue-star-rating": "^1.6.0",
     "vuetify": "^1.0.17",
     "vuex": "^3.0.1",
     "vuex-i18n": "^1.10.5"

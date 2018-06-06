@@ -16,3 +16,4 @@ selenium-debug.log
 *.sln
 .settings/
 .settings/org.eclipse.core.resources.prefs
+.vscode/

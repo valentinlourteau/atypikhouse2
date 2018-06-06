@@ -23,12 +23,10 @@ import Discover from './components/view/Discover';
 import about from './components/view/About';
 import Contact from './components/view/Contact';
 import MyTrips from './components/view/MyTrips';
-import Detail from './components/view/Detail';
-import Manager from './components/view/Manager';
+import TripDetail from './components/view/TripDetail';
 import CGV from './components/view/CGV';
 import CGU from './components/view/CGU';
 import MentionLegale from './components/view/MentionLegale';
-import AdUser from './components/view/AdUser';
 import Inputs from './components/view/admin/Inputs';
 import HealthCheck from './components/view/admin/Inputs';
 import Manager from './components/view/Manager';
@@ -101,7 +99,7 @@ const router = new VueRouter({
     { path: '/manageUsers', component:ManageUsers},
     { path: '/alerte', component:Alerte},
     { path: '/manager', component: Manager},
-    { path: '/detail', component: Detail},
+    { path: '/tripDetail', component: TripDetail},
     { path: '/cgv', component: CGV},   
     { path: '/cgu', component: CGU},
     { path: '/contact', component: Contact},
