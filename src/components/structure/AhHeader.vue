@@ -4,7 +4,7 @@
 	<v-toolbar class="primary">
 		<portal-target style="margin-left:0px;" name="headerToolbarIcon"></portal-target>
 	    <v-toolbar-title :class="$store.state.user != null ? 'hidden-lg-and-up' : ''" @click="$router.push('/')">AtypikHouse</v-toolbar-title>
-	    <v-toolbar-title v-if="$store.state.user != null" class="hidden-md-and-down"  style="margin-left:300px;" @click="$router.push('/')">AtypikHouse</v-toolbar-title>
+	    <v-toolbar-title v-if="$store.state.user != null" class="hidden-md-and-down"  style="margin-left:316px;" @click="$router.push('/')">AtypikHouse</v-toolbar-title>
 	    <v-spacer></v-spacer>
 
 		<!-- La toolbar en mode desktop -->

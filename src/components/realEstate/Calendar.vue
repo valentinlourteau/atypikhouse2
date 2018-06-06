@@ -15,7 +15,7 @@
       		
       		</v-flex>
       		
-      			<v-flex xs4>
+      			<v-flex xs12 md6>
       		
       			<!-- Liste des jours bloqués -->
       			<v-card class="mb-3">
@@ -42,7 +42,7 @@
 				
 				</v-flex>
 				
-				<v-flex xs4>
+				<v-flex xs12 md6>
       			
       			<!-- Liste des date bloqués -->
       			<v-card>

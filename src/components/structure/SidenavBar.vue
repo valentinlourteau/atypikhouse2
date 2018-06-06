@@ -135,17 +135,17 @@ export default {
             {
               title: "Utilisateurs",
               icon: "supervised_user_circle",
-              link: "/aduser"
+              link: "/manageUsers"
             },
             {
               title: "Etat des services",
               icon: "power",
-              link: "/alerte"
+              link: "/health-check"
             },
             {
               title: "Paramètres d'un bien",
               icon: "input",
-              link: "/input"
+              link: "/admin/inputs"
             }
           ]
         }

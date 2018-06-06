@@ -14,6 +14,7 @@
     );
 
   window.addEventListener('load', function() {
+    console.log("je passe dans load du service worker")
       if ('serviceWorker' in navigator &&
           (window.location.protocol === 'https:' || isLocalhost)) {
         navigator.serviceWorker.register('service-worker.js')
@@ -52,4 +53,11 @@
         });
       }
   });
+
+  //Ajouter la popup pour installer la pwa
+  window.addEventListener('beforeinstallprompt', function(event) {
+    console.log("before install prompt")
+    event.prompt();
+  })
+
 })();

@@ -22,17 +22,17 @@ import Account from './components/view/Account';
 import Discover from './components/view/Discover';
 import about from './components/view/About';
 import Contact from './components/view/Contact';
-
 import MyTrips from './components/view/MyTrips';
 import Detail from './components/view/Detail';
 import Manager from './components/view/Manager';
 import CGV from './components/view/CGV';
 import CGU from './components/view/CGU';
 import MentionLegale from './components/view/MentionLegale';
-
-
-
 import AdUser from './components/view/AdUser';
+import Inputs from './components/view/admin/Inputs';
+import HealthCheck from './components/view/admin/Inputs';
+import Manager from './components/view/Manager';
+import ManageUsers from './components/view/ManageUsers';
 import Alerte from './components/view/Alerte';
 import RealEstate from './components/view/realEstate/RealEstate';
 import NewRealEstate from './components/view/realEstate/NewRealEstate';
@@ -97,8 +97,8 @@ const router = new VueRouter({
     { path: '/', component: Home },
     { path: '/home', component: Home},
     { path: '/account', component: Account},
-    { path: '/aduser', component:AdUser},
     { path: '/mytrips', component:MyTrips},
+    { path: '/manageUsers', component:ManageUsers},
     { path: '/alerte', component:Alerte},
     { path: '/manager', component: Manager},
     { path: '/detail', component: Detail},
@@ -106,9 +106,6 @@ const router = new VueRouter({
     { path: '/cgu', component: CGU},
     { path: '/contact', component: Contact},
     { path: '/mentionlegale', component: MentionLegale},
-
-
-
     { path: '/discover', component: Discover},
     { path: '/About', component: about},
     { path: '/realEstate/home', component: RealEstate},
@@ -118,6 +115,8 @@ const router = new VueRouter({
 	{ path: '/realEstate/detail', component: RealEstateDetail},
 	{ path: '/messages', component: Messages},
 	{ path: '/notifications', component: Notifications},
+	{ path: '/admin/inputs', component: Inputs},
+	{ path: '/admin/health-check', component: HealthCheck},
   ],
   mode: 'history'
 });
@@ -153,7 +152,7 @@ Vue.i18n.add('en', translationsEn);
 
 Vue.i18n.set('fr');
 
-//Vue.http.options.root = 'http://46.226.111.181:4040/api/';
+// Vue.http.options.root = 'http://46.226.111.181:4040/api/';
 Vue.http.options.root = 'http://localhost:4040/api/';
 Vue.http.options.rejectUnauthorized = false;
 Vue.http.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get("token");
