@@ -28,10 +28,10 @@
 			        <v-card-actions>
 			          <v-btn v-if="accomodation.complete" flat color="blue" @click="onViewDetail(accomodation)">GERER</v-btn>
 			          <v-btn v-if="!accomodation.complete" flat color="blue" @click="onResumeCreation(accomodation)">REPRENDRE LA CREATION</v-btn>
-			          <v-spacer></v-spacer>
+			          <!-- <v-spacer></v-spacer>
 			          <v-btn :disabled="!accomodation.complete" @click="setAccomodationActive(accomodation)" icon>
 			          	<v-icon>{{ accomodation.actif ? 'visibility' : 'visibility_off' }}</v-icon>
-			          </v-btn>
+			          </v-btn> -->
 			        </v-card-actions>
       			</v-card>
 			

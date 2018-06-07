@@ -28,7 +28,7 @@ import CGV from './components/view/CGV';
 import CGU from './components/view/CGU';
 import MentionLegale from './components/view/MentionLegale';
 import Inputs from './components/view/admin/Inputs';
-import HealthCheck from './components/view/admin/Inputs';
+import HealthCheck from './components/view/admin/HealthCheck';
 import Manager from './components/view/Manager';
 import ManageUsers from './components/view/ManageUsers';
 import Alerte from './components/view/Alerte';

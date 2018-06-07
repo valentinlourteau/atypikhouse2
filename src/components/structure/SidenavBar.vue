@@ -130,7 +130,7 @@
               {
                 title: "Etat des services",
                 icon: "power",
-                link: "/health-check"
+                link: "/admin/health-check"
               },
               {
                 title: "Paramètres d'un bien",
