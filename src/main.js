@@ -26,6 +26,7 @@ import MyTrips from './components/view/MyTrips';
 import TripDetail from './components/view/TripDetail';
 import CGV from './components/view/CGV';
 import CGU from './components/view/CGU';
+import PlanSite from './components/view/PlanSite';
 import MentionLegale from './components/view/MentionLegale';
 import Inputs from './components/view/admin/Inputs';
 import HealthCheck from './components/view/admin/Inputs';
@@ -101,7 +102,8 @@ const router = new VueRouter({
     { path: '/manager', component: Manager},
     { path: '/tripDetail', component: TripDetail},
     { path: '/cgv', component: CGV},   
-    { path: '/cgu', component: CGU},
+	{ path: '/cgu', component: CGU},
+    { path: '/plansite', component: PlanSite},
     { path: '/contact', component: Contact},
     { path: '/mentionlegale', component: MentionLegale},
     { path: '/discover', component: Discover},

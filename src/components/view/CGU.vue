@@ -71,7 +71,7 @@
           },
           {
             title: "Plan du site",
-            link: "/input"
+            link: "/plansite"
           },
           {
             title: "CGU",
