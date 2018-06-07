@@ -1,5 +1,10 @@
 <template>
   <div>
+    <v-container fluid sm4>
+        <v-layout row wrap>
+          <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+            <v-card>
+  
     <section class="mx-5">
       <div class="display-4 my-4 center">
         Conditions generales
@@ -31,6 +36,10 @@
       </div>
 
     </section>
+    </v-card>
+    </v-flex>
+    </v-layout>
+		</v-container>
 
     <v-footer height="auto" color="primary">
 			<v-layout row wrap justify-center>
@@ -62,7 +71,7 @@
           },
           {
             title: "Plan du site",
-            link: "/input"
+            link: "/plansite"
           },
           {
             title: "CGU",
