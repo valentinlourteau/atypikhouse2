@@ -16,6 +16,7 @@ import PortalVue from 'portal-vue';
 import VueLodash from 'vue-lodash';
 import 'viewerjs/dist/viewer.css';
 import Viewer from 'v-viewer';
+import VueAgile from 'vue-agile';
 //pages
 import Home from './components/view/Home';
 import Account from './components/view/Account';
@@ -57,7 +58,7 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(VueLocalStorage); 
 Vue.use(VueResource);
-
+Vue.use(VueAgile);
 const veeValidateConfig = {
 		  errorBagName: 'errors', // change if property conflicts
 		  fieldsBagName: 'fields', 
