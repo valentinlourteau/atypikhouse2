@@ -121,7 +121,6 @@ const router = new VueRouter({
   ],
   mode: 'history'
 });
-Vue.ls.set("user",{	email:"test"})
 
 const store = new Vuex.Store({
   state: {
