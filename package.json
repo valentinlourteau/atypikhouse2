@@ -27,6 +27,7 @@
     "vue-hotel-datepicker": "^2.2.1",
     "vue-lodash": "^2.0.0",
     "vue-ls": "^2.4.1",
+    "vue-material-checkbox": "^1.1.2",
     "vue-material-design-icons": "^1.4.0",
     "vue-paypal-checkout": "^3.1.2",
     "vue-resource": "^1.5.0",

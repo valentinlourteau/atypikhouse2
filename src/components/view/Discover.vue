@@ -10,7 +10,175 @@
 				<v-btn class="mx-auto" style="display:block;" color="secondary" @click="imLucky()" flat>Surprenez moi !</v-btn>
 			</v-flex>
 			</v-layout>
-						
+            <v-divider></v-divider>
+    <v-dialog v-model="dialog" persistent max-width="580">
+      <v-btn slot="activator" color="white" text="black" >Arrivée-Départ</v-btn>
+      
+      <v-card>
+    <v-layout row wrap>
+    <v-flex xs12 sm6>
+      <v-date-picker v-model="picker" color="primary"></v-date-picker>
+    </v-flex>
+    <v-flex xs12 sm6 class="hidden-xs-only">
+      <v-date-picker v-model="picker2" color="green lighten-1" header-color="primary"></v-date-picker>
+    </v-flex>
+  </v-layout>
+      <v-spacer></v-spacer>
+          <v-btn color="black" flat @click.native="dialog = false">Annuler</v-btn>
+          <v-btn color="primary" flat @click.native="dialog = false">Valider</v-btn>
+</v-card>
+</v-dialog>
+    <v-dialog v-model="dialog2" persistent max-width="580">
+
+               <v-btn slot="activator" color="white" text="black" >Capacité</v-btn>
+               <v-card ml4>
+               	<!-- Capacité d'accueil -->
+								<v-flex xs12 >
+									<v-subheader>Capacité d'accueil</v-subheader>
+								</v-flex>
+								<v-flex xs9 ml-4>
+									<v-slider min="1" max="20"></v-slider>
+								</v-flex>
+								<v-flex xs3 ml-4>
+									<v-text-field  type="number" :rules="accueilRules"></v-text-field>
+								</v-flex ml-4 >
+								<!-- Nombre de lits -->
+								<v-flex xs12 ml-4>
+									<v-subheader>Nombre de couchages (un fauteuil une place, ça ne compte pas !)</v-subheader>
+								</v-flex>
+								<v-flex xs9 ml-4>
+									<v-slider  min="1" max="20" xs9></v-slider>
+								</v-flex>
+								<v-flex xs3 ml-4>
+									<v-text-field  type="number" :rules="accueilRules"></v-text-field>
+								</v-flex>
+								<!-- Nombre de chambres -->
+								<v-flex xs12 ml-4>
+									<v-subheader>Nombre de chambres</v-subheader>
+								</v-flex>
+								<v-flex xs9 ml-4>
+									<v-slider  min="1" max="20" xs9></v-slider>
+								</v-flex>
+								<v-flex xs3 ml-4>
+									<v-text-field  type="number" :rules="accueilRules"></v-text-field>
+								</v-flex>
+							 <v-spacer></v-spacer>
+                                  <v-btn color="black" flat @click.native="dialog2 = false">Annuler</v-btn>
+                                  <v-btn color="primary" flat @click.native="dialog2 = false">Valider</v-btn>
+
+							</v-layout>
+               </v-card>
+               </v-dialog>
+   <v-dialog v-model="dialog3" persistent max-width="580">
+
+               <v-btn slot="activator" color="white" text="black" >Type de logement</v-btn>
+              <v-card>
+     <v-card-text>
+      <v-container fluid>
+        <v-layout row wrap>
+          <v-flex xs12 sm3>
+            <v-checkbox v-model="a" value="cabane" label="Cabane"></v-checkbox>
+          </v-flex>
+          <v-flex xs6 sm3>
+            <v-checkbox v-model="b" value="Iglo" label="Iglo"></v-checkbox>
+          </v-flex>
+          <v-flex xs6 sm3>
+            <v-checkbox v-model="c" value="top" label="Bulle"></v-checkbox>
+          </v-flex>
+          <v-flex xs12 sm3>
+            <v-checkbox v-model="e" value="multi-line" label="Chapelle"></v-checkbox>
+          </v-flex>
+          <v-flex xs12 sm3>
+            <v-checkbox v-model="f" value="vertical" label="Autre"></v-checkbox>
+          </v-flex>
+          <v-spacer></v-spacer>
+                                 
+          </v-layout>
+           <v-btn color="black" flat @click.native="dialog3 = false">Annuler</v-btn>
+           <v-btn color="primary" flat @click.native="dialog3 = false">Valider</v-btn>
+          </v-container>
+          </v-card-text>
+          
+          </v-card>
+          		
+               </v-dialog>
+                <v-dialog
+        v-model="dialog4"
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+        scrollable
+      >
+                     <v-btn slot="activator" color="white" text="black" >plus de filtres</v-btn>
+      
+        <v-card tile>
+          <v-toolbar card dark color="primary">
+            <v-btn icon dark @click.native="dialog4 = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Plus de filtres</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn dark flat @click.native="dialog4 = false">Valider </v-btn>
+              <v-btn dark flat @click.native="dialog4 = false">Annuler </v-btn>
+              
+            </v-toolbar-items>
+        
+          </v-toolbar>
+          <v-card-text>
+            <v-list three-line subheader>
+              <v-subheader>User Controls</v-subheader>
+              <v-list-tile avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title>Content filtering</v-list-tile-title>
+                  <v-list-tile-sub-title>Set the content filtering level to restrict apps that can be downloaded</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile avatar>
+                <v-list-tile-content>
+                  <v-list-tile-title>Password</v-list-tile-title>
+                  <v-list-tile-sub-title>Require password for purchase or use password to restrict purchase</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+            <v-divider></v-divider>
+            <v-list three-line subheader>
+              <v-subheader>General</v-subheader>
+              <v-list-tile avatar>
+                <v-list-tile-action>
+                  <v-checkbox v-model="notifications"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Notifications</v-list-tile-title>
+                  <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile avatar>
+                <v-list-tile-action>
+                  <v-checkbox v-model="sound"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Sound</v-list-tile-title>
+                  <v-list-tile-sub-title>Auto-update apps at any time. Data charges may apply</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile avatar>
+                <v-list-tile-action>
+                  <v-checkbox v-model="widgets"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Auto-add widgets</v-list-tile-title>
+                  <v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+          </v-card-text>
+
+          <div style="flex: 1 1 auto;"></div>
+        </v-card>
+      </v-dialog>
+			            <v-divider></v-divider>
+			
 						<v-container grid-list-lg>
 						<v-layout row wrap>
 						<v-flex style="transition: all 250ms" v-for="accomodation in accomodations"  :key="accomodation._id" v-bind:class="{'md12 lg12 xl12': accomodation.viewDetail}" class="xs12 md4 lg3 xl2">
@@ -214,6 +382,20 @@
     data: function() {
       return {
         search: null,
+        dialog: false,
+        dialog2: false,
+        dialog3:false,
+        dialog4:false,
+        a: '',
+        b: '',
+        c:'',
+        d:'',
+        e:'',
+        f:'',
+
+
+        
+
         accomodations: [],
         //les traductions parce que le calendar est stocké en FR
         daysTraduction: [
