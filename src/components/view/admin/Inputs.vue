@@ -112,7 +112,7 @@ export default {
       this.dialog = false;
       this.$http.post("list", this.selectedItem).then(response => {
         if (response.status == 200) {
-          this.listItems.push(this.selectedItem);
+          this.listItems.push(response.body.element);
           this.$store.commit("snackbar", "Element ajouté à la liste");
         }
       });

@@ -186,7 +186,7 @@
                   <v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
                   <v-card-title primary-title>
                     <div class="headline" style="width:100%">{{ accomodation.name }}</div>
-                    <div class="price" style="width:100%">{{ accomodation.priceNightPerson }} € par nuit et par personne</div>
+                    <div class="price" style="width:100%">{{ accomodation.priceNight }} € par nuit</div>
                     <div class="grey--text" style="width:100%">{{ getTruncatedDescription(accomodation) }}</div>
                   </v-card-title>
                 </div>
@@ -271,7 +271,7 @@
                                     <v-list-tile>
                                       <v-list-tile-content>
                                         <v-list-tile-title>{{ getPriceOfAccomodation(accomodation) }} €</v-list-tile-title>
-                                        <v-list-tile-sub-title>Montant du séjour sur la base du nombre de voyageurs</v-list-tile-sub-title>
+                                        <v-list-tile-sub-title>Montant du séjour sur la base du nombre de nuits</v-list-tile-sub-title>
                                       </v-list-tile-content>
                                     </v-list-tile>
 
@@ -566,9 +566,8 @@
       //calcule le prix de la réservation en fonction du nombre de personnes
       getPriceOfAccomodation(accomodation) {
         return (
-          accomodation.priceNightPerson *
-          this.nbNightsBetweenTwoDates(accomodation) *
-          accomodation.reservation.nbrPersonnes
+          accomodation.priceNight *
+          this.nbNightsBetweenTwoDates(accomodation)
         );
       },
       //calcule le prix de la taxe
