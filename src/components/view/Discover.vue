@@ -17,10 +17,10 @@
         <v-card>
           <v-layout row wrap>
             <v-flex xs12 sm6>
-              <v-date-picker v-model="picker" color="primary"></v-date-picker>
+              <v-date-picker v-model="filter.dateDebut"  color="primary"></v-date-picker>
             </v-flex>
             <v-flex xs12 sm6 class="hidden-xs-only">
-              <v-date-picker v-model="picker2" color="green lighten-1" header-color="primary"></v-date-picker>
+              <v-date-picker v-model="filter.dateFin" color="green lighten-1" header-color="primary"></v-date-picker>
             </v-flex>
           </v-layout>
           <v-spacer></v-spacer>
@@ -40,7 +40,7 @@
             <v-slider min="1" max="20"></v-slider>
           </v-flex>
           <v-flex xs3 ml-4>
-            <v-text-field type="number" :rules="accueilRules"></v-text-field>
+            <v-text-field type="number" ></v-text-field>
           </v-flex ml-4>
           <!-- Nombre de lits -->
           <v-flex xs12 ml-4>
@@ -50,7 +50,7 @@
             <v-slider min="1" max="20" xs9></v-slider>
           </v-flex>
           <v-flex xs3 ml-4>
-            <v-text-field type="number" :rules="accueilRules"></v-text-field>
+            <v-text-field type="number" ></v-text-field>
           </v-flex>
           <!-- Nombre de chambres -->
           <v-flex xs12 ml-4>
@@ -60,7 +60,7 @@
             <v-slider min="1" max="20" xs9></v-slider>
           </v-flex>
           <v-flex xs3 ml-4>
-            <v-text-field type="number" :rules="accueilRules"></v-text-field>
+            <v-text-field type="number" ></v-text-field>
           </v-flex>
           <v-spacer></v-spacer>
           <v-btn color="black" flat @click.native="dialog2 = false">Annuler</v-btn>
@@ -121,35 +121,47 @@
           </v-toolbar>
           <v-card-text>
             <v-list three-line subheader>
-              <v-subheader>User Controls</v-subheader>
-              <v-list-tile avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>Content filtering</v-list-tile-title>
-                  <v-list-tile-sub-title>Set the content filtering level to restrict apps that can be downloaded</v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>Password</v-list-tile-title>
-                  <v-list-tile-sub-title>Require password for purchase or use password to restrict purchase</v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
+              <v-subheader>Chambre et lits</v-subheader>
+            <v-flex xs12>
+            <v-subheader>Lits</v-subheader>
+          </v-flex>
+          <v-flex xs2 ml-4>
+            <v-slider min="1" max="20"></v-slider>
+          </v-flex>
+              <v-flex xs12>
+            <v-subheader>Chambres</v-subheader>
+          </v-flex>
+          <v-flex xs2 ml-4>
+            <v-slider min="1" max="20"></v-slider>
+          </v-flex>                  	
+              <v-flex xs12>
+            <v-subheader>Salles de bain</v-subheader>
+          </v-flex>
+           <v-flex xs2 ml-4>
+            <v-slider min="1" max="20"></v-slider>
+          </v-flex>
             </v-list>
             <v-divider></v-divider>
             <v-list three-line subheader>
-              <v-subheader>General</v-subheader>
+              <v-subheader>Equipements</v-subheader>
+               <v-flex xs12 sm3>
+                  <v-checkbox v-model="a" value="cabane" label="Cabane"></v-checkbox>
+                </v-flex>
+                <v-flex xs6 sm3>
+                  <v-checkbox v-model="b" value="Iglo" label="Iglo"></v-checkbox>
+                </v-flex>
+                <v-flex xs6 sm3>
+                  <v-checkbox v-model="c" value="top" label="Bulle"></v-checkbox>
+                </v-flex>
+                <v-flex xs12 sm3>
+                  <v-checkbox v-model="e" value="multi-line" label="Chapelle"></v-checkbox>
+                </v-flex>
+                <v-flex xs12 sm3>
+                  <v-checkbox v-model="f" value="vertical" label="Autre"></v-checkbox>
+                </v-flex>
               <v-list-tile avatar>
                 <v-list-tile-action>
-                  <v-checkbox v-model="notifications"></v-checkbox>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>Notifications</v-list-tile-title>
-                  <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile avatar>
-                <v-list-tile-action>
-                  <v-checkbox v-model="sound"></v-checkbox>
+                  <v-checkbox ></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
                   <v-list-tile-title>Sound</v-list-tile-title>
@@ -158,7 +170,7 @@
               </v-list-tile>
               <v-list-tile avatar>
                 <v-list-tile-action>
-                  <v-checkbox v-model="widgets"></v-checkbox>
+                  <v-checkbox ></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
                   <v-list-tile-title>Auto-add widgets</v-list-tile-title>
@@ -373,6 +385,10 @@
         dialog2: false,
         dialog3: false,
         dialog4: false,
+        filter: {
+        	dateDebut: null,
+        	dateFin: null,
+        },
         a: "",
         b: "",
         c: "",
