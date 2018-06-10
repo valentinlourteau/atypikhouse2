@@ -185,7 +185,7 @@
       </v-dialog>
       <v-divider></v-divider>
 
-      <v-container grid-list-lg>
+            <v-container grid-list-lg>
         <v-layout row wrap>
           <v-flex style="transition: all 250ms" v-for="accomodation in accomodations" :key="accomodation._id" v-bind:class="{'md12 lg12 xl12': accomodation.viewDetail}" class="xs12 md4 lg3 xl2">
             <v-card>
@@ -196,7 +196,7 @@
                   <v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
                   <v-card-title primary-title>
                     <div class="headline" style="width:100%">{{ accomodation.name }}</div>
-                    <div class="price" style="width:100%">50€ par nuit</div>
+                    <div class="price" style="width:100%">{{ accomodation.priceNightPerson }} € par nuit et par personne</div>
                     <div class="grey--text" style="width:100%">{{ getTruncatedDescription(accomodation) }}</div>
                   </v-card-title>
                 </div>
@@ -249,8 +249,10 @@
 
                             <!-- Affichage du prix par nuité -->
 
-                            <HotelDatePicker :startingDateValue="accomodation.reservation.startDate" :endingDateValue="accomodation.reservation.endDate" format="DD/MM/YYYY" :minNights="accomodation.durationmin" :maxNights="accomodation.durationmax" :disabledDates="getLockedDates(accomodation)" :disabledDaysOfWeek="getLockedDays(accomodation)" @checkInChanged="accomodation.reservation.startDate = $event" @checkOutChanged="accomodation.reservation.endDate = $event" />
-                            <v-btn :disabled="accomodation.reservation.endDate == null" color="primary" @click.native="onGoStep2(accomodation)">Continue</v-btn>
+                            <HotelDatePicker :startingDateValue="accomodation.reservation.dateDebut" :endingDateValue="accomodation.reservation.dateFin" format="DD/MM/YYYY" :minNights="accomodation.durationmin" :maxNights="accomodation.durationmax" :disabledDates="getLockedDates(accomodation)" :disabledDaysOfWeek="getLockedDays(accomodation)" @checkInChanged="accomodation.reservation.dateDebut = $event" @checkOutChanged="accomodation.reservation.dateFin = $event" />
+                            <div v-if="accomodation.reservation.dateFin != null && accomodation.reservation.dateDebut != null"> {{ nbNightsBetweenTwoDates(accomodation) }} nuits</div>
+                            <div v-else>0 nuit</div>
+                            <v-btn :disabled="accomodation.reservation.dateFin == null" color="primary" @click.native="onGoStep2(accomodation)">Continue</v-btn>
 
                           </div>
                         </v-stepper-content>
@@ -264,10 +266,10 @@
                             <v-container fluid>
                               <v-layout row wrap>
                                 <v-flex xs9>
-                                  <v-slider label="Voyageurs" v-model="accomodation.reservation.nbVoyageurs" min="1" :max="accomodation.guests"></v-slider>
+                                  <v-slider label="Voyageurs" v-model="accomodation.reservation.nbrPersonnes" min="1" :max="accomodation.guests"></v-slider>
                                 </v-flex>
                                 <v-flex xs3>
-                                  <v-text-field v-model="accomodation.reservation.nbVoyageurs" type="number"></v-text-field>
+                                  <v-text-field v-model="accomodation.reservation.nbrPersonnes" type="number"></v-text-field>
                                 </v-flex>
 
                                 <v-flex xs12>
@@ -278,15 +280,24 @@
                                   <v-list>
                                     <v-list-tile>
                                       <v-list-tile-content>
-                                        <v-list-tile-title>{{ accomodation.reservation.price }} €</v-list-tile-title>
+                                        <v-list-tile-title>{{ getPriceOfAccomodation(accomodation) }} €</v-list-tile-title>
                                         <v-list-tile-sub-title>Montant du séjour sur la base du nombre de voyageurs</v-list-tile-sub-title>
                                       </v-list-tile-content>
                                     </v-list-tile>
 
                                     <v-list-tile>
                                       <v-list-tile-content>
-                                        <v-list-tile-title>{{ accomodation.reservation.AHTaxe }} €</v-list-tile-title>
+                                        <v-list-tile-title>{{ getTaxeAmount(accomodation) }} €</v-list-tile-title>
                                         <v-list-tile-sub-title>Frais de gestion AtypikHouse</v-list-tile-sub-title>
+                                      </v-list-tile-content>
+                                    </v-list-tile>
+
+                                    <v-divider></v-divider>
+
+                                    <v-list-tile>
+                                      <v-list-tile-content>
+                                        <v-list-tile-title>{{ getTotalAmountToPay(accomodation) }} €</v-list-tile-title>
+                                        <v-list-tile-sub-title>Montant total à régler</v-list-tile-sub-title>
                                       </v-list-tile-content>
                                     </v-list-tile>
 
@@ -318,7 +329,7 @@
                                     <v-divider class="my-3"></v-divider>
                                     <div class="title mb-3">Montant à payer : {{ accomodation.reservation.totalAmount }} €</div>
 
-                                    <PayPal :amount="accomodation.reservation.price" currency="EUR" :client="credentials" env="sandbox" @payment-completed="userHasPaid(accomodation)">
+                                    <PayPal :amount="accomodation.reservation.price.toString()" currency="EUR" :client="credentials" env="sandbox" @payment-completed="userHasPaid(accomodation)">
                                     </PayPal>
 
                                   </v-flex>
@@ -345,6 +356,7 @@
           </v-flex>
         </v-layout>
       </v-container>
+
 
     </v-container>
 
