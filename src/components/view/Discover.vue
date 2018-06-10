@@ -1,5 +1,6 @@
 /* La page sur les voyages, experiences ... */
 <template>
+<<<<<<< HEAD
 	<div>
 		<v-container >
 			<v-layout class="mx-auto" row wrap>
@@ -350,6 +351,194 @@
 		
 			
 	</div>
+=======
+  <div>
+    <v-container>
+      <v-layout class="mx-auto" row wrap>
+        <v-flex xs6 offset-xs3 align-center>
+          <v-text-field prepend-icon="search" v-model="search" :placeholder="getRandomPlaceHolder()" solo></v-text-field>
+        </v-flex>
+        <v-flex xs12>
+          <v-btn class="mx-auto" style="display:block;" color="secondary" @click="imLucky()" flat>Surprenez moi !</v-btn>
+        </v-flex>
+      </v-layout>
+
+      <v-container grid-list-lg>
+        <v-layout row wrap>
+          <v-flex style="transition: all 250ms" v-for="accomodation in accomodations" :key="accomodation._id" v-bind:class="{'md12 lg12 xl12': accomodation.viewDetail}" class="xs12 md4 lg3 xl2">
+            <v-card>
+
+              <div @click="onViewDetail(accomodation)" style="cursor:pointer;" v-if="!accomodation.viewDetail">
+
+                <div>
+                  <v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
+                  <v-card-title primary-title>
+                    <div class="headline" style="width:100%">{{ accomodation.name }}</div>
+                    <div class="price" style="width:100%">{{ accomodation.priceNightPerson }} € par nuit et par personne</div>
+                    <div class="grey--text" style="width:100%">{{ getTruncatedDescription(accomodation) }}</div>
+                  </v-card-title>
+                </div>
+
+              </div>
+
+              <!-- si jamais je clique sur une carte pour afficher le détail -->
+              <div v-if="accomodation.viewDetail">
+                <v-btn @click="accomodation.viewDetail = false;" color="primary" top absolute right fab>
+                  <v-icon class="black--text">undo</v-icon>
+                </v-btn>
+                <v-container v-viewer grid-list-lg>
+                  <v-layout align-center row wrap>
+                    <v-flex v-for="(pic, index) in accomodation.images" :key="index" v-bind:class="{flex30 : index % 2 == 0, flex20 : index % 2 != 0}">
+                      <img height="auto" style="width:100%;cursor:pointer;" :src="pic.data" />
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+
+                <v-card-title>
+                  <v-flex class="display-2 blue--text" xs12>{{ accomodation.name }}</v-flex>
+                  <v-flex class="subheading" xs12>{{ accomodation.description }}</v-flex>
+                </v-card-title>
+
+                <v-card-text>
+
+                  <v-layout row unwrap>
+                    <v-flex style="display:flex;" xs12 md6>
+                      <v-btn @click="onContactOwner(accomodation)" class="mx-auto" outline large flat>CONTACTER</v-btn>
+                    </v-flex>
+                    <v-flex style="display:flex;" xs12 md6>
+                      <v-btn @click="onStartProcessBookAccomodation(accomodation)" class="mx-auto" color="secondary" outline large flat>
+                        <v-icon>{{ accomodation.showLocationProcess ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>RESERVER</v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-card-text>
+
+                <v-card-text v-show="accomodation.showLocationProcess && accomodation.calendar != null">
+
+                  <v-container v-if="accomodation.showLocationProcess && accomodation.calendar != null" grid-list-md>
+                    <v-layout row wrap>
+
+                      <v-stepper v-model="accomodation.step" vertical>
+
+                        <v-stepper-step :complete="accomodation.step > 1" step="1">
+                          Choix des dates
+                        </v-stepper-step>
+                        <v-stepper-content step="1">
+                          <div v-show="accomodation.step == 1">
+
+                            <!-- Affichage du prix par nuité -->
+
+                            <HotelDatePicker :startingDateValue="accomodation.reservation.dateDebut" :endingDateValue="accomodation.reservation.dateFin" format="DD/MM/YYYY" :minNights="accomodation.durationmin" :maxNights="accomodation.durationmax" :disabledDates="getLockedDates(accomodation)" :disabledDaysOfWeek="getLockedDays(accomodation)" @checkInChanged="accomodation.reservation.dateDebut = $event" @checkOutChanged="accomodation.reservation.dateFin = $event" />
+                            <div v-if="accomodation.reservation.dateFin != null && accomodation.reservation.dateDebut != null"> {{ nbNightsBetweenTwoDates(accomodation) }} nuits</div>
+                            <div v-else>0 nuit</div>
+                            <v-btn :disabled="accomodation.reservation.dateFin == null" color="primary" @click.native="onGoStep2(accomodation)">Continue</v-btn>
+
+                          </div>
+                        </v-stepper-content>
+
+                        <v-stepper-step :complete="accomodation.step > 2" step="2">
+                          Nombre de voyageurs
+                        </v-stepper-step>
+                        <v-stepper-content step="2">
+                          <div v-show="accomodation.step == 2">
+
+                            <v-container fluid>
+                              <v-layout row wrap>
+                                <v-flex xs9>
+                                  <v-slider label="Voyageurs" v-model="accomodation.reservation.nbrPersonnes" min="1" :max="accomodation.guests"></v-slider>
+                                </v-flex>
+                                <v-flex xs3>
+                                  <v-text-field v-model="accomodation.reservation.nbrPersonnes" type="number"></v-text-field>
+                                </v-flex>
+
+                                <v-flex xs12>
+                                  <v-divider></v-divider>
+                                </v-flex>
+
+                                <v-flex xs12>
+                                  <v-list>
+                                    <v-list-tile>
+                                      <v-list-tile-content>
+                                        <v-list-tile-title>{{ getPriceOfAccomodation(accomodation) }} €</v-list-tile-title>
+                                        <v-list-tile-sub-title>Montant du séjour sur la base du nombre de voyageurs</v-list-tile-sub-title>
+                                      </v-list-tile-content>
+                                    </v-list-tile>
+
+                                    <v-list-tile>
+                                      <v-list-tile-content>
+                                        <v-list-tile-title>{{ getTaxeAmount(accomodation) }} €</v-list-tile-title>
+                                        <v-list-tile-sub-title>Frais de gestion AtypikHouse</v-list-tile-sub-title>
+                                      </v-list-tile-content>
+                                    </v-list-tile>
+
+                                    <v-divider></v-divider>
+
+                                    <v-list-tile>
+                                      <v-list-tile-content>
+                                        <v-list-tile-title>{{ getTotalAmountToPay(accomodation) }} €</v-list-tile-title>
+                                        <v-list-tile-sub-title>Montant total à régler</v-list-tile-sub-title>
+                                      </v-list-tile-content>
+                                    </v-list-tile>
+
+                                  </v-list>
+                                </v-flex>
+
+                              </v-layout>
+                            </v-container>
+
+                            <v-btn color="primary" @click.native="onChooseVisitorsBeforePay(accomodation)">Continue</v-btn>
+                            <v-btn @click="accomodation.step = 1" flat>Retour</v-btn>
+
+                          </div>
+                        </v-stepper-content>
+
+                        <v-stepper-step :complete="accomodation.step > 3" step="3">
+                          Règlement
+                        </v-stepper-step>
+                        <v-stepper-content step="3">
+
+                          <div v-show="accomodation.step == 3">
+
+                            <v-jumbotron>
+                              <v-container fill-height>
+                                <v-layout align-center>
+                                  <v-flex>
+                                    <h3 class="display-3">C'est presque fini !</h3>
+                                    <span class="subheading">Vous êtes sur le point de finaliser la réservation d'un bien. Nous vous remercions de la confiance que vous accordez, à nous comme au propriétaire.</span>
+                                    <v-divider class="my-3"></v-divider>
+                                    <div class="title mb-3">Montant à payer : {{ accomodation.reservation.totalAmount }} €</div>
+
+                                    <PayPal :amount="accomodation.reservation.price.toString()" currency="EUR" :client="credentials" env="sandbox" @payment-completed="userHasPaid(accomodation)">
+                                    </PayPal>
+
+                                  </v-flex>
+                                </v-layout>
+                              </v-container>
+                            </v-jumbotron>
+
+                            <v-btn @click="accomodation.step = 2" flat>Retour</v-btn>
+                          </div>
+                        </v-stepper-content>
+
+                      </v-stepper>
+
+                    </v-layout>
+                  </v-container>
+
+                </v-card-text>
+
+                <contact-form :showModal="contactOwner" @close="contactOwner = false;" :sender="$store.state.user" receiver="accomodation.host"></contact-form>
+
+              </div>
+
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+
+    </v-container>
+
+  </div>
+>>>>>>> 340f199652cdbae432fb5f95d9dc44a3a9d8e390
 </template>
 
 <script>
@@ -444,7 +633,7 @@
         if (accomodation.fetch) accomodation.viewDetail = true;
         else
           this.$http.get("accomodation/" + accomodation._id).then(response => {
-            console.log("accomodation");
+            // console.log("accomodation");
             console.log(accomodation);
             if (response.status == 200) {
               //Permet de supprimer tous les champs sauf viewDetail qu'on a besoin de suivre pour mettre les valeurs du détail
@@ -455,6 +644,7 @@
               Object.keys(response.body.accomodation).forEach(function(key) {
                 accomodation[key] = response.body.accomodation[key];
               });
+              //fetch pour préciser qu'on a déjà fait le get du détail
               accomodation.fetch = true;
               accomodation.viewDetail = true;
             }
@@ -465,9 +655,9 @@
         this.$set(accomodation, "step", 1);
         this.$set(accomodation, "calendar", null);
         this.$set(accomodation, "reservation", {
-          startDate: null,
-          endDate: null,
-          nbVoyageurs: 1,
+          dateDebut: null,
+          dateFin: null,
+          nbrPersonnes: 1,
           price: "0",
           AHTaxe: 0,
           status: "attente",
@@ -489,24 +679,35 @@
         this.contactOwner = true;
       },
       onChooseVisitorsBeforePay(accomodation) {
-        //TODO Définir la tarification ici
-        // 			accomodation.reservation.price = accomodation.reservation.nbVoyageurs * accomodation.tarification
-        accomodation.reservation.price = "324";
-        accomodation.reservation.taxe =
-          accomodation.reservation.price * this.AHTaxe / 100;
-        accomodation.reservation.totalAmount = (
-          parseFloat(accomodation.reservation.price) +
-          parseFloat(accomodation.reservation.taxe)
-        ).toString();
+        accomodation.reservation.price = this.getTotalAmountToPay(accomodation);
+        accomodation.reservation.taxe = this.getTaxeAmount(accomodation);
+        accomodation.reservation.totalAmount = this.getTotalAmountToPay(
+          accomodation
+        );
         accomodation.step = 3;
       },
       userHasPaid(accomodation) {
-        accomodation.reservation.status = "paid";
-        //TODO requête http post reservation, si un utilisateur a déjà réservé entre temps on reçoit un message qui indique cela
-        //router redirection vers le détail d'un voyage en cas de succès
+        var vue = this;
+        var reservation = Object.assign({}, accomodation.reservation);
+        reservation.status = "PAID";
+        reservation.accomodation = accomodation._id;
+        this.$http
+          .post("reservation", reservation)
+          .then(response => {
+            if (response.status == 200) {
+              this.$store.commit("snackbar", "Réservation effectuée");
+              accomodation.viewDetail = false;
+              setTimeout(function() {
+                vue.$store.commit("snackbar", "Accès à la réservation");
+                //TODO rediriger vers le détail de la réservation
+              }, 1500);
+            }
+          });
+        //ervé entre temps on reçoit un message qui indique cela
+        //router redirection vers le détail d'un voyage en cas de succèsTODO requête http post reservation, si un utilisateur a déjà rés
       },
       getLockedDates(accomodation) {
-        console.log("dates : " + typeof accomodation.calendar);
+        // console.log("dates : " + typeof accomodation.calendar);
         if (accomodation.calendar != null) {
           return this.lodash
             .map(accomodation.calendar.lockedDates)
@@ -517,19 +718,43 @@
       },
       getLockedDays(accomodation) {
         var vue = this;
-        console.log("days : " + typeof accomodation.calendar);
+        // console.log("days : " + typeof accomodation.calendar);
         if (accomodation.calendar != null) {
           var lockedDays = this.lodash
             .map(accomodation.calendar.lockedDays)
             .map(function(day) {
               return vue.lodash.find(vue.daysTraduction, { fr: day }).en;
             });
-          console.log(lockedDays);
+          // console.log(lockedDays);
           return lockedDays;
         }
       },
       onGoStep2(accomodation) {
         accomodation.step = 2;
+      },
+      nbNightsBetweenTwoDates(accomodation) {
+        return moment(accomodation.reservation.dateFin).diff(
+          moment(accomodation.reservation.dateDebut),
+          "days"
+        );
+      },
+      //calcule le prix de la réservation en fonction du nombre de personnes
+      getPriceOfAccomodation(accomodation) {
+        return (
+          accomodation.priceNightPerson *
+          this.nbNightsBetweenTwoDates(accomodation) *
+          accomodation.reservation.nbrPersonnes
+        );
+      },
+      //calcule le prix de la taxe
+      getTaxeAmount(accomodation) {
+        return this.getPriceOfAccomodation(accomodation) * this.AHTaxe / 100;
+      },
+      getTotalAmountToPay(accomodation) {
+        return (
+          this.getTaxeAmount(accomodation) +
+          this.getPriceOfAccomodation(accomodation)
+        );
       }
     }
   };

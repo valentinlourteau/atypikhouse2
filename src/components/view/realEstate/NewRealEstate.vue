@@ -28,7 +28,7 @@
 				<v-stepper-items>
 
 					<v-stepper-content step="1">
-						<h1 class="display-2"> sur la création d'un bien atypique.</h1>
+						<h1 class="display-2">Bienvenue sur la création d'un bien atypique.</h1>
 						<h2 class="display-1">Vous allez contribuer à l'enrichissement de notre offre, nous vous en remercions.</h2>
 						<v-divider></v-divider>
 						<p>Nous sommes fier de vous permettre de promouvoir notre passion pour la découverte, le voyage, et nous pensons que les logements atypiques contribuent à ces valeurs. Nous vous assisterons tout au long du processus de création de votre bien sur le site. Et vous apporterons, nous l'ésperons, toutes les précisions nécessaires pour mener à bien le processus de création.
@@ -146,7 +146,7 @@
 										<h3 class="display-3">Votre bien mérite les plus belles photos</h3>
 										<span class="subheading">Vous allez pouvoir ajouter ici les photos qui vont rendre votre bien unique, nous en sommes persuadé. N'hésitez pas à prendre des photos de jour, mettant votre bien en valeur. La popularité qu'aura votre bien en dépend largement.</span>
 										<v-divider class="my-3"></v-divider>
-										<div class="title mb-3">Vendez leur du rêve !</div>
+										<div class="title mb-3 black--text" style="text-shadow:none;">Vendez leur du rêve !</div>
 										<file-upload accept="image/*" @formData="onChooseImg($event)"></file-upload>
 									</v-flex>
 								</v-layout>

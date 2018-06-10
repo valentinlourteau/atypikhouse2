@@ -7,24 +7,24 @@
           <v-card-title class="headline">
             Mes voyages
           </v-card-title>
-            <v-data-table :headers="headers" :items="destinat" hide-actions>
-              <template slot="items" slot-scope="props">
-                <td>{{ props.item.destination }}</td>
-                <td class="text-xs-right">{{ props.item.DDS }}</td>
-                <td class="text-xs-right">{{ props.item.DFS }}</td>
+          <v-data-table :headers="headers" :items="destinat" hide-actions>
+            <template slot="items" slot-scope="props">
+              <td>{{ props.item.destination }}</td>
+              <td class="text-xs-right">{{ props.item.DDS }}</td>
+              <td class="text-xs-right">{{ props.item.DFS }}</td>
 
-                <td class="justify-center layout px-0">
-                  <v-layout row justify-center>
+              <td class="justify-center layout px-0">
+                <v-layout row justify-center>
 
-                    <v-btn icon to='/tripDetail' slot="activator">
-                      <v-icon color="teal">visibility</v-icon>
-                    </v-btn>
+                  <v-btn icon to='/tripDetail' slot="activator">
+                    <v-icon color="teal">visibility</v-icon>
+                  </v-btn>
 
-                  </v-layout>
-                </td>
+                </v-layout>
+              </td>
 
-              </template>
-            </v-data-table>
+            </template>
+          </v-data-table>
         </v-card>
       </v-flex>
     </v-container>
@@ -100,4 +100,7 @@
 
 
 <style>
+  td {
+    vertical-align: middle !important;
+  } 
 </style>
