@@ -14,6 +14,8 @@ const translationsFr = {
 	"accomodation.stepper.step.7": "Description",
 	"accomodation.stepper.step.8": "Règlement",
 	"accomodation.stepper.step.9": "Gestion du temps",
+	"minimum.price.per.night" : "Prix minimum par nuit",
+	"maximum.price.per.night" : "Prix maximum par nuit"
 };
 
 export default translationsFr;

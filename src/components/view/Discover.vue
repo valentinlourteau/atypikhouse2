@@ -11,10 +11,15 @@
         </v-flex>
       </v-layout>
       <v-divider></v-divider>
+      
       <v-dialog v-model="dialog" persistent max-width="580">
         <v-btn slot="activator" color="white" text="black">Arrivée-Départ</v-btn>
 
         <v-card>
+        	<v-card-title>
+        		<h4>Dates de séjour</h4>
+        	</v-card-title>
+        	<v-card-text>
           <v-layout row wrap>
             <v-flex xs12 sm6>
               <v-date-picker v-model="filter.dateDebut"  color="primary"></v-date-picker>
@@ -23,9 +28,44 @@
               <v-date-picker v-model="filter.dateFin" color="green lighten-1" header-color="primary"></v-date-picker>
             </v-flex>
           </v-layout>
-          <v-spacer></v-spacer>
+          </v-card-text>
+          <v-card-actions>
           <v-btn color="black" flat @click.native="dialog = false">Annuler</v-btn>
           <v-btn color="primary" flat @click.native="dialog = false">Valider</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="dialog1" persistent max-width="580">
+        <v-btn slot="activator" color="white" text="black">Prix</v-btn>
+
+        <v-card>
+        			<div class="headline">Prix</div>
+			            <v-divider></v-divider>
+          <v-layout row wrap>
+            <v-layout row wrap>
+          
+             <v-subheader>{{ $t('minimum.price.per.night') }}</v-subheader>  
+             <v-flex xs8 ml-4	>        
+            <v-slider :max="255" v-model="PriceMin" ></v-slider>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="PriceMin" type="number"></v-text-field>
+          </v-flex>
+          <v-subheader>{{ $t('maximum.price.per.night') }}</v-subheader>  
+          <v-flex xs8 xs8 ml-4	>        
+            <v-slider :max="500" v-model="PriceMax" ></v-slider>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="PriceMax" type="number"></v-text-field>
+          </v-flex>
+          </v-layout>
+          
+            
+          </v-layout>
+          <v-spacer></v-spacer>
+          <v-btn color="black" flat @click.native="dialog1 = false">Annuler</v-btn>
+          <v-btn color="primary" flat @click.native="dialog1 = false">Valider</v-btn>
         </v-card>
       </v-dialog>
       <v-dialog v-model="dialog2" persistent max-width="580">
@@ -34,33 +74,32 @@
         <v-card ml4>
           <!-- Capacité d'accueil -->
           <v-flex xs12>
-            <v-subheader>Capacité d'accueil</v-subheader>
+			<div class="headline">Capacité</div>
+			            <v-divider></v-divider>
           </v-flex>
           <v-flex xs9 ml-4>
-            <v-slider min="1" max="20"></v-slider>
+            <v-slider v-model="number" min="1" max="20" label="Nombre des personnes"></v-slider>                                   
           </v-flex>
           <v-flex xs3 ml-4>
-            <v-text-field type="number" ></v-text-field>
+            <v-text-field v-model="number"  type="number"  ></v-text-field>
           </v-flex ml-4>
           <!-- Nombre de lits -->
           <v-flex xs12 ml-4>
-            <v-subheader>Nombre de couchages (un fauteuil une place, ça ne compte pas !)</v-subheader>
           </v-flex>
           <v-flex xs9 ml-4>
-            <v-slider min="1" max="20" xs9></v-slider>
+            <v-slider v-model="beds" min="1" max="20" xs9 label="Nombre des lits"></v-slider>
           </v-flex>
           <v-flex xs3 ml-4>
-            <v-text-field type="number" ></v-text-field>
+            <v-text-field v-model="beds" type="number" ></v-text-field>
           </v-flex>
           <!-- Nombre de chambres -->
           <v-flex xs12 ml-4>
-            <v-subheader>Nombre de chambres</v-subheader>
           </v-flex>
           <v-flex xs9 ml-4>
-            <v-slider min="1" max="20" xs9></v-slider>
+            <v-slider v-model="rooms" min="1" max="20" xs9 label="Nombre des chambres"></v-slider>
           </v-flex>
           <v-flex xs3 ml-4>
-            <v-text-field type="number" ></v-text-field>
+            <v-text-field  v-model="rooms" type="number" ></v-text-field>
           </v-flex>
           <v-spacer></v-spacer>
           <v-btn color="black" flat @click.native="dialog2 = false">Annuler</v-btn>
@@ -73,23 +112,13 @@
 
         <v-btn slot="activator" color="white" text="black">Type de logement</v-btn>
         <v-card>
+        			<div class="headline">Type de logement</div>
+			            <v-divider></v-divider>
           <v-card-text>
             <v-container fluid>
               <v-layout row wrap>
-                <v-flex xs12 sm3>
-                  <v-checkbox v-model="a" value="cabane" label="Cabane"></v-checkbox>
-                </v-flex>
-                <v-flex xs6 sm3>
-                  <v-checkbox v-model="b" value="Iglo" label="Iglo"></v-checkbox>
-                </v-flex>
-                <v-flex xs6 sm3>
-                  <v-checkbox v-model="c" value="top" label="Bulle"></v-checkbox>
-                </v-flex>
-                <v-flex xs12 sm3>
-                  <v-checkbox v-model="e" value="multi-line" label="Chapelle"></v-checkbox>
-                </v-flex>
-                <v-flex xs12 sm3>
-                  <v-checkbox v-model="f" value="vertical" label="Autre"></v-checkbox>
+                <v-flex v-for="(type, index) in availableFilters.listOfAccomodationTypes" :key="type._id" xs12 md3>
+                  <v-checkbox v-model="filter.selectedTypes" :value="type._id" :label="type.frname"></v-checkbox>
                 </v-flex>
                 <v-spacer></v-spacer>
 
@@ -110,73 +139,34 @@
             <v-btn icon dark @click.native="dialog4 = false">
               <v-icon>close</v-icon>
             </v-btn>
-            <v-toolbar-title>Plus de filtres</v-toolbar-title>
+            <v-toolbar-title color="black">Plus de filtres</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
-              <v-btn dark flat @click.native="dialog4 = false">Valider </v-btn>
+              <v-btn dark flat @click.native="dialog4 = false" >Valider </v-btn>
               <v-btn dark flat @click.native="dialog4 = false">Annuler </v-btn>
 
             </v-toolbar-items>
 
           </v-toolbar>
           <v-card-text>
-            <v-list three-line subheader>
-              <v-subheader>Chambre et lits</v-subheader>
-            <v-flex xs12>
-            <v-subheader>Lits</v-subheader>
-          </v-flex>
-          <v-flex xs2 ml-4>
-            <v-slider min="1" max="20"></v-slider>
-          </v-flex>
-              <v-flex xs12>
-            <v-subheader>Chambres</v-subheader>
-          </v-flex>
-          <v-flex xs2 ml-4>
-            <v-slider min="1" max="20"></v-slider>
-          </v-flex>                  	
-              <v-flex xs12>
-            <v-subheader>Salles de bain</v-subheader>
-          </v-flex>
-           <v-flex xs2 ml-4>
-            <v-slider min="1" max="20"></v-slider>
-          </v-flex>
-            </v-list>
+    
             <v-divider></v-divider>
-            <v-list three-line subheader>
-              <v-subheader>Equipements</v-subheader>
-               <v-flex xs12 sm3>
-                  <v-checkbox v-model="a" value="cabane" label="Cabane"></v-checkbox>
+            <v-list >
+              <v-subheader >Equipements</v-subheader>
+                 <v-flex v-for="(equipment, index) in availableFilters.listOfEquipments" :key="equipment._id" xs12 md3>
+                  <v-checkbox v-model="filter.selectedEquipments" :value="equipment._id" :label="equipment.frname"></v-checkbox>
                 </v-flex>
-                <v-flex xs6 sm3>
-                  <v-checkbox v-model="b" value="Iglo" label="Iglo"></v-checkbox>
+                      <v-divider></v-divider>
+              <v-subheader >Installations</v-subheader>
+                  <v-flex v-for="(space, index) in availableFilters.listOfAvailableSpaces" :key="space._id" xs12 md3>
+                  <v-checkbox v-model="filter.selectedSpaces" :value="space._id" :label="space.frname"></v-checkbox>
                 </v-flex>
-                <v-flex xs6 sm3>
-                  <v-checkbox v-model="c" value="top" label="Bulle"></v-checkbox>
+                         <v-divider></v-divider>
+              <v-subheader >Règlement intérieur</v-subheader>
+                  <v-flex v-for="(rule, index) in availableFilters.listOfAvailableRules" :key="rule._id" xs12 md3>
+                  <v-checkbox v-model="filter.selectedRules" :value="rule._id" :label="rule.frname"></v-checkbox>                
                 </v-flex>
-                <v-flex xs12 sm3>
-                  <v-checkbox v-model="e" value="multi-line" label="Chapelle"></v-checkbox>
-                </v-flex>
-                <v-flex xs12 sm3>
-                  <v-checkbox v-model="f" value="vertical" label="Autre"></v-checkbox>
-                </v-flex>
-              <v-list-tile avatar>
-                <v-list-tile-action>
-                  <v-checkbox ></v-checkbox>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>Sound</v-list-tile-title>
-                  <v-list-tile-sub-title>Auto-update apps at any time. Data charges may apply</v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile avatar>
-                <v-list-tile-action>
-                  <v-checkbox ></v-checkbox>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>Auto-add widgets</v-list-tile-title>
-                  <v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
+
             </v-list>
           </v-card-text>
 
@@ -368,14 +358,22 @@
   import HotelDatePicker from "vue-hotel-datepicker";
   import moment from "moment";
   import ContactForm from "../ContactForm";
-
+  import ListService from "../../class/services/ListService";
+  import Modal from '../Modal';
   export default {
     components: {
       HotelDatePicker,
       PayPal,
-      ContactForm
+      ContactForm,
+      Modal,
     },
     created: function() {
+    	
+    	ListService.fetchList("accomodationTypes", this.availableFilters.listOfAccomodationTypes);
+	    ListService.fetchList("accomodationEquipements", this.availableFilters.listOfEquipments);
+	    ListService.fetchList("accomodationAvailableSpaces",this.availableFilters.listOfAvailableSpaces);
+	    ListService.fetchList("accomodationRules", this.availableFilters.listOfAvailableRules);
+    	
       this.$http.get("accomodation").then(response => {
         if (response.status == 200) {
           this.accomodations = response.body.accomodations;
@@ -394,20 +392,26 @@
       return {
         search: null,
         dialog: false,
+        dialog1 :false,
         dialog2: false,
         dialog3: false,
         dialog4: false,
         filter: {
         	dateDebut: null,
         	dateFin: null,
+        	selectedEquipments: [],
         },
-        a: "",
-        b: "",
-        c: "",
-        d: "",
-        e: "",
-        f: "",
-
+        availableFilters: {
+        	listOfAccomodationTypes: [],
+        	listOfEquipments:[],
+        	listOfAvailableSpaces:[],
+        	listOfAvailableRules:[],
+        },
+     PriceMin:'',
+     PriceMax:'',
+     number:'',
+     beds:'',
+     rooms:'',
         accomodations: [],
         //les traductions parce que le calendar est stocké en FR
         daysTraduction: [
