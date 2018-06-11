@@ -7,22 +7,21 @@
           <v-card-title class="headline">
             Mes voyages
           </v-card-title>
-          <v-data-table :headers="headers" :items="destinat" hide-actions>
+          <v-data-table :headers="headers" :items="travels" hide-actions>
             <template slot="items" slot-scope="props">
-              <td>{{ props.item.destination }}</td>
-              <td class="text-xs-right">{{ props.item.DDS }}</td>
-              <td class="text-xs-right">{{ props.item.DFS }}</td>
-
+              <td>{{ props.item.accomodation.name }}</td>
+              <td>{{ moment(props.item.dateReservation).format('DD/MM/YYYY') }}</td>
+              <td>{{ moment(props.item.dateDebut).format('DD/MM/YYYY') }}</td>
+              <td>{{ moment(props.item.dateFin).format('DD/MM/YYYY') }}</td>
+              <td>{{ props.item.nbrPersonnes }}</td>
+              <td>{{ getStatusText(props.item.status) }}</td>
               <td class="justify-center layout px-0">
                 <v-layout row justify-center>
-
-                  <v-btn icon to='/tripDetail' slot="activator">
+                  <v-btn icon slot="activator">
                     <v-icon color="teal">visibility</v-icon>
                   </v-btn>
-
                 </v-layout>
               </td>
-
             </template>
           </v-data-table>
         </v-card>
@@ -34,66 +33,45 @@
   import Modal from "../Modal";
   export default {
     data: () => ({
-      show: false,
       dialog: false,
       headers: [
-        {
-          text: "Destination",
-          align: "left	",
-          sortable: false,
-          value: "destination"
-        },
-        { text: "Date debut de sejours", align: "right", value: "DDS" },
-        { text: "Date fin de sejours", align: "right", value: "DFS" },
-        { text: "Details", value: "detail", align: "right", sortable: false }
+        { text: "Bien concerné", value: "Bien" },
+        { text: "Date de réservation", value: "DDR" },
+        { text: "Date de début", value: "dateDebut"},
+        { text: "Date de fin", value: "dateFin"},
+        { text: "Invités", value: "personnes"},
+        { text: "Statut", value: "statut"},
+        { text: "", value: "actions"}
       ],
-      destinat: [],
-      editedIndex: -1,
-      editedItem: {
-        destination: "",
-        DDS: "",
-        DFS: "",
-        detail: ""
-      },
-      defaultItem: {
-        destination: "",
-        DDS: "",
-        DFS: ""
-      }
+      travels: [],
     }),
-
-    computed: {
-      formTitle() {
-        return this.editedIndex === -1
-          ? "Nouveau utilisateur"
-          : "Modifier un utilisateur";
-      }
-    },
-
     created() {
-      this.initialize();
+      this.$http.get("reservation/travels/" + this.$store.state.user.id).then(response => {
+        if (response.status == 200) {
+          this.travels = response.body.reservations;
+        }
+      });
     },
     methods: {
-      initialize() {
-        this.destinat = [
-          {
-            destination: "Espagne",
-            DDS: "17/10/2017",
-            DFS: "1/11/2017"
-          }
-        ];
-      },
-
-      editItem(item) {
-        this.editedIndex = this.destinat.indexOf(item);
-        this.editedItem = Object.assign({}, item);
-        this.dialog = true;
-      },
-
-      deleteItem(item) {
-        const index = this.destinat.indexOf(item);
-        confirm("") && this.destinat.splice(index, 1);
-      }
+      getStatusText(statut) {
+    		switch (statut) {
+    		case "A":
+    			return "Payé - en attente de validation";
+    			break;
+    		case "B":
+    			return "Payé - refusé";
+    			break;
+    		case "C":
+    			return "Payé - accepté";
+    			break;
+    		case "D":
+    			return "Terminée - séjour effectué";
+    			break;
+    		default:
+    			return "";
+    		
+    		}
+    	},
     }
   };
 </script>

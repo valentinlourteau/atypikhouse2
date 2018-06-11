@@ -30,6 +30,7 @@
     "vue-material-checkbox": "^1.1.2",
     "vue-material-design-icons": "^1.4.0",
     "vue-paypal-checkout": "^3.1.2",
+    "vue-quill-editor": "^3.0.6",
     "vue-resource": "^1.5.0",
     "vue-router": "^3.0.1",
     "vue-star-rating": "^1.6.0",

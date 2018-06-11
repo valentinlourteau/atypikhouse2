@@ -8,24 +8,18 @@
             <v-card-title>
               <span class="headline">Gestion des utilisateurs</span>
             </v-card-title>
-            <v-data-table :headers="headers" :items="aduser" hide-actions>
+            <v-data-table :headers="headers" :items="users" hide-actions>
               <template slot="items" slot-scope="props">
                 <td>{{ props.item.firstname }}</td>
                 <td>{{ props.item.lastname }}</td>
-                <td>{{ props.item.addmail }}</td>
+                <td>{{ props.item.email }}</td>
+                <td>{{ props.item.admin }}</td>
                 <td>
                   <v-btn icon class="mx-0" @click="editItem(props.item)">
                     <v-icon>edit</v-icon>
                   </v-btn>
-                  <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-                    <v-icon>delete</v-icon>
-                  </v-btn>
                 </td>
 
-              </template>
-
-              <template slot="no-data">
-                <v-btn color="primary" @click="initialize">Reset</v-btn>
               </template>
             </v-data-table>
 
@@ -41,7 +35,7 @@
     <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">{{formTitle}}</span>
+          <span class="headline">Edition d'un utilisateur</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
@@ -50,13 +44,10 @@
                 <v-text-field v-model="editedItem.firstname" label="Prenom"></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field v-model="editedItem.lastname" label="Nom de famille"></v-text-field>
+                <v-text-field v-model="editedItem.lastname" label="Nom"></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field v-model="editedItem.addmail" label="Adresse e-mail"></v-text-field>
-              </v-flex>
-              <v-flex xs12>
-                <v-text-field v-model="editedItem.password" label="Mot de passe"></v-text-field>
+                <v-text-field v-model="editedItem.email" label="Adresse e-mail"></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
@@ -76,36 +67,26 @@
     data: () => ({
       dialog: false,
       headers: [
-        { text: "First Name", value: "firstname" },
-        { text: "Last Name", value: "lastname" },
-        { text: "Adresse e-mail", value: "Addmail" },
-        { text: "Actions", value: "name", sortable: false }
+        { text: "Prenom", value: "firstname" },
+        { text: "nom", value: "lastname" },
+        { text: "Email", value: "email" },
+        { text: "Admin", value: "admin" },
+        { text: "Actions", value: "actions" }
       ],
-      aduser: [],
-      editedIndex: -1,
+      users: [],
       editedItem: {
         firstname: "",
         lastname: "",
-        addmail: "",
-        matricule: "",
-        poste: ""
+        email: ""
       },
       defaultItem: {
         firstname: "",
         lastname: "",
-        addmail: "",
-        matricule: "",
-        poste: ""
+        email: ""
       }
     }),
 
-    computed: {
-      formTitle() {
-        return this.editedIndex === -1
-          ? "Nouvel utilisateur"
-          : "Modifier un utilisateur";
-      }
-    },
+    computed: {},
 
     watch: {
       dialog(val) {
@@ -118,41 +99,39 @@
     },
     methods: {
       initialize() {
-        this.aduser = [
-          {
-            firstname: "Hammami",
-            lastname: "mohamed",
-            addmail: "hammamimedamine02@gmail.com"
+        this.$http.get("users/findAll").then(response => {
+          if (response.status == 200) {
+            this.users = response.body.users;
           }
-        ];
+        });
       },
 
       editItem(item) {
-        this.editedIndex = this.aduser.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
-      },
-
-      deleteItem(item) {
-        const index = this.aduser.indexOf(item);
-        confirm("") && this.aduser.splice(index, 1);
       },
 
       close() {
         this.dialog = false;
         setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem);
-          this.editedIndex = -1;
+          this.editedItem = this.defaultItem;
         }, 300);
       },
 
       save() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.aduser[this.editedIndex], this.editedItem);
-        } else {
-          this.aduser.push(this.editedItem);
-        }
-        this.close();
+        var vue = this;
+        console.log(this.editedItem)
+        this.$http.put("users/any/" + this.editedItem._id, this.editedItem).then(response => {
+          if (response.status == 200) {
+            this.$store.commit("snackbar", "Utilisateur modifié");
+            this.close();
+            vue.$http.get("users/findAll").then(response => {
+              if (response.status == 200) {
+                vue.users = response.body.users;
+              }
+            });
+          }
+        });
       }
     }
   };
