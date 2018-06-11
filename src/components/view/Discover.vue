@@ -516,7 +516,7 @@
       userHasPaid(accomodation) {
         var vue = this;
         var reservation = Object.assign({}, accomodation.reservation);
-        reservation.status = "PAID";
+        reservation.status = "A";
         reservation.accomodation = accomodation._id;
         this.$http.post("reservation", reservation).then(response => {
           if (response.status == 200) {

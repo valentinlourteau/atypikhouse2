@@ -17,6 +17,7 @@ import VueLodash from 'vue-lodash';
 import 'viewerjs/dist/viewer.css';
 import Viewer from 'v-viewer';
 import VueAgile from 'vue-agile';
+import moment from 'moment';
 //pages
 import Home from './components/view/Home';
 import Account from './components/view/Account';
@@ -43,6 +44,7 @@ import Notifications from './components/view/Notifications'
 import TD from './class/utils/TokenDecrypter';
 
 Vue.use(VueLodash, {name : 'lodash'});
+Vue.prototype.moment = moment;
 Vue.use(Viewer)
 
 Vue.use(Vuetify, { theme: {
@@ -156,7 +158,8 @@ Vue.i18n.set('fr');
 // Vue.http.options.root = 'http://46.226.111.181:4040/api/';
 
 //saisir ici l'ip v4 du pc si jamais on veut se servir de l'api sur le même réseau
-Vue.http.options.root = 'http://192.168.1.16:4040/api/';
+//Vue.http.options.root = 'http://192.168.1.16:4040/api/';
+Vue.http.options.root = 'http://localhost:4040/api/';
 Vue.http.options.rejectUnauthorized = false;
 Vue.http.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get("token");
 

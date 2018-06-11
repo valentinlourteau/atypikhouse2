@@ -101,6 +101,9 @@
       
       <!-- Réservations -->
       <v-tab-item>
+      
+      	<reservations :accomodationId="accomodation._id" />
+      
       </v-tab-item>
       
       <!-- A proximité -->
@@ -122,6 +125,7 @@ import Nearby from '../../realEstate/Nearby';
 import Accomodation from '../../../class/entities/Accomodation';
 import ReadWriteField from '../../utility/ReadWriteField';
 import FileUpload from '../../utility/FileUpload';
+import Reservations from '../../realEstate/Reservations';
 
 export default {
 	components: {
@@ -129,6 +133,7 @@ export default {
 		FileUpload,
 		Calendar,
 		Nearby,
+		Reservations
 	},
 	data: function() {
 		return {

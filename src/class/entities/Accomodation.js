@@ -15,7 +15,7 @@
     this._userId;
     this.actif = false;
     this.currentStep = 1;
-    this.priceNightPerson = 0;
+    this.priceNight = 0;
   }
 
 }

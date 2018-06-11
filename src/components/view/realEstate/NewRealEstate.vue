@@ -184,10 +184,10 @@
 								<v-text-field v-model="accomodation.description" label="Description" :rules="[v => !!v || 'La description est requise']" multi-line counter></v-text-field>
 								<v-layout row wrap>
 									<v-flex xs9>
-										<v-slider :min="1" :max="1000" v-model="accomodation.priceNightPerson" label="Prix par nuit et par personne"></v-slider>
+										<v-slider :min="1" :max="1000" v-model="accomodation.priceNight" label="Prix par nuit en €"></v-slider>
 									</v-flex>
 									<v-flex xs3>
-										<v-text-field v-model="accomodation.priceNightPerson" type="number"></v-text-field>
+										<v-text-field v-model="accomodation.priceNight" type="number"></v-text-field>
 									</v-flex>
 								</v-layout>
 							</div>
