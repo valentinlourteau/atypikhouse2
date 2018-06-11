@@ -1,235 +1,171 @@
 <template>
   <div>
-    <v-tabs v-model="tabs" icons-and-text centered dark color="black">
-      <v-tabs-slider color="yellow"></v-tabs-slider>
-
-      <v-tab href="#tab-1">
-        Recents
-        <v-icon>phone</v-icon>
+    	<v-tabs v-model="activeTab" color="yellow" dark slider-color="black" centered @input="onChangeTab($event)">		
+      <v-tab v-for="tab in tabs" :key="tab.text" ripple>
+       <span class="black--text">{{ tab.text }}</span>
       </v-tab>
-      <v-tab href="#tab-2">
-        Favorites
-        <v-icon>favorite</v-icon>
-      </v-tab>
-      <v-tab href="#tab-3">
-        Nearby
-        <v-icon>account_box</v-icon>
-      </v-tab>
-      <v-tab-item id="tab-1">
-        <v-card flat>
-
-          <v-container grid-list-md text-xs-center>
-            <v-layout row wrap>
-              <v-flex md6>
-                <h2>
-                  Le Bien
-                </h2>
-                <star-rating inline read-only :star-size="30" :increment="0.1" :show-rating="false" :active-color="tertiary"></star-rating>
-              </v-flex>
-              <v-flex md6>
-                <h2>
-                  L'ambiance
-                </h2>
-                <star-rating inline read-only :star-size="30" :increment="0.1" :show-rating="false" :active-color="tertiary"></star-rating>
-              </v-flex>
-            </v-layout>
+            <!-- Resume -->
+      <v-tab-item>
+       <v-layout row wrap class="mx-2">
+       <v-container fluid>
+      <v-layout row wrap>
+        <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+          <v-card>
             <v-card-title>
-              <span class="title">A propos
-              </span>
-
-            </v-card-title>
-          </v-container>
-          <v-layout row wrap>
-            <v-flex xs12 lg5 mb-6>
-              <v-expansion-panel popout>
-
-                <v-expansion-panel-content v-for="(category , i) in categories" :key="i">
-                  <div slot="header">{{category.name}}</div>
-                  <v-badge color="secondary" right>
-                    <v-icon>{{ category.icon }}</v-icon>
-                  </v-badge>
-
-                  <v-card>
-                    <v-card-text class="grey lighten-3">
-                      <li v-for="(child,j) in category.children" :key="j">
-                        {{child.name}}
-                        <v-icon>{{ child.icon }}</v-icon>
-                      </li>
-                    </v-card-text>
-                  </v-card>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
+        <v-form ref="generalInformationsForm">
+	      	<v-subheader>Informations générales</v-subheader>
+	      <v-card-text>      
+	      	<read-write-field :read="generalInformationsReadMode"  label="Nom" :rules="[v => !!v || 'Le nom est requis',
+	      	v => v.length < 20 || 'Le nom doit être inférieur à 20 caractères']"></read-write-field>
+	      	<read-write-field :read="generalInformationsReadMode" label="Description" :rules="[v => !!v || 'La description est requise']"></read-write-field>
+	      	<read-write-field :read="generalInformationsReadMode"  label="Type de bien"></read-write-field>	      	
+	      	<v-divider></v-divider>	      	
+	      	<read-write-field :read="generalInformationsReadMode"  label="Capacité d'accueil"></read-write-field>
+	      	<read-write-field :read="generalInformationsReadMode"  label="Nombre de chambres à coucher"></read-write-field>
+	      	<read-write-field :read="generalInformationsReadMode"  label="Nombre de lits"></read-write-field>
+	      	<read-write-field :read="generalInformationsReadMode" label="Nombre de salles de bain"></read-write-field>	      	
+	      	<v-divider></v-divider>	      	
+	      	<read-write-field :read="generalInformationsReadMode"  label="Nombre de jours minimum"></read-write-field>
+	      	<read-write-field :read="generalInformationsReadMode" label="Nombre de jours maximum"></read-write-field>
+	      	<read-write-field :read="generalInformationsReadMode"  label="Heure d'arrivée maximale"></read-write-field>
+	      	<read-write-field :read="generalInformationsReadMode"  label="Heure de départ maximale"></read-write-field>	      	
+	      	<v-divider></v-divider>	      	
+	      </v-card-text>	      
+	      <v-card-actions>
+	      	<v-btn v-if="generalInformationsReadMode" class="black--text" @click="generalInformationsReadMode = false" flat>Editer</v-btn>
+	      	<v-btn v-if="!generalInformationsReadMode" class="black--text" @click="onCancelGeneralInformations()" flat>Annuler</v-btn>
+	      	<v-btn v-if="!generalInformationsReadMode" class="black--text" @click="onSaveGeneralInformations()" color="blue" flat>Enregistrer</v-btn>
+	      </v-card-actions>     	      	
+	      	</v-form>            
+	      	</v-card-title>
+            </v-card>
             </v-flex>
-            <v-flex xs12 lg5 offset-lg2>
-              <v-expansion-panel inset>
-                <v-expansion-panel-content v-for="(item,i) in items" :key="i">
-                  <div slot="header">{{item.name}}</div>
-
-                  <v-badge color="secondary" right>
-                    <v-icon>{{ item.icon }}</v-icon>
-                  </v-badge>
-
-                  <v-card>
-                    <v-card-text class="grey lighten-3">
-                      <li v-for="(son,j) in item.sons" :key="j">
-                        {{son.name}}
-                        <v-icon>{{ son.icon }}</v-icon>
-                      </li>
-                    </v-card-text>
-                  </v-card>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-
-            </v-flex>
-          </v-layout>
-
-          <v-card-title>
-            <span class="title">A propos
-            </span>
-
-          </v-card-title>
-          <div id="app" style="height: 100%">
-            <v-map :zoom=13 :center="[47.413220, -1.219482]">
-              <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
-              <v-marker :lat-lng="[47.413220, -1.219482]"></v-marker>
-            </v-map>
+            </v-layout>
+            </v-container>         
+             </v-layout>
+      </v-tab-item>      
+       <!-- Calendrier global -->
+      <v-tab-item>
+            <v-layout row wrap >		
+			<v-flex xs12 sm4 lg4 xl3 ml-4 mt-3 >
+      <v-card>
+        <v-card-media src="/static/images/background1.jpg" height="200px">
+        </v-card-media>
+        <v-card-title primary-title>
+          <div>
+            <h3 class="headline mb-0">Cabane avec piscine</h3>
+            <div>Une Cabane avec une piscine extérieur en pleine nature </div>
           </div>
-
+        </v-card-title>
+        <v-card-actions>
+          <v-btn flat color="orange" dark @click.stop="dialog = true">Ajouter des photos</v-btn>
+          <v-dialog
+        v-model="dialog"
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+        scrollable
+      >
+<v-card tile>
+          <v-toolbar card dark color="primary">
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Mes photos et mes commentaires</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn dark flat @click.native="dialog = false">Valider</v-btn>
+             <v-btn dark flat @click.native="dialog = false">Annuler</v-btn>             
+            </v-toolbar-items>
+       
+          </v-toolbar>
+   
+  		 <div>
+            <div class="file-upload-form">
+                Mes Souvenirs Atypikque
+                <input type="file" @change="previewImage" accept="image/*">
+            </div>
+            <div class="image-preview" v-if="imageData.length > 0">
+                <img class="preview" :src="imageData">
+            </div>
+        </div>
+             <v-text-field textarea label="Commentaire..." v-model="comment" ></v-text-field>
+              <v-btn dark color="primary" class="black--text">Commenter</v-btn>         
+          <div style="flex: 1 1 auto;"></div>
         </v-card>
-
+      </v-dialog>          
+        </v-card-actions>
+      </v-card>
+    </v-flex>
+		</v-layout>
+      
       </v-tab-item>
-
-      <v-tab-item id="tab-2">
-        <v-card flat>
-          <v-card-text>This is the second tab</v-card-text>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item id="tab-3">
-        <v-card flat>
-          <v-card-text>This is the third tab</v-card-text>
-        </v-card>
-      </v-tab-item>
-    </v-tabs>
-
+      
+      
+      
+</v-tabs>
   </div>
 </template>
 
 <script >
-  import Gmaps from "../utility/Gmaps";
-  import Vue from "vue";
-  import GoogleMapsLoader from "google-maps";
-
-  import FileUpload from "../utility/FileUpload";
-  import StarRating from "vue-star-rating";
+import Accomodation from './../../class/entities/Accomodation';
+import ReadWriteField from '../utility/ReadWriteField';
+import FileUpload from "./../utility/FileUpload";
 
   export default {
-    data() {
-      return {
-        mapLoaded: false,
+	  components: {
+			ReadWriteField,
+		    FileUpload,
 
-        categories: [
-          {
-            name: "Services",
-            children: [
-              {
-                icon: "wifi",
-                name: "Wi-Fi gratuit"
-              },
-              {
-                icon: "car",
-                name: "Parking"
-              },
-              {
-                icon: "wifi",
-
-                name: "Parking"
-              }
-            ]
-          },
-
-          {
-            name: "Le bien",
-            children: [
-              {
-                name: "La cabane"
-              }
-            ]
-          },
-          {
-            name: "Activites",
-            children: [
-              {
-                name: "Sport"
-              },
-              {
-                name: "Loisirs et detente"
-              },
-              {
-                name: "sports nautiques"
-              }
-            ]
-          },
-          {
-            name: "Spa et bien etre",
-
-            children: [
-              {
-                name: "Activite"
-              }
-            ]
-          }
-        ],
-
-        items: [
-          {
-            name: "Encadrement enfant",
-            sons: [
-              {
-                icon: "wifi",
-                name: "club enfant"
-              },
-              {
-                icon: "car",
-                name: "Espace te service pour les enfants"
-              },
-              {
-                icon: "wifi",
-
-                name: "Activité"
-              }
-            ]
-          },
-
-          {
-            name: "Le bien",
-            sons: [
-              {
-                name: "La cabane"
-              }
-            ]
-          },
-          {
-            name: "Activites",
-            sons: [
-              {
-                name: "Sport"
-              },
-              {
-                name: "Loisirs et detente"
-              },
-              {
-                name: "sports nautiques"
-              }
-            ]
-          }
-        ]
-      };
-    },
-    components: {
-      StarRating,
-      Gmaps
-    }
+	  },
+	  
+	
+	data: function() {
+		return {
+			 dialog: false,
+			generalInformationsReadMode: true,
+			 imageData: "",
+			 comment: '',
+			activeTab: null,
+			tabs: [
+				{text : "Resume"},
+				{text : "Avis"},
+			],
+		}
+	},
+ 	methods: {
+ 
+ 		 previewImage: function(event) {
+             var input = event.target;
+             if (input.files && input.files[0]) {
+                 var reader = new FileReader();
+                 reader.onload = (e) => {
+                     this.imageData = e.target.result;
+                 }
+                 reader.readAsDataURL(input.files[0]);
+             }
+         },
+     
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 	}
   };
 </script>
 <style>
+.file-upload-form, .image-preview {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    padding: 20px;
+}
+img.preview {
+    width: 200px;
+    background-color: white;
+    border: 1px solid #DDD;
+    padding: 5px;
+}
 </style>
