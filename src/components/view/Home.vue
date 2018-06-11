@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;">
+    <div style="position:relative;height:100%;">
         <agile :arrows="false" :autoplaySpeed="6000" :speed="300" :fade="true" :autoplay="true" :infinite="true" :pauseOnHover="false">
             <div class="slide" style="background-image:url(/static/images/slider/slide1.jpg);background-size:100%;">
             </div>
@@ -8,9 +8,11 @@
             <div class="slide" style="background-image:url(/static/images/background3.jpg);background-size:100%;">
             </div>
         </agile>
+        
+       	<img class="logo-ah pa-5" src="/static/images/logo-only.svg"></img>
 
         <div class="bloc pa-5">
-            <div class="title">
+        	<div class="title">
                 <h1 class="display-3 white--text">Réservez votre logement atypique dans le monde entier, maintenant.</h1>
                     <v-layout class="mx-auto" row wrap>
                         <v-flex align-center xs12 class="my-3">
@@ -61,5 +63,13 @@
     .agile__list,
     .agile__slide {
       height: 100%;
+    }
+    .logo-ah {
+    	position: absolute;
+    	top: 64px;
+    	left: 0;
+    	width: 256px;
+    	height: auto;
+    	box-sizing: content-box;
     }
 </style>

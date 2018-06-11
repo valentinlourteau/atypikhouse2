@@ -16,7 +16,7 @@
                 <td>{{ moment(props.item.dateReservation).format('DD/MM/YYYY') }}</td>
                 <td>{{ moment(props.item.dateDebut).format('DD/MM/YYYY') }}</td>
                 <td>{{ moment(props.item.dateFin).format('DD/MM/YYYY') }}</td>
-                <td>{{ props.item.totalAmount }}</td>
+                <td>{{ props.item.totalAmount }} €</td>
                 <td>{{ getStatusText(props.item.status) }}</td>
                 <td>
                 <v-menu v-if="props.item.status == 'A'" offset-y>
