@@ -10,10 +10,9 @@
           <v-btn class="mx-auto" style="display:block;" color="secondary" @click="imLucky()" flat>Surprenez moi !</v-btn>
         </v-flex>
       </v-layout>
-      <v-divider></v-divider>
       
       <v-dialog v-model="dialog" persistent max-width="580">
-        <v-btn slot="activator" color="white" text="black">Arrivée-Départ</v-btn>
+        <v-btn slot="activator" color="primary" class="black--text">Arrivée-Départ</v-btn>
 
         <v-card>
         	<v-card-title>
@@ -37,7 +36,7 @@
       </v-dialog>
 
       <v-dialog v-model="dialog1" persistent max-width="580">
-        <v-btn slot="activator" color="white" text="black">Prix</v-btn>
+        <v-btn slot="activator" color="primary" class="black--text">Prix</v-btn>
 
         <v-card>
         			<div class="headline">Prix</div>
@@ -70,7 +69,7 @@
       </v-dialog>
       <v-dialog v-model="dialog2" persistent max-width="580">
 
-        <v-btn slot="activator" color="white" text="black">Capacité</v-btn>
+        <v-btn slot="activator" color="primary" class="black--text">Capacité</v-btn>
         <v-card ml4>
           <!-- Capacité d'accueil -->
           <v-flex xs12>
@@ -110,7 +109,7 @@
       </v-dialog>
       <v-dialog v-model="dialog3" persistent max-width="580">
 
-        <v-btn slot="activator" color="white" text="black">Type de logement</v-btn>
+        <v-btn slot="activator" color="primary" class="black--text">Type de logement</v-btn>
         <v-card>
         			<div class="headline">Type de logement</div>
 			            <v-divider></v-divider>
@@ -132,7 +131,7 @@
 
       </v-dialog>
       <v-dialog v-model="dialog4" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
-        <v-btn slot="activator" color="white" text="black">plus de filtres</v-btn>
+        <v-btn slot="activator" color="secondary" class="black--text">plus de filtres</v-btn>
 
         <v-card tile>
           <v-toolbar card dark color="primary">
@@ -173,7 +172,6 @@
           <div style="flex: 1 1 auto;"></div>
         </v-card>
       </v-dialog>
-      <v-divider></v-divider>
 
             <v-container grid-list-lg>
         <v-layout row wrap>
@@ -206,12 +204,37 @@
                   </v-layout>
                 </v-container>
 
-                <v-card-title>
-                  <v-flex class="display-2 blue--text" xs12>{{ accomodation.name }}</v-flex>
-                  <v-flex class="subheading" xs12>{{ accomodation.description }}</v-flex>
+                <v-card-title class="yellow">
+                  <v-flex class="display-2" xs12>{{ accomodation.name }}</v-flex>
+                  <v-flex class="subheading" xs12>{{ accomodation.description }}</v-flex>  
                 </v-card-title>
 
                 <v-card-text>
+                
+                <v-subheader>Informations générales</v-subheader>
+                  <v-flex xs12>
+                    	<v-chip color="primary" class="black--text">{{ accomodation.type.frname }}</v-chip>
+                    	<v-chip color="primary" class="black--text">{{ accomodation.priceNight }} € par nuit</v-chip>
+                    	<v-chip color="secondary" class="black--text">{{ accomodation.city }}</v-chip>
+                    	<v-chip>{{ accomodation.guests }} invités maximum</v-chip>
+                    	<v-chip>{{ accomodation.beds }} lit(s)</v-chip>
+                    	<v-chip>{{ accomodation.bedrooms }} chambre(s)</v-chip>
+                    	<v-chip>{{ accomodation.bathrooms }} salle(s) de bain</v-chip>
+                    	<v-chip>{{ accomodation.durationmin }} jours minimum</v-chip>
+                    	<v-chip>{{ accomodation.durationmax }} jours maximum</v-chip>
+                    	<!-- Equipements -->
+                    	<v-subheader>Equipements</v-subheader>
+                    	<v-chip v-for="equipment in accomodation.equipments" :key="equipment._id">{{ equipment.frname }}</v-chip>
+                    	<!-- Règlement -->
+                    	<v-subheader>Règlement</v-subheader>
+                    	<v-chip v-for="rule in accomodation.requirements" :key="rule._id">{{ rule.frname }}</v-chip>
+                    	<!-- Espaces accessibles -->
+                    	<v-subheader>Espaces accessibles</v-subheader>
+                    	<v-chip v-for="space in accomodation.spaces" :key="space._id"> {{ space.frname }}</v-chip>
+                    	<!-- Features -->
+                    	<v-subheader>Autres</v-subheader>
+                    	<v-chip v-for="feature in accomodation.features" :key="feature._id">{{ feature.name }} : {{ feature.value }}</v-chip>
+                    </v-flex>
 
                   <v-layout row unwrap>
                     <v-flex style="display:flex;" xs12 md6>
@@ -222,6 +245,7 @@
                         <v-icon>{{ accomodation.showLocationProcess ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>RESERVER</v-btn>
                     </v-flex>
                   </v-layout>
+                  
                 </v-card-text>
 
                 <v-card-text v-show="accomodation.showLocationProcess && accomodation.calendar != null">
