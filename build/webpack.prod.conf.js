@@ -15,9 +15,9 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const loadMinified = require('./load-minified')
 const PrerenderSpaPlugin = require('prerender-spa-plugin')
 
-const env = process.env.NODE_ENV === 'testing'
-  ? require('../config/test.env')
-  : config.build.env
+const env = process.env.NODE_ENV === 'testing' ?
+  require('../config/test.env') :
+  config.build.env
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -38,33 +38,33 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env': env
     }),
     new PrerenderSpaPlugin(
-    		// Path to compiled app
-    		path.join(__dirname, '../dist'),
-    		// List of endpoints you wish to prerender
-    		[
-    			'/',
-    		    '/home',
-    		    '/account',
-    		    '/mytrips',
-    		    '/manageUsers',
-    		    '/alerte',
-    		    '/manager',
-    		    '/tripDetail',
-    		    '/cgv',
-    			'/cgu',
-    		    '/plansite',
-    		    '/contact',
-    		    '/mentionlegale',
-    		    '/discover',
-    		    '/About',
-    		    '/realEstate/home',
-    		    '/realEstate/new',
-    		    '/realEstate/detail',
-    			'/messages',
-    			'/notifications',
-    			'/admin/inputs',
-    			'/admin/health-check'
-    		]
+      // Path to compiled app
+      path.join(__dirname, '../dist'),
+      // List of endpoints you wish to prerender
+      [
+        '/',
+        '/home',
+        '/account',
+        '/mytrips',
+        '/manageUsers',
+        '/alerte',
+        '/manager',
+        '/tripDetail',
+        '/cgv',
+        '/cgu',
+        '/plansite',
+        '/contact',
+        '/mentionlegale',
+        '/discover',
+        '/About',
+        '/realEstate/home',
+        '/realEstate/new',
+        '/realEstate/detail',
+        '/messages',
+        '/notifications',
+        '/admin/inputs',
+        '/admin/health-check'
+      ]
     ),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
@@ -87,9 +87,9 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing'
-        ? 'index.html'
-        : config.build.index,
+      filename: process.env.NODE_ENV === 'testing' ?
+        'index.html' :
+        config.build.index,
       template: 'index.html',
       inject: true,
       minify: {
@@ -125,13 +125,11 @@ const webpackConfig = merge(baseWebpackConfig, {
       chunks: ['vendor']
     }),
     // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*']
-      }
-    ]),
+    new CopyWebpackPlugin([{
+      from: path.resolve(__dirname, '../static'),
+      to: config.build.assetsSubDirectory,
+      ignore: ['.*']
+    }]),
     // service worker caching
     new SWPrecacheWebpackPlugin({
       cacheId: 'atypikhouse2',
