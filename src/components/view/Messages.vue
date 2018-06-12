@@ -22,6 +22,7 @@
           </v-card>
         </v-flex>
 
+		<!-- Les messages -->
         <v-flex xs12 sm7>
           <v-card>
             <v-card-title>
