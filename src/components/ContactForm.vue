@@ -27,35 +27,30 @@ import Modal from './Modal';
 export default {
 	data: function () {
 		return {
-			sender: null,
-			receiver: null,
+			sender: this.$store.state.user.id,
 			message: "",
 		}
 	},
-	watch: {
-		"senderProp" : function(newVal, oldVal) {
-			this.sender = newVal;
-		},
-		"receiverProp" : function(newVal, oldVal) {
-			this.receiver = newVal;
-		},
-	},
-	props: {
-		showModal: Boolean,
-		senderProp: Object,
-		receiverProp: Object,
-	},
+	props: ["showModal", "receiverProp"],
 	components: {
 		Modal,
 	},
 	methods: {
 		//Envoi d'un message
 		onSendMessage() {
+			var vue = this;
 			this.$validator.validateAll().then(validate => {
 				if (validate) 
-					//TODO requête API envoi de message
+					vue.$http.post("message", {
+						sender: vue.sender,
+						receiver: vue.receiverProp,
+						message: vue.message
+					}).then(response => {
+						if (response.status == 200) {
+							vue.$store.commit("snackbar", "Message envoyÃ©");
+						}
+					})
 					this.$emit('close');
-					this.$store.commit("snackbar", "Message envoyé");
 				})
 			},
 		},

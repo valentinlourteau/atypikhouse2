@@ -13,6 +13,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const loadMinified = require('./load-minified')
+const PrerenderSpaPlugin = require('prerender-spa-plugin')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -36,6 +37,35 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
+    new PrerenderSpaPlugin(
+    		// Path to compiled app
+    		path.join(__dirname, '../dist'),
+    		// List of endpoints you wish to prerender
+    		[
+    			'/',
+    		    '/home',
+    		    '/account',
+    		    '/mytrips',
+    		    '/manageUsers',
+    		    '/alerte',
+    		    '/manager',
+    		    '/tripDetail',
+    		    '/cgv',
+    			'/cgu',
+    		    '/plansite',
+    		    '/contact',
+    		    '/mentionlegale',
+    		    '/discover',
+    		    '/About',
+    		    '/realEstate/home',
+    		    '/realEstate/new',
+    		    '/realEstate/detail',
+    			'/messages',
+    			'/notifications',
+    			'/admin/inputs',
+    			'/admin/health-check'
+    		]
+    ),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false

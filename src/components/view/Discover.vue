@@ -362,7 +362,7 @@
 
                 </v-card-text>
 
-                <contact-form :showModal="contactOwner" @close="contactOwner = false;" :sender="$store.state.user" receiver="accomodation.host"></contact-form>
+                <contact-form :showModal="contactOwner" @close="contactOwner = false;" :receiverProp="accomodation.host"></contact-form>
 
               </div>
 
@@ -408,6 +408,7 @@
               "showLocationProcess",
               false
             );
+            this.$set(this.accomodations[accomodation], "host", "");
           }
         }
       });
@@ -489,7 +490,7 @@
             if (response.status == 200) {
               //Permet de supprimer tous les champs sauf viewDetail qu'on a besoin de suivre pour mettre les valeurs du détail
               Object.keys(accomodation).forEach(function(key) {
-                if (key != "viewDetail" && key != "showLocationProcess")
+                if (key != "viewDetail" && key != "showLocationProcess" && key != "host")
                   delete accomodation[key];
               });
               Object.keys(response.body.accomodation).forEach(function(key) {
