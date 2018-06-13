@@ -242,7 +242,7 @@
 
                         <v-card-media :src="nearby.images[0] == null ? '/static/images/no_bkg_state.svg' : nearby.images[0].data" height="200px"></v-card-media>
                         <v-card-title v-bind:class="{blue: index % 2 == 0, yellow: index % 2 != 0}" primary-title>
-                          <div class="headline">{{ nearby.name }}</div>
+                          <div class="headline" style="width:100%;">{{ nearby.name }}</div>
                           <div>{{ nearby.description }}</div>
                         </v-card-title>
 
@@ -258,7 +258,7 @@
                     </v-flex>
                   </v-layout>
 
-                  <v-layout row unwrap>
+                  <v-layout v-if="$store.state.user != null" row unwrap>
                     <v-flex style="display:flex;" xs12 md6>
                       <v-btn @click="onContactOwner(accomodation)" class="mx-auto" outline large flat>CONTACTER</v-btn>
                     </v-flex>
@@ -267,6 +267,7 @@
                         <v-icon>{{ accomodation.showLocationProcess ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>RESERVER</v-btn>
                     </v-flex>
                   </v-layout>
+                  <v-alert type="info" :value="true" v-else>Veuillez vous connecter pour contacter le propriétaire ou réserver le bien</v-alert>
 
                 </v-card-text>
 
@@ -591,7 +592,7 @@
             this.$store.commit("snackbar", "Réservation effectuée");
             accomodation.viewDetail = false;
             setTimeout(function() {
-              vue.$store.commit("snackbar", "Accès à la réservation");
+              //vue.$store.commit("snackbar", "Accès à la réservation");
               //TODO rediriger vers le détail de la réservation
             }, 1500);
           }

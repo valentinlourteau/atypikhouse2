@@ -32,6 +32,7 @@
               <template v-for="(message, index) in selectedConv.messages">
                 <v-list-tile :key="index" avatar>
                   <v-list-tile-avatar>
+                  <!-- TODO METTRE L'IMAGE DU SENDER -->
                     <img src="/static/images/background.jpg">
                   </v-list-tile-avatar>
                   <v-list-tile-content>
@@ -40,9 +41,14 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </template>
+              <v-list-tile>
+                  <v-list-tile-content>
+                    <v-text-field v-model="newMessage.message" label="Votre message"></v-text-field>
+                    <v-list-tile-sub-title v-html="message.message"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
             </v-list>
             <v-alert type="info" :value="true" v-else>Sélectionnez une conversation pour voir les messages</v-alert>
-
           </v-card>
 
         </v-flex>
@@ -75,6 +81,11 @@
     data: function() {
       return {
         messages: [],
+        newMessage: {
+        	message: '',
+        	sender: this.$store.state.user,
+        	receiver: null
+        }
         conversations: [],
         selectedConv: null
       };
@@ -82,6 +93,7 @@
     methods: {
       onViewDetail(conv) {
         this.selectedConv = conv;
+        this.newMessage.receiver = conv.receiver;
       }
     }
   };

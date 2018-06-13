@@ -44,7 +44,7 @@
 			</v-layout>
 		</v-footer>
 
-		<v-btn v-if="$store.state.user.admin" v-on:click="editMode = true;" fab color="primary" fixed right bottom>
+		<v-btn v-if="$store.state.user != null && $store.state.user.admin" v-on:click="editMode = true;" fab color="secondary" fixed right bottom>
 			<v-icon class="black--text">edit</v-icon>
 		</v-btn>
 

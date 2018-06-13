@@ -49,6 +49,9 @@
               <v-flex xs12>
                 <v-text-field v-model="editedItem.email" label="Adresse e-mail"></v-text-field>
               </v-flex>
+              <v-flex xs12>
+                <v-checkbox v-model="editedItem.admin" label="Admin ?"></v-checkbox>
+              </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
