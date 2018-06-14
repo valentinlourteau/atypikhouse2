@@ -435,7 +435,7 @@
         this.availableFilters.listOfAvailableRules
       );
 
-      this.$http.get("accomodation").then(response => {
+      this.$http.post("accomodation/filters").then(response => {
         if (response.status == 200) {
           this.accomodations = response.body.accomodations;
           for (var accomodation in this.accomodations) {
@@ -506,10 +506,11 @@
       //La méthode pour chercher avec les filtres
       onClickSearchWithFilter() {
         this.$store.commit("snackbar", "C'est parti !");
-        this.$http.get("accomodation/filters", this.filter).then(response => {
+        this.$http.post("accomodation/filters", this.filter).then(response => {
           if (response.status == 200) {
+        	console.log("recherche effectuée")
             this.accomodations.length = 0;
-            this.accomodations.concat(response.body.accomodations);
+            this.accomodations = this.accomodations.concat(response.body.accomodations);
           }
         })
       },

@@ -41,7 +41,7 @@
             </v-list-tile-content>
           </v-list-tile>
 
-          <v-list-group v-else sub-group no-action value="true">
+          <v-list-group v-else-if="$store.state.user != null && $store.state.user.admin" sub-group no-action value="true">
             <v-list-tile slot="activator">
               <v-list-tile-title>Administration</v-list-tile-title>
             </v-list-tile>
@@ -107,14 +107,14 @@
             if: !this.$store.state.admin,
             divider: false
           },
-          {
-            title: "Notifications",
-            icon: "notification_important",
-            link: "/notifications",
-            if: !this.$store.state.admin,
-            badge: 6,
-            divider: true
-          },
+//           {
+//             title: "Notifications",
+//             icon: "notification_important",
+//             link: "/notifications",
+//             if: !this.$store.state.admin,
+//             badge: 6,
+//             divider: true
+//           },
           {
             title: "Administrateur",
             icon: "",

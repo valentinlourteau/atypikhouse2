@@ -28,10 +28,6 @@
       </v-layout>
     </v-container>
 
-    <v-btn @click="dialog = true;" color="yellow" fab fixed right bottom>
-      <v-icon>add</v-icon>
-    </v-btn>
-
     <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card>
         <v-card-title>

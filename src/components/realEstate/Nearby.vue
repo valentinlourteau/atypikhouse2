@@ -55,7 +55,7 @@
 						<v-text-field v-model="nearby.website" label="Site web"></v-text-field>
 						<file-upload accept="image/*" @formData="onChooseImg($event)"></file-upload>
 						<!-- TODO A ENLEVER A LA FIN CAR CEST UNE VALEUR GEREE PAR L'OUTIL -->
-						<v-text-field v-model="nearby.majDate" label="Date de mise à jour"></v-text-field>
+<!-- 						<v-text-field v-model="nearby.majDate" label="Date de mise à jour"></v-text-field> -->
 
 					</v-card-text>
 
