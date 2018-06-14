@@ -13,7 +13,8 @@ const translationsFr = {
 	"accomodation.stepper.step.6": "Photos",
 	"accomodation.stepper.step.7": "Description",
 	"accomodation.stepper.step.8": "Règlement",
-	"accomodation.stepper.step.9": "Gestion du temps",
+	"accomodation.stepper.step.9": "Informations additionnelles",
+	"accomodation.stepper.step.10": "Gestion du temps",
 	"minimum.price.per.night" : "Prix minimum par nuit",
 	"maximum.price.per.night" : "Prix maximum par nuit"
 };

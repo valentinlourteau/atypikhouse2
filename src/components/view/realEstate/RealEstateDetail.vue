@@ -27,7 +27,8 @@
 										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.name" label="Nom" :rules="[v => !!v || 'Le nom est requis',
 	      	v => v.length < 20 || 'Le nom doit être inférieur à 20 caractères']"></read-write-field>
 										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.description" label="Description" :rules="[v => !!v || 'La description est requise']"></read-write-field>
-										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.type" label="Type de bien"></read-write-field>
+										<read-write-field :read="true" v-model="accomodation.priceNight" label="Prix à la nuit" :rules="[v => !!v || 'Le prix à la nuit est requis']"></read-write-field>
+										<label class="label"></label>
 
 										<v-divider></v-divider>
 
@@ -45,10 +46,17 @@
 
 										<v-divider></v-divider>
 
+										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.city" label="Ville"></read-write-field>
+										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.zipcode" label="Code postal"></read-write-field>
+										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.street" label="Rue"></read-write-field>
+										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.apartment" label="Appartement"></read-write-field>
+
+										<v-divider></v-divider>
+
 									</v-card-text>
 
 									<v-card-actions>
-										<v-btn v-if="generalInformationsReadMode" class="black--text" @click="generalInformationsReadMode = false" flat>Editer</v-btn>
+										<v-btn v-if="generalInformationsReadMode" class="black--text" @click="$router.push('/realEstate/new/' + accomodation._id)" flat>Editer</v-btn>
 										<v-btn v-if="!generalInformationsReadMode" class="black--text" @click="onCancelGeneralInformations()" flat>Annuler</v-btn>
 										<v-btn v-if="!generalInformationsReadMode" class="black--text" @click="onSaveGeneralInformations()" color="blue" flat>Enregistrer</v-btn>
 									</v-card-actions>

@@ -3,16 +3,16 @@
   <div>
     <v-container>
       <v-layout class="mx-auto" row wrap>
-        <v-flex xs6 offset-xs3 align-center>
-          <v-text-field prepend-icon="search" v-model="search" :placeholder="getRandomPlaceHolder()" solo></v-text-field>
+        <v-flex lg6 xs12 offset-lg3 align-center>
+          <v-text-field prepend-icon="search" v-model="filter.city" :placeholder="getRandomPlaceHolder()" solo></v-text-field>
         </v-flex>
-        <v-flex xs12>
+        <v-flex v-if="false" xs12>
           <v-btn class="mx-auto" style="display:block;" color="secondary" @click="imLucky()" flat>Surprenez moi !</v-btn>
         </v-flex>
       </v-layout>
 
       <v-dialog v-model="dialog" persistent max-width="580">
-        <v-btn slot="activator" color="primary" class="black--text">Arrivée-Départ</v-btn>
+        <v-btn v-if="false" slot="activator" color="primary" class="black--text">Arrivée-Départ</v-btn>
 
         <v-card>
           <v-card-title>
@@ -36,30 +36,27 @@
       </v-dialog>
 
       <v-dialog v-model="dialog1" persistent max-width="580">
-        <v-btn slot="activator" color="primary" class="black--text">Prix</v-btn>
+        <v-btn slot="activator" color="primary" class="black--text mt-3">Prix</v-btn>
 
         <v-card>
-          <div class="headline">Prix</div>
-          <v-divider></v-divider>
+          <v-card-title>
+            <div class="headline">Prix</div>
+          </v-card-title>
           <v-layout row wrap>
-            <v-layout row wrap>
-
-              <v-subheader>{{ $t('minimum.price.per.night') }}</v-subheader>
-              <v-flex xs8 ml-4>
-                <v-slider :max="255" v-model="PriceMin"></v-slider>
-              </v-flex>
-              <v-flex xs3>
-                <v-text-field v-model="PriceMin" type="number"></v-text-field>
-              </v-flex>
-              <v-subheader>{{ $t('maximum.price.per.night') }}</v-subheader>
-              <v-flex xs8 xs8 ml-4>
-                <v-slider :max="500" v-model="PriceMax"></v-slider>
-              </v-flex>
-              <v-flex xs3>
-                <v-text-field v-model="PriceMax" type="number"></v-text-field>
-              </v-flex>
-            </v-layout>
-
+            <v-subheader>{{ $t('minimum.price.per.night') }}</v-subheader>
+            <v-flex xs8 ml-4>
+              <v-slider :max="255" v-model="filter.priceRange.min"></v-slider>
+            </v-flex>
+            <v-flex xs3>
+              <v-text-field v-model="filter.priceRange.min" type="number"></v-text-field>
+            </v-flex>
+            <v-subheader>{{ $t('maximum.price.per.night') }}</v-subheader>
+            <v-flex xs8 ml-4>
+              <v-slider v-model="filter.priceRange.max" :min="filter.priceRange.min" :max="1000"></v-slider>
+            </v-flex>
+            <v-flex xs3>
+              <v-text-field v-model="filter.priceRange.max" type="number"></v-text-field>
+            </v-flex>
           </v-layout>
           <v-spacer></v-spacer>
           <v-btn color="black" flat @click.native="dialog1 = false">Annuler</v-btn>
@@ -68,37 +65,40 @@
       </v-dialog>
       <v-dialog v-model="dialog2" persistent max-width="580">
 
-        <v-btn slot="activator" color="primary" class="black--text">Capacité</v-btn>
-        <v-card ml4>
+        <v-btn slot="activator" color="primary" class="black--text mt-3">Capacité</v-btn>
+        <v-card>
           <!-- Capacité d'accueil -->
-          <v-flex xs12>
-            <div class="headline">Capacité</div>
-            <v-divider></v-divider>
-          </v-flex>
-          <v-flex xs9 ml-4>
-            <v-slider v-model="number" min="1" max="20" label="Nombre des personnes"></v-slider>
-          </v-flex>
-          <v-flex xs3 ml-4>
-            <v-text-field v-model="number" type="number"></v-text-field>
-          </v-flex ml-4>
+          <v-card-title>
+            <div class="headline">Capacité d'accueil</div>
+          </v-card-title>
+          <v-card-text>
+            <v-layout row wrap>
+              <v-flex xs9>
+                <v-slider v-model="filter.guests" min="1" max="20" label="Nombre des personnes"></v-slider>
+              </v-flex>
+              <v-flex xs3>
+                <v-text-field v-model="filter.guests" type="number"></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
           <!-- Nombre de lits -->
-          <v-flex xs12 ml-4>
+          <!-- <v-flex xs12 ml-4>
           </v-flex>
           <v-flex xs9 ml-4>
             <v-slider v-model="beds" min="1" max="20" xs9 label="Nombre des lits"></v-slider>
           </v-flex>
           <v-flex xs3 ml-4>
-            <v-text-field v-model="beds" type="number"></v-text-field>
-          </v-flex>
+            <v-text-field v-model="beds" type="number"></v-text-field> -->
+          <!-- </v-flex> -->
           <!-- Nombre de chambres -->
-          <v-flex xs12 ml-4>
+          <!-- <v-flex xs12 ml-4>
           </v-flex>
           <v-flex xs9 ml-4>
             <v-slider v-model="rooms" min="1" max="20" xs9 label="Nombre des chambres"></v-slider>
           </v-flex>
           <v-flex xs3 ml-4>
             <v-text-field v-model="rooms" type="number"></v-text-field>
-          </v-flex>
+          </v-flex> -->
           <v-spacer></v-spacer>
           <v-btn color="black" flat @click.native="dialog2 = false">Annuler</v-btn>
           <v-btn color="primary" flat @click.native="dialog2 = false">Valider</v-btn>
@@ -106,7 +106,7 @@
           </v-layout>
         </v-card>
       </v-dialog>
-      <v-dialog v-model="dialog3" persistent max-width="580">
+      <v-dialog v-if="false" v-model="dialog3" persistent max-width="580">
 
         <v-btn slot="activator" color="primary" class="black--text">Type de logement</v-btn>
         <v-card>
@@ -129,7 +129,7 @@
         </v-card>
 
       </v-dialog>
-      <v-dialog v-model="dialog4" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
+      <v-dialog v-if="false" v-model="dialog4" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
         <v-btn slot="activator" color="secondary" class="black--text">plus de filtres</v-btn>
 
         <v-card tile>
@@ -171,6 +171,9 @@
           <div style="flex: 1 1 auto;"></div>
         </v-card>
       </v-dialog>
+
+      <!-- La recherche !!!  -->
+      <v-btn @click="onClickSearchWithFilter()" color="secondary" class="black--text mt-3">Rechercher !</v-btn>
 
       <v-container grid-list-lg>
         <v-layout row wrap>
@@ -236,6 +239,7 @@
                     <v-subheader>Activités à proximité</v-subheader>
                   </v-flex>
                   <v-layout row wrap>
+                    <!-- Les activités à proximité -->
                     <v-flex v-for="(nearby, index) in accomodation.activities" :key="nearby._id" xs12 sm4 lg3 xl2 class="pa-2">
 
                       <v-card>
@@ -456,9 +460,15 @@
         dialog3: false,
         dialog4: false,
         filter: {
-          dateDebut: null,
-          dateFin: null,
-          selectedEquipments: []
+          priceRange: {
+            min: 0,
+            max: 9999
+          },
+          city: null,
+          guests: 1,
+          // dateDebut: null, //pas encore
+          // dateFin: null, //pas encore
+          // selectedEquipments: [] //pas encore
         },
         availableFilters: {
           listOfAccomodationTypes: [],
@@ -493,8 +503,26 @@
       };
     },
     methods: {
+      //La méthode pour chercher avec les filtres
+      onClickSearchWithFilter() {
+        this.$store.commit("snackbar", "C'est parti !");
+        this.$http.get("accomodation/filters", this.filter).then(response => {
+          if (response.status == 200) {
+            this.accomodations.length = 0;
+            this.accomodations.concat(response.body.accomodations);
+          }
+        })
+      },
       getRandomPlaceHolder() {
-        return "Une maison sous l'eau";
+        var items = [
+          "Paris",
+          "La Rochelle",
+          "Bordeaux",
+          "Madrid",
+          "Los Angeles",
+          "Dubai"
+        ];
+        return items[Math.floor(Math.random() * items.length)];
       },
       imLucky() {
         this.selectedAccomodation = null;
@@ -521,12 +549,21 @@
         else
           this.$http.get("accomodation/" + accomodation._id).then(response => {
             if (response.status == 200) {
-              //TODO requête http pour ramener la liste des nearby
+              //Récupère la liste des activités d'un bien
               this.$http.get("activity/" + accomodation._id).then(response => {
                 if (response.status == 200) {
                   accomodation.activities = response.body.activities;
                 }
               });
+              //Récupère la liste des réservations d'un bien
+              this.$http.get("reservation/" + accomodation._id).then(response => {
+                if (response.status == 200) {
+                  console.log("je récupère les réservations");
+                  console.log(response.body.reservations.length);
+                  accomodation.reservations = response.body.reservations;
+                }
+              });
+
               //Permet de supprimer tous les champs ceux dont on souhaite traçer les modifications
               Object.keys(accomodation).forEach(function(key) {
                 if (
@@ -602,13 +639,36 @@
       },
       getLockedDates(accomodation) {
         // console.log("dates : " + typeof accomodation.calendar);
+        var lockedDates = [];
         if (accomodation.calendar != null) {
-          return this.lodash
+          lockedDates = this.lodash
             .map(accomodation.calendar.lockedDates)
             .map(function(date) {
               return moment(date).format("YYYY-MM-DD");
             });
         }
+        //Ajout des jours réservés
+        if (
+          accomodation.reservations != null &&
+          accomodation.reservations.length > 0
+        ) {
+          accomodation.reservations.forEach(reservation => {
+            if (reservation.status == "C" || reservation.status == "D") {
+              var startDate, endDate;
+              startDate = moment(reservation.dateDebut);
+              endDate = moment(reservation.dateFin);
+              var now = startDate.clone(),
+                dates = [];
+
+              while (now.isSameOrBefore(endDate)) {
+                lockedDates.push(now.format("YYYY-MM-DD"));
+                now.add(1, "days");
+              }
+            }
+          });
+        }
+        console.log(lockedDates.length);
+        return lockedDates;
       },
       getLockedDays(accomodation) {
         var vue = this;

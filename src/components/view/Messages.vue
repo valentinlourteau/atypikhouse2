@@ -22,7 +22,7 @@
           </v-card>
         </v-flex>
 
-		<!-- Les messages -->
+        <!-- Les messages -->
         <v-flex xs12 sm7>
           <v-card>
             <v-card-title>
@@ -32,7 +32,7 @@
               <template v-for="(message, index) in selectedConv.messages">
                 <v-list-tile :key="index" avatar>
                   <v-list-tile-avatar>
-                  <!-- TODO METTRE L'IMAGE DU SENDER -->
+                    <!-- TODO METTRE L'IMAGE DU SENDER -->
                     <img src="/static/images/background.jpg">
                   </v-list-tile-avatar>
                   <v-list-tile-content>
@@ -42,13 +42,17 @@
                 </v-list-tile>
               </template>
               <v-list-tile>
-                  <v-list-tile-content>
-                    <v-text-field v-model="newMessage.message" label="Votre message"></v-text-field>
-                    <v-list-tile-sub-title v-html="message.message"></v-list-tile-sub-title>
-                  </v-list-tile-content>
-                </v-list-tile>
+                <v-list-tile-content>
+                  <v-text-field v-model="newMessage.message" label="Votre message"></v-text-field>
+                </v-list-tile-content>
+              </v-list-tile>
             </v-list>
             <v-alert type="info" :value="true" v-else>Sélectionnez une conversation pour voir les messages</v-alert>
+
+            <v-card-actions v-if="selectedConv != null">
+              <v-btn @click="sendMessage();" :disabled="newMessage.message == ''" flat>ENVOYER</v-btn>
+            </v-card-actions>
+
           </v-card>
 
         </v-flex>
@@ -62,30 +66,30 @@
     created: function() {
       var vue = this;
       this.$http.get("message").then(response => {
-    	  if (response.status == 200) {
-    		  console.log("je recupere les messages")
-    		  vue.messages = response.body.messages;
-    		  var receivers = vue.lodash.uniqBy(
-    			        vue.lodash.map(vue.messages, "receiver"),
-    			        "_id"
-    		  );
-    		  receivers.forEach(function(receiver) {
-    		        vue.conversations.push({
-    		          messages: vue.lodash.filter(vue.messages, { receiver: receiver }),
-    		          receiver: receiver
-    		        });
-    		  });
-    	  }
-      })      
+        if (response.status == 200) {
+          console.log("je recupere les messages");
+          vue.messages = response.body.messages;
+          var receivers = vue.lodash.uniqBy(
+            vue.lodash.map(vue.messages, "receiver"),
+            "_id"
+          );
+          receivers.forEach(function(receiver) {
+            vue.conversations.push({
+              messages: vue.lodash.filter(vue.messages, { receiver: receiver }),
+              receiver: receiver
+            });
+          });
+        }
+      });
     },
     data: function() {
       return {
         messages: [],
         newMessage: {
-        	message: '',
-        	sender: this.$store.state.user,
-        	receiver: null
-        }
+          message: "",
+          sender: this.$store.state.user.id,
+          receiver: null
+        },
         conversations: [],
         selectedConv: null
       };
@@ -93,7 +97,17 @@
     methods: {
       onViewDetail(conv) {
         this.selectedConv = conv;
-        this.newMessage.receiver = conv.receiver;
+        this.newMessage.receiver = conv.receiver._id;
+      },
+      sendMessage() {
+        var conv = this.selectedConv;
+        this.$http.post("message", this.newMessage).then(response => {
+          if (response.status == 200) {
+            //TODO voir pour populate la réponse
+            conv.messages.push(response.body.message);
+            this.$store.commit("snackbar", "Message envoyé");
+          }
+        })
       }
     }
   };

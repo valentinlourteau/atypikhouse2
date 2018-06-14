@@ -3,7 +3,7 @@
 
     <v-container fluid>
       <v-layout row wrap>
-        <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+        <v-flex xs12 sm12 xl6 offset-xl3>
           <v-card>
             <v-card-title>
               <span class="headline">Gestion des utilisateurs</span>

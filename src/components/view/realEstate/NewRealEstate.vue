@@ -6,23 +6,25 @@
 			<v-stepper ref="test" v-model="accomodation.currentStep">
 
 				<v-stepper-header>
-					<v-stepper-step step="1" :complete="maxStep > 0">{{$t('accomodation.stepper.step.1')}}</v-stepper-step>
+					<v-stepper-step step="1" :complete="maxStep > 0" editable>{{$t('accomodation.stepper.step.1')}}</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="2" :complete="maxStep > 1">{{$t('accomodation.stepper.step.2')}}</v-stepper-step>
+					<v-stepper-step step="2" :complete="maxStep > 1" editable>{{$t('accomodation.stepper.step.2')}}</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="3" :complete="maxStep > 2">{{$t('accomodation.stepper.step.3')}}</v-stepper-step>
+					<v-stepper-step step="3" :complete="maxStep > 2" editable>{{$t('accomodation.stepper.step.3')}}</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="4" :complete="maxStep > 3">{{$t('accomodation.stepper.step.4')}}</v-stepper-step>
+					<v-stepper-step step="4" :complete="maxStep > 3" editable>{{$t('accomodation.stepper.step.4')}}</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="5" :complete="maxStep > 4">{{$t('accomodation.stepper.step.5')}}s</v-stepper-step>
+					<v-stepper-step step="5" :complete="maxStep > 4" editable>{{$t('accomodation.stepper.step.5')}}</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="6" :complete="maxStep > 5">{{$t('accomodation.stepper.step.6')}}</v-stepper-step>
+					<v-stepper-step step="6" :complete="maxStep > 5" editable>{{$t('accomodation.stepper.step.6')}}</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="7" :complete="maxStep > 6">{{$t('accomodation.stepper.step.7')}}</v-stepper-step>
+					<v-stepper-step step="7" :complete="maxStep > 6" editable>{{$t('accomodation.stepper.step.7')}}</v-stepper-step>
 					<v-divider></v-divider>
-					<v-stepper-step step="8" :complete="maxStep > 7">{{$t('accomodation.stepper.step.8')}}</v-stepper-step>
+					<v-stepper-step step="8" :complete="maxStep > 7" editable>{{$t('accomodation.stepper.step.8')}}</v-stepper-step>
 					<v-divider></v-divider>
 					<v-stepper-step step="9" :complete="maxStep > 8">{{$t('accomodation.stepper.step.9')}}</v-stepper-step>
+					<v-divider></v-divider>
+					<v-stepper-step step="10" :complete="maxStep > 9" editable>{{$t('accomodation.stepper.step.10')}}</v-stepper-step>
 				</v-stepper-header>
 
 				<v-stepper-items>
@@ -214,6 +216,28 @@
 						<v-form ref="step9">
 							<v-layout row wrap>
 
+								<v-subheader>Renseignements supplémentaires</v-subheader>
+
+								<!-- Les différentes features que l'on peut ajouter -->
+								<v-flex v-for="feature in listOfAvailableFeatures" :key="feature._id" xs12>
+									<v-text-field v-model="feature.value" :label="feature.name" :prepend-icon="feature.icon" :type="feature.type == 'string' ? 'text' : 'number'"></v-text-field>
+								</v-flex>
+
+							</v-layout>
+						</v-form>
+
+						<br/>
+
+						<v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
+						<v-btn color="primary" @click="changeIndex(10)">Continuer</v-btn>
+
+					</v-stepper-content>
+
+					<v-stepper-content step="10">
+
+						<v-form ref="step10">
+							<v-layout row wrap>
+
 								<!-- Durée minimale de séjour -->
 								<v-flex xs12>
 									<v-subheader>Durée minimale de séjour (jours)</v-subheader>
@@ -239,13 +263,13 @@
 								<!-- Heure d'arrivée -->
 								<v-flex xs12 md6 lg6>
 									<v-subheader>Heure limite d'arrivée</v-subheader>
-									<v-time-picker v-model="accomodation.arrival"></v-time-picker>
+									<v-time-picker format="24hr" v-model="accomodation.arrival"></v-time-picker>
 								</v-flex>
 
 								<!-- Heure de départ -->
 								<v-flex xs12 md6>
 									<v-subheader>Heure limite de départ</v-subheader>
-									<v-time-picker v-model="accomodation.departure"></v-time-picker>
+									<v-time-picker format="24hr" v-model="accomodation.departure"></v-time-picker>
 								</v-flex>
 
 							</v-layout>
@@ -284,7 +308,7 @@
 	    this.accomodation.currentStep = 1;
 	    if (this.$route.params.accomodationId != null) {
 	      this.$http
-	        .get("accomodation/" + this.$route.params.accomodationId)
+	        .get("accomodation/light/" + this.$route.params.accomodationId)
 	        .then(response => {
 	          if (response.status == 200) {
 	            //on delay car si le premier bloc du stepper n'a pas eu le temps de s'afficher alors le stepper ne voudra pas changer
@@ -320,6 +344,7 @@
 	      listOfEquipments: [],
 	      listOfAvailableSpaces: [],
 	      listOfAvailableRules: [],
+	      listOfAvailableFeatures: [],
 	      accueilRules: [
 	        v => !!v || "l'item est requis",
 	        v => (v <= 20 && v > 0) || "Dois être compris entre 0 et 20"
@@ -373,12 +398,41 @@
 
 	      if (comp == null || comp.validate()) {
 	        console.log("all inputs properly validated or no form");
-	        console.log("Index : " + index);
 	        this.accomodation.currentStep = index;
 	        this.$refs.test.inputValue = this.accomodation.currentStep;
 	        if (index > this.maxStep) this.maxStep = index;
 	        //Validation de la première étape, je fais un POST, si je reviens en arrière je ne refais pas ça
 	        if (index == 2) this.$refs.gmaps.initMap();
+
+	        //Si je passe à l'étape des options supplémentaires alors je charge les features
+	        if (index == 9) {
+	          console.log("je passe aux features");
+	          this.$http
+	            .get("feature/" + this.accomodation.type)
+	            .then(response => {
+	              if (response.status == 200) {
+									console.log("je récupère les features");
+									this.listOfAvailableFeatures.length = 0;
+	                this.listOfAvailableFeatures = this.listOfAvailableFeatures.concat(response.body.features);
+	              }
+	            });
+	        }
+	        //La je traite les features ajoutées par l'utilisateur
+	        if (index == 10) {
+	          this.accomodation.features = [];
+	          this.listOfAvailableFeatures.forEach(feature => {
+							//dans le cas ou la feature a une valeur je l'ajoute à l'accomodation
+	            if (feature.value != null) {
+								var featureValue = {
+									ref: feature._id,
+									value: feature.type == 'number' ? Number(feature.value) : feature.value
+								};
+								this.accomodation.features.push(featureValue)
+	            }
+						});
+						console.log(this.accomodation.features);
+	        }
+
 	        if (this.accomodation._id == null) {
 	          this.$http.post("accomodation").then(response => {
 	            if (response.status == 200) {
@@ -400,7 +454,7 @@
 	            .put("accomodation/" + this.accomodation._id, this.accomodation)
 	            .then(response => {
 	              if (response.status == 200)
-	                console.log("etape validée et sauvegardée avec succès");
+	                console.log(response.body.accomodation);
 	            });
 	        }
 	      } else {

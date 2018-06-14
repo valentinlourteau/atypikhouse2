@@ -44,6 +44,16 @@
                 </div>
               </div>
             </v-card-text>
+
+            <v-list>
+                <v-list-tile v-for="feature in features" :key="feature._id">
+                  <v-list-tile-content>
+                    <v-list-tile-title v-html="feature.name"></v-list-tile-title>
+                    <v-list-tile-sub-title v-html="feature.type"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
+
             <v-card-actions v-if="selectedFlag == 'accomodationTypes' && selectedType != null">
               <v-btn @click="onInitAddNewFeature()" color="secondary" flat>AJOUTER</v-btn>
             </v-card-actions>
@@ -57,7 +67,8 @@
     <v-dialog v-model="featureDialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <div class="headline">{{ selectedFeature._id == null ? 'Ajouter un champs de saisie' : 'Editer un champs de saisie'}}</div>
+          <div style="width:100%" class="headline">{{ selectedFeature._id == null ? 'Ajouter un champs de saisie' : 'Editer un champs de saisie'}}</div>
+          <v-subheader>{{ selectedType != null ? selectedType.frname : '' }}</v-subheader>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
@@ -73,11 +84,11 @@
               </v-flex>
 
               <v-flex xs12>
-                <v-menu offset-y>
+                <v-menu style="width:100%" offset-y>
                   <v-text-field slot="activator" label="Type de valeur" v-model="selectedFeature.type"></v-text-field>
                   <v-list>
-                    <v-list-tile v-for="(type, index) in ['number', 'date', 'string']" :key="index" @click="selectedFeature.type = type">
-                      <v-list-tile-title>{{ type }}</v-list-tile-title>
+                    <v-list-tile v-for="(type, index) in [{text:'Nombre', value: 'number'}, {text:'Texte', value:'string'}]" :key="index" @click="selectedFeature.type = type.value">
+                      <v-list-tile-title>{{ type.text }}</v-list-tile-title>
                     </v-list-tile>
                   </v-list>
                 </v-menu>
@@ -156,7 +167,7 @@
           icon: "",
           name: "",
           accomodationtype: null
-        }
+        },
       };
     },
     methods: {
@@ -197,11 +208,20 @@
           if (response.status == 200) {
             this.features.push(response.body.savedFeature);
             this.$store.commit("snackbar", "Feature enregistrée");
+            this.featureDialog = false;
           }
-        })
+        });
       },
       onSelectType(type) {
-        this.selectedType = type;
+        if (this.selectedFlag == "accomodationTypes") {
+          this.selectedType = type;
+          this.$http.get("feature/" + type._id).then(response => {
+            if (response.status == 200) {
+              this.features.length = 0;
+              this.features = this.features.concat(response.body.features);
+            }
+          });
+        }
       }
     }
   };

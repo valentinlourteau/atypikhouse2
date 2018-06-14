@@ -1,8 +1,7 @@
 <template>
   <div>
-    </v-dialog>
     <v-container fluid>
-      <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+      <v-flex xs12>
         <v-card>
           <v-card-title class="headline">
             Mes voyages
@@ -17,7 +16,7 @@
               <td>{{ getStatusText(props.item.status) }}</td>
               <td class="justify-center layout px-0">
                 <v-layout row justify-center>
-                  <v-btn icon slot="activator">
+                  <v-btn @click="$router.push('/tripDetail/' + props.item._id)" icon>
                     <v-icon color="teal">visibility</v-icon>
                   </v-btn>
                 </v-layout>
@@ -37,41 +36,42 @@
       headers: [
         { text: "Bien concerné", value: "Bien" },
         { text: "Date de réservation", value: "DDR" },
-        { text: "Date de début", value: "dateDebut"},
-        { text: "Date de fin", value: "dateFin"},
-        { text: "Invités", value: "personnes"},
-        { text: "Statut", value: "statut"},
-        { text: "", value: "actions"}
+        { text: "Date de début", value: "dateDebut" },
+        { text: "Date de fin", value: "dateFin" },
+        { text: "Invités", value: "personnes" },
+        { text: "Statut", value: "statut" },
+        { text: "", value: "actions" }
       ],
-      travels: [],
+      travels: []
     }),
     created() {
-      this.$http.get("reservation/travels/" + this.$store.state.user.id).then(response => {
-        if (response.status == 200) {
-          this.travels = response.body.reservations;
-        }
-      });
+      this.$http
+        .get("reservation/travels/" + this.$store.state.user.id)
+        .then(response => {
+          if (response.status == 200) {
+            this.travels = response.body.reservations;
+          }
+        });
     },
     methods: {
       getStatusText(statut) {
-    		switch (statut) {
-    		case "A":
-    			return "Payé - en attente de validation";
-    			break;
-    		case "B":
-    			return "Payé - refusé";
-    			break;
-    		case "C":
-    			return "Payé - accepté";
-    			break;
-    		case "D":
-    			return "Terminée - séjour effectué";
-    			break;
-    		default:
-    			return "";
-    		
-    		}
-    	},
+        switch (statut) {
+          case "A":
+            return "Payé - en attente de validation";
+            break;
+          case "B":
+            return "Payé - refusé";
+            break;
+          case "C":
+            return "Payé - accepté";
+            break;
+          case "D":
+            return "Terminée - séjour effectué";
+            break;
+          default:
+            return "";
+        }
+      }
     }
   };
 </script>
@@ -80,5 +80,5 @@
 <style>
   td {
     vertical-align: middle !important;
-  } 
+  }
 </style>
