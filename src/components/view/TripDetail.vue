@@ -16,6 +16,7 @@
                       <v-subheader>Informations générales</v-subheader>
                       <v-card-text v-if="reservation != null">
 
+
                         <label class="label">Date de réservation</label>
                         <div>{{ moment(reservation.dateReservation).format('DD/MM/YYYY') }}</div>
                         <label class="label">Date de début</label>
@@ -122,7 +123,6 @@
   import ReadWriteField from "../utility/ReadWriteField";
   import FileUpload from "./../utility/FileUpload";
   import StarRating from "vue-star-rating";
-
   export default {
     components: {
       ReadWriteField,

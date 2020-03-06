@@ -1,15 +1,10 @@
 <template>
 	<div>
-
 		<v-alert class="ma-3" :value="true" type="info">Vous pouvez renseigner ici les activités à proximité de votre bien, elles permettront aux voyageurs de se projetter dans votre bien. Ajouter des informations précises et les maintenir à jour est un gage de sérieux pour le voyageur. N'hésitez pas à y mettre vos meilleurs clichés et pourquoi pas une petite anecdote !</v-alert>
 		<v-alert class="ma-3" :value="nearbyList.filter(nearby => nearby.oldInformations).length > 0" type="warning">Une ou plusieurs activités à proximité n'ont pas été mises à jours depuis longtemps !</v-alert>
-
 		<v-layout row wrap class="mx-2">
-
 			<v-flex v-for="nearby in nearbyList" :key="nearby._id" xs12 sm4 lg3 xl3 class="pa-2">
-
 				<v-card>
-
 					<v-card-media :src="nearby.images[0] == null ? '/static/images/no_bkg_state.svg' : nearby.images[0].data" height="200px"></v-card-media>
 					<v-card-title primary-title>
 						<div>
@@ -17,7 +12,6 @@
 							<span :class="nearby.oldInformations ? 'orange--text' : 'grey--text'">Mis à jour le : {{ getFormattedDate(nearby.majDate) }}</span>
 						</div>
 					</v-card-title>
-
 					<v-card-actions>
 						<v-btn :color="nearby.oldInformations ? 'orange' : 'secondary'" @click="onEditNearby(nearby)" flat>
 							<span style="order:2" :class="nearby.oldInformations ? 'orange--text' : ''">METTRE A JOUR</span>
@@ -28,25 +22,17 @@
 							<v-icon>delete</v-icon>
 						</v-btn>
 					</v-card-actions>
-
 				</v-card>
-
 			</v-flex>
-
 		</v-layout>
-
 		<v-btn color="primary" @click="onAddNewNearby()" fab fixed right bottom>
 			<v-icon color="black">add</v-icon>
 		</v-btn>
-
 		<v-dialog v-model="showDialogAddNearby" max-width="500px" persistent>
-
 			<v-card>
 				<form @submit.prevent="handleSubmit">
 					<v-subheader>Activité</v-subheader>
-
 					<v-card-text>
-
 						<v-text-field v-model="nearby.name" v-validate="'required'" :error-messages="errors.collect('name')" data-vv-name="name" label="Nom de l'activité" required></v-text-field>
 						<v-text-field v-model="nearby.description" v-validate="'required'" :error-messages="errors.collect('description')" data-vv-name="description" label="Description de l'activité" multi-line required></v-text-field>
 						<v-text-field v-model="nearby.price" label="prix indicatif"></v-text-field>
@@ -65,17 +51,13 @@
 					</v-card-actions>
 				</form>
 			</v-card>
-
 		</v-dialog>
-
 	</div>
 </template>
-
 <script type="text/javascript">
 	import Nearby from "../../class/entities/Nearby";
 	import FileUpload from "../utility/FileUpload";
 	import moment from "moment";
-
 	export default {
 	  components: {
 	    FileUpload
@@ -185,6 +167,5 @@
 	  }
 	};
 </script>
-
 <style scoped scss>
 </style>

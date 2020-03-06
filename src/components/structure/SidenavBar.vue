@@ -1,12 +1,9 @@
 <template>
   <div>
-
     <portal class="margin-left:none;" v-if="$store.state.user != null" to="headerToolbarIcon">
       <v-toolbar-side-icon class="hidden-lg-and-up" @click.stop="displayDrawer = !displayDrawer"></v-toolbar-side-icon>
     </portal>
-
     <v-navigation-drawer v-if="$store.state.user != null" persistent v-model="displayDrawer" app>
-
       <div v-on:click="redirectHome()" class="user-view">
         <div class="background">
           <img src="/static/images/background.jpg" style="width: 300px;">
@@ -22,10 +19,8 @@
           </div>
         </div>
       </div>
-
       <v-list>
         <div v-if="item.if" v-for="item in items" :key="item.title">
-
           <v-list-tile v-if="item.items == null" :to="item.link" active-class="yellow--text black">
             <v-list-tile-action v-if="item.badge == null">
               <v-icon>{{ item.icon }}</v-icon>
@@ -52,10 +47,8 @@
               </v-list-tile-action>
             </v-list-tile>
           </v-list-group>
-
           <v-divider v-if="item.divider"></v-divider>
         </div>
-
         <v-list-tile v-if="$store.state.user != null" @click="onClickDisconnect">
           <v-list-tile-action>
             <v-icon>exit_to_app</v-icon>
@@ -64,14 +57,10 @@
             <v-list-tile-title>Déconnexion</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-
       </v-list>
-
     </v-navigation-drawer>
-
   </div>
 </template>
-
 <script type="text/javascript">
   export default {
     mounted: function() {},
@@ -107,6 +96,7 @@
             if: !this.$store.state.admin,
             divider: false
           },
+       
 //           {
 //             title: "Notifications",
 //             icon: "notification_important",
@@ -157,13 +147,11 @@
     }
   };
 </script>
-
 <style scss>
   .user-view {
     position: relative;
     padding: 32px 32px 0;
   }
-
   .background {
     overflow: hidden;
     position: absolute;

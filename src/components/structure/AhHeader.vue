@@ -12,7 +12,6 @@
 	    
 	    
 	      <v-btn @click="$router.push('/About')" flat>Qui sommes-nous?</v-btn>
-	      <v-btn @click="$router.push('/discover')" flat>Voyager</v-btn>
 	      <v-btn v-if="this.$store.state.user == null" flat @click="showModalAuthenticate = true">Connexion</v-btn>
 	    </v-toolbar-items>
 

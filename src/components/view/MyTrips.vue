@@ -75,10 +75,9 @@
     }
   };
 </script>
-
-
 <style>
   td {
     vertical-align: middle !important;
+  
   }
-</style>
+</style> 

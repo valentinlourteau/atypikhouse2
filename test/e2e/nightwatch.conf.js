@@ -22,9 +22,7 @@ module.exports = {
       selenium_port: 4444,
       selenium_host: 'localhost',
       silent: true,
-      globals: {
-        devServerURL: 'http://localhost:' + (process.env.PORT || config.dev.port)
-      }
+     
     },
 
     chrome: {

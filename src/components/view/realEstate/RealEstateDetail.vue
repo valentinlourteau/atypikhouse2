@@ -1,33 +1,26 @@
 /* Le détail d'une annonce ... */
 <template>
 	<div>
-
 		<v-tabs v-model="activeTab" color="yellow" dark slider-color="black" centered @input="onChangeTab($event)">
-
 			<v-tab v-for="tab in tabs" :key="tab.text" ripple>
 				<span class="black--text">{{ tab.text }}</span>
 			</v-tab>
-
 			<!-- Information générales -->
 			<v-tab-item>
-
 				<v-container>
-
 					<v-layout row wrap>
-
 						<v-flex xs12 sm8 offset-sm2>
 							<v-card class="mb-4">
-
 								<v-form ref="generalInformationsForm">
 									<v-card-title>
 										<v-subheader>Informations générales</v-subheader>
 									</v-card-title>
 									<v-card-text>
-
 										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.name" label="Nom" :rules="[v => !!v || 'Le nom est requis',
 	      	v => v.length < 20 || 'Le nom doit être inférieur à 20 caractères']"></read-write-field>
 										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.description" label="Description" :rules="[v => !!v || 'La description est requise']"></read-write-field>
-										<read-write-field :read="true" v-model="accomodation.priceNight" label="Prix à la nuit" :rules="[v => !!v || 'Le prix à la nuit est requis']"></read-write-field>
+										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.type" label="Type de bien"></read-write-field>
+										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.priceNight" label="Prix à la nuit" :rules="[v => !!v || 'Le prix à la nuit est requis']"></read-write-field>
 										<label class="label"></label>
 
 										<v-divider></v-divider>
@@ -36,9 +29,7 @@
 										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.bedrooms" label="Nombre de chambres à coucher"></read-write-field>
 										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.beds" label="Nombre de lits"></read-write-field>
 										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.bathrooms" label="Nombre de salles de bain"></read-write-field>
-
 										<v-divider></v-divider>
-
 										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.durationmin" label="Nombre de jours minimum"></read-write-field>
 										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.durationmax" label="Nombre de jours maximum"></read-write-field>
 										<read-write-field :read="generalInformationsReadMode" v-model="accomodation.arrival" label="Heure d'arrivée maximale"></read-write-field>
@@ -56,18 +47,15 @@
 									</v-card-text>
 
 									<v-card-actions>
+										<v-btn v-if="generalInformationsReadMode" class="black--text" @click="generalInformationsReadMode = false" flat>Editer</v-btn>
 										<v-btn v-if="generalInformationsReadMode" class="black--text" @click="$router.push('/realEstate/new/' + accomodation._id)" flat>Editer</v-btn>
 										<v-btn v-if="!generalInformationsReadMode" class="black--text" @click="onCancelGeneralInformations()" flat>Annuler</v-btn>
 										<v-btn v-if="!generalInformationsReadMode" class="black--text" @click="onSaveGeneralInformations()" color="blue" flat>Enregistrer</v-btn>
 									</v-card-actions>
-
 								</v-form>
-
 							</v-card>
-
 							<v-card>
 								<v-subheader>Photos</v-subheader>
-
 								<!-- LISTE DES PHOTOS -->
 								<v-layout row wrap>
 									<v-flex xs12 lg6 xl4 v-for="picture in accomodation.images" :key="picture.fileName">
@@ -86,47 +74,30 @@
 										</v-card>
 									</v-flex>
 								</v-layout>
-
 								<file-upload accept="image/*" @formData="onChooseImg($event)"></file-upload>
 								<v-card-actions>
 									<v-btn class="black--text" @click="onSavePhotos()" color="blue" flat>Enregistrer</v-btn>
 								</v-card-actions>
 							</v-card>
-
 						</v-flex>
-
 					</v-layout>
-
 				</v-container>
-
 			</v-tab-item>
-
 			<!-- Calendrier -->
 			<v-tab-item>
-
 				<calendar :accomodationId="accomodation._id" />
-
 			</v-tab-item>
-
 			<!-- Réservations -->
 			<v-tab-item>
-
 				<reservations :accomodationId="accomodation._id" />
-
 			</v-tab-item>
-
 			<!-- A proximité -->
 			<v-tab-item>
-
 				<nearby :accomodationId="accomodation._id" />
-
 			</v-tab-item>
-
 		</v-tabs>
-
 	</div>
 </template>
-
 <script>
 	import Calendar from "../../realEstate/Calendar";
 	import Nearby from "../../realEstate/Nearby";
@@ -134,7 +105,6 @@
 	import ReadWriteField from "../../utility/ReadWriteField";
 	import FileUpload from "../../utility/FileUpload";
 	import Reservations from "../../realEstate/Reservations";
-
 	export default {
 	  components: {
 	    ReadWriteField,
@@ -244,7 +214,6 @@
 	  }
 	};
 </script>
-
 <style scoped>
 	.date-picker-title__year .picker__title__btn {
 	  color: black !important;

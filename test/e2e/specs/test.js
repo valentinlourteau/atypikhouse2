@@ -10,9 +10,9 @@ module.exports = {
 
     browser
       .url(devServer)
-      .waitForElementVisible('#app', 5000)
+      .waitForElementVisible('#app', 8000)
       .assert.elementPresent('.hello')
-      .assert.containsText('h1', 'Welcome to Your Vue.js PWA')
+      .assert.containsText('h1', 'Offrez-vous la Magie d"une nuit insolite')
       .assert.elementCount('img', 1)
       .end()
   }

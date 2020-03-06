@@ -85,12 +85,10 @@ const veeValidateConfig = {
 		  i18nRootKey: 'validations' // the nested key under which the
 										// validation messsages will be located
 		};
-
 Vue.use(VeeValidate, veeValidateConfig);
 Vue.use(PortalVue)
-
+Vue.config.productionTip = false
 Vue.config.productionTip = false;
-
 const router = new VueRouter({
   routes: [
     { path: '/', component: Home },
@@ -120,7 +118,6 @@ const router = new VueRouter({
   ],
   mode: 'history'
 });
-
 const store = new Vuex.Store({
   state: {
 	  user : Vue.ls.get("user"),
@@ -141,31 +138,25 @@ const store = new Vuex.Store({
 	  },
   },
 });
-
 import translationsEn from './resources/translations/translation_en';
 import translationsFr from './resources/translations/translation_fr';
-
 Vue.use(vuexI18n.plugin, store);
-
 Vue.i18n.add('fr', translationsFr);
 Vue.i18n.add('en', translationsEn);
-
 Vue.i18n.set('fr');
-
 // Vue.http.options.root = 'http://46.226.111.181:4040/api/';
 
 //saisir ici l'ip v4 du pc si jamais on veut se servir de l'api sur le même réseau
-// Vue.http.options.root = 'http://192.168.1.16:4040/api/';
+//Vue.http.options.root = 'http://192.168.1.16:4040/api/';
 Vue.http.options.root = 'http://localhost:4040/api/';
 Vue.http.options.rejectUnauthorized = false;
 Vue.http.headers.common['Authorization'] = 'Bearer ' + Vue.ls.get("token");
 
-GoogleMapsLoader.KEY = 'AIzaSyB1h7TjJ_nYVQn09j9JZsdVwD59C7Skp78';
+
+GoogleMapsLoader.KEY = 'AIzaSyCQcQLvoNyLPv5XDt4mBW-kizJHd-_Vxf4';
 GoogleMapsLoader.LIBRARIES = ['geometry', 'places'];
 GoogleMapsLoader.LANGUAGE = 'fr';
-
 export default store;
-
 /* eslint-disable no-new */
 var vue = new Vue({
   el: '#app',
@@ -174,6 +165,4 @@ var vue = new Vue({
   components: { App },
   template: '<App/>'
 })
-
 App.vue
-

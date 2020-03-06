@@ -18,7 +18,6 @@
                 </v-list-tile>
               </template>
             </v-list>
-
           </v-card>
         </v-flex>
 
@@ -60,12 +59,12 @@
     </v-container>
   </div>
 </template>
-
 <script>
   export default {
     created: function() {
       var vue = this;
       this.$http.get("message").then(response => {
+          
         if (response.status == 200) {
           console.log("je recupere les messages");
           vue.messages = response.body.messages;
@@ -86,6 +85,7 @@
       return {
         messages: [],
         newMessage: {
+         
           message: "",
           sender: this.$store.state.user.id,
           receiver: null

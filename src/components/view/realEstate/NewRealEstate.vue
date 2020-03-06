@@ -2,7 +2,6 @@
 <template>
 	<div>
 		<div class="container">
-
 			<v-stepper ref="test" v-model="accomodation.currentStep">
 
 				<v-stepper-header>
@@ -28,7 +27,6 @@
 				</v-stepper-header>
 
 				<v-stepper-items>
-
 					<v-stepper-content step="1">
 						<h1 class="display-2">Bienvenue sur la création d'un bien atypique.</h1>
 						<h2 class="display-1">Vous allez contribuer à l'enrichissement de notre offre, nous vous en remercions.</h2>
@@ -38,26 +36,20 @@
 						<p>Pour votre confort, nous enregistrons automatiquement votre annonce au fur et à mesure que vous complétez les étapes, de sorte à pouvoir reprendre la saisie si vous ne pouvez pas tout faire en une fois.</p>
 						<p>Voila, vous savez tous ! On commence ?</p>
 						<v-btn color="primary" @click.native="changeIndex(2);">Continuerr</v-btn>
-
 					</v-stepper-content>
-
 					<v-stepper-content step="2">
 						<gmaps ref="gmaps" @onChooseAddress="onPickAdress($event)" validator="required"></gmaps>
 						</br>
 						<v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
 						<v-btn color="primary" @click.native="changeIndex(3)">Continuer</v-btn>
-
 					</v-stepper-content>
-
 					<v-stepper-content step="3">
-
 						Bien
 						<v-layout row wrap>
 							<v-flex v-for="room in listOfRoomsMode" :key="room.value" xs4>
 								<v-checkbox v-model="accomodation.room" :label="$t(room.code)" :value="room.value"></v-checkbox>
 							</v-flex>
 						</v-layout>
-
 						<!-- Type de bien -->
 						Type de bien
 						<v-layout row wrap>
@@ -65,7 +57,6 @@
 								<v-checkbox v-model="accomodation.type" :label="type.frname" :value="type._id"></v-checkbox>
 							</v-flex>
 						</v-layout>
-
 						<v-form ref="step3">
 							<v-layout row wrap>
 								<!-- Capacité d'accueil -->
@@ -108,14 +99,11 @@
 								<v-flex xs3>
 									<v-text-field v-model="accomodation.bathrooms" type="number" :rules="accueilRules"></v-text-field>
 								</v-flex>
-
 							</v-layout>
 						</v-form>
 						<v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
 						<v-btn color="primary" @click.native="changeIndex(4)">Continuer</v-btn>
-
 					</v-stepper-content>
-
 					<v-stepper-content step="4">
 						EQUIPEMENTS
 						<v-layout row wrap>
@@ -125,9 +113,7 @@
 						</v-layout>
 						<v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
 						<v-btn color="primary" @click.native="changeIndex(5)">Continuer</v-btn>
-
 					</v-stepper-content>
-
 					<v-stepper-content step="5">
 						ESPACES ACCESSIBLES
 						<v-layout row wrap>
@@ -137,9 +123,7 @@
 						</v-layout>
 						<v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
 						<v-btn color="primary" @click.native="changeIndex(6)">Continuer</v-btn>
-
 					</v-stepper-content>
-
 					<v-stepper-content step="6">
 						<v-jumbotron height="400px">
 							<v-container fill-height>
@@ -154,7 +138,6 @@
 								</v-layout>
 							</v-container>
 						</v-jumbotron>
-
 						<!-- LISTE DES PHOTOS -->
 						<v-layout row wrap>
 							<v-flex xs6 lg4 xl3 v-for="picture in accomodation.images" :key="picture.fileName">
@@ -173,12 +156,9 @@
 								</v-card>
 							</v-flex>
 						</v-layout>
-
 						<v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
 						<v-btn color="primary" @click.native="changeIndex(7)">Continuer</v-btn>
-
 					</v-stepper-content>
-
 					<v-stepper-content step="7">
 						<v-form ref="step7">
 							<div>
@@ -196,9 +176,7 @@
 						</v-form>
 						<v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
 						<v-btn color="primary" @click.native="changeIndex(8)">Continuer</v-btn>
-
 					</v-stepper-content>
-
 					<v-stepper-content step="8">
 						<v-subheader>Règlement</v-subheader>
 						<v-layout row wrap>
@@ -208,9 +186,7 @@
 						</v-layout>
 						<v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
 						<v-btn color="primary" @click.native="changeIndex(9)">Continuer</v-btn>
-
 					</v-stepper-content>
-
 					<v-stepper-content step="9">
 
 						<v-form ref="step9">
@@ -246,9 +222,8 @@
 									<v-slider v-model="accomodation.durationmin" min="1" max="360" xs9></v-slider>
 								</v-flex>
 								<v-flex xs3>
-									<v-text-field v-model="accomodation.durationmin" type="number" :rules="[v => v >= 1 && v <= 360 || 'Veuillez saisir une valeur comprise entre 1 et 360']"></v-text-field>
+								<v-text-field v-model="accomodation.durationmin" type="number" :rules="[v => v >= 1 && v <= 360 || 'Veuillez saisir une valeur comprise entre 1 et 360']"></v-text-field>
 								</v-flex>
-
 								<!-- Durée maximale de séjour -->
 								<v-flex xs12>
 									<v-subheader>Durée maximale de séjour (jours)</v-subheader>
@@ -257,9 +232,8 @@
 									<v-slider v-model="accomodation.durationmax" min="1" max="360" xs9></v-slider>
 								</v-flex>
 								<v-flex xs3>
-									<v-text-field v-model="accomodation.durationmax" type="number" :rules="[v => v >= 1 && v <= 360 || 'Veuillez saisir une valeur comprise entre 1 et 360']"></v-text-field>
+								<v-text-field v-model="accomodation.durationmax" type="number" :rules="[v => v >= 1 && v <= 360 || 'Veuillez saisir une valeur comprise entre 1 et 360']"></v-text-field>
 								</v-flex>
-
 								<!-- Heure d'arrivée -->
 								<v-flex xs12 md6 lg6>
 									<v-subheader>Heure limite d'arrivée</v-subheader>
@@ -274,30 +248,21 @@
 
 							</v-layout>
 						</v-form>
-
 						<br/>
-
 						<v-btn @click.native="onGoPrevious()" flat>Précédent</v-btn>
 						<v-btn color="primary" @click="onValidate()">Valider</v-btn>
-
 					</v-stepper-content>
-
 				</v-stepper-items>
-
 			</v-stepper>
-
 		</div>
-
 	</div>
 </template>
-
 <script>
 	import GoogleMapsLoader from "google-maps";
 	import Accomodation from "../../../class/entities/Accomodation";
 	import FileUpload from "../../utility/FileUpload";
 	import Gmaps from "../../utility/Gmaps";
 	import ListService from "../../../class/services/ListService";
-
 	export default {
 	  components: {
 	    FileUpload,
@@ -319,7 +284,6 @@
 	          }
 	        });
 	    }
-
 	    //Chargement des combo
 	    ListService.fetchList("accomodationTypes", this.listOfAccomodationTypes);
 	    ListService.fetchList("accomodationEquipements", this.listOfEquipments);
@@ -355,7 +319,6 @@
 	    onValidate() {
 	      var comp = null;
 	      comp = this.$refs["step" + this.accomodation.currentStep];
-
 	      if (comp == null || comp.validate()) {
 	        var vue = this;
 	        this.accomodation.complete = true;
@@ -395,7 +358,6 @@
 	    changeIndex(index) {
 	      var comp = null;
 	      comp = this.$refs["step" + (index - 1)];
-
 	      if (comp == null || comp.validate()) {
 	        console.log("all inputs properly validated or no form");
 	        this.accomodation.currentStep = index;
@@ -403,7 +365,6 @@
 	        if (index > this.maxStep) this.maxStep = index;
 	        //Validation de la première étape, je fais un POST, si je reviens en arrière je ne refais pas ça
 	        if (index == 2) this.$refs.gmaps.initMap();
-
 	        //Si je passe à l'étape des options supplémentaires alors je charge les features
 	        if (index == 9) {
 	          console.log("je passe aux features");
@@ -432,7 +393,6 @@
 						});
 						console.log(this.accomodation.features);
 	        }
-
 	        if (this.accomodation._id == null) {
 	          this.$http.post("accomodation").then(response => {
 	            if (response.status == 200) {
@@ -482,24 +442,20 @@
 	    },
 	    onPickAdress(adress) {
 	      var comps = Array.from(adress);
-
 	      var filterArray = comps.filter(comp =>
 	        comp.types.includes("postal_code")
 	      );
 	      if (filterArray.length > 0)
 	        this.accomodation.zipcode = filterArray[0].long_name;
 	      else this.accomodation.zipcode = "";
-
 	      filterArray = comps.filter(comp => comp.types.includes("locality"));
 	      if (filterArray.length > 0)
 	        this.accomodation.city = filterArray[0].long_name;
 	      else this.accomodation.city = "";
-
 	      filterArray = comps.filter(comp => comp.types.includes("street_number"));
 	      if (filterArray.length > 0)
 	        this.accomodation.street = filterArray[0].long_name;
 	      else this.accomodation.street = "";
-
 	      filterArray = comps.filter(comp => comp.types.includes("route"));
 	      if (filterArray.length > 0)
 	        this.accomodation.street += " " + filterArray[0].long_name;
@@ -521,7 +477,6 @@
 	  }
 	};
 </script>
-
 <style>
 	#location-input {
 	  background-color: #fff;

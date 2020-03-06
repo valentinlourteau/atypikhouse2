@@ -3,60 +3,62 @@
   <div>
     <v-container>
       <v-layout class="mx-auto" row wrap>
-        <v-flex lg6 xs12 offset-lg3 align-center>
-          <v-text-field prepend-icon="search" v-model="filter.city" :placeholder="getRandomPlaceHolder()" solo></v-text-field>
+        <v-flex xs6 offset-xs3 align-center>
+          <v-text-field prepend-icon="search" v-model="search" :placeholder="getRandomPlaceHolder()" solo></v-text-field>
         </v-flex>
-        <v-flex v-if="false" xs12>
+        <v-flex xs12>
           <v-btn class="mx-auto" style="display:block;" color="secondary" @click="imLucky()" flat>Surprenez moi !</v-btn>
         </v-flex>
       </v-layout>
-
+      <v-divider></v-divider>
+      
       <v-dialog v-model="dialog" persistent max-width="580">
-        <v-btn v-if="false" slot="activator" color="primary" class="black--text">Arrivée-Départ</v-btn>
-
+        <v-btn slot="activator" color="white" text="black">Arrivée-Départ</v-btn>
         <v-card>
           <v-card-title>
             <h4>Dates de séjour</h4>
           </v-card-title>
           <v-card-text>
-            <v-layout row wrap>
-              <v-flex xs12 sm6>
-                <v-date-picker v-model="filter.dateDebut" color="primary"></v-date-picker>
-              </v-flex>
-              <v-flex xs12 sm6 class="hidden-xs-only">
-                <v-date-picker v-model="filter.dateFin" color="green lighten-1" header-color="primary"></v-date-picker>
-              </v-flex>
-            </v-layout>
+          <v-layout row wrap>
+            <v-flex xs12 sm6>
+              <v-date-picker v-model="filter.dateDebut"  color="primary"></v-date-picker>
+            </v-flex>
+            <v-flex xs12 sm6 class="hidden-xs-only">
+              <v-date-picker v-model="filter.dateFin" color="green lighten-1" header-color="primary"></v-date-picker>
+            </v-flex>
+          </v-layout>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="black" flat @click.native="dialog = false">Annuler</v-btn>
-            <v-btn color="primary" flat @click.native="dialog = false">Valider</v-btn>
+          <v-btn color="black" flat @click.native="dialog = false">Annuler</v-btn>
+          <v-btn color="primary" flat @click.native="dialog = false">Valider</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-
       <v-dialog v-model="dialog1" persistent max-width="580">
-        <v-btn slot="activator" color="primary" class="black--text mt-3">Prix</v-btn>
-
+        <v-btn slot="activator" color="white" text="black">Prix</v-btn>
         <v-card>
-          <v-card-title>
-            <div class="headline">Prix</div>
-          </v-card-title>
+              <div class="headline">Prix</div>
+                  <v-divider></v-divider>
           <v-layout row wrap>
-            <v-subheader>{{ $t('minimum.price.per.night') }}</v-subheader>
-            <v-flex xs8 ml-4>
-              <v-slider :max="255" v-model="filter.priceRange.min"></v-slider>
-            </v-flex>
-            <v-flex xs3>
-              <v-text-field v-model="filter.priceRange.min" type="number"></v-text-field>
-            </v-flex>
-            <v-subheader>{{ $t('maximum.price.per.night') }}</v-subheader>
-            <v-flex xs8 ml-4>
-              <v-slider v-model="filter.priceRange.max" :min="filter.priceRange.min" :max="1000"></v-slider>
-            </v-flex>
-            <v-flex xs3>
-              <v-text-field v-model="filter.priceRange.max" type="number"></v-text-field>
-            </v-flex>
+            <v-layout row wrap>
+          
+             <v-subheader>{{ $t('minimum.price.per.night') }}</v-subheader>  
+             <v-flex xs8 ml-4 >        
+            <v-slider :max="255" v-model="PriceMin" ></v-slider>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="PriceMin" type="number"></v-text-field>
+          </v-flex>
+          <v-subheader>{{ $t('maximum.price.per.night') }}</v-subheader>  
+          <v-flex xs8 xs8 ml-4  >        
+            <v-slider :max="500" v-model="PriceMax" ></v-slider>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field v-model="PriceMax" type="number"></v-text-field>
+          </v-flex>
+          </v-layout>
+          
+            
           </v-layout>
           <v-spacer></v-spacer>
           <v-btn color="black" flat @click.native="dialog1 = false">Annuler</v-btn>
@@ -64,54 +66,48 @@
         </v-card>
       </v-dialog>
       <v-dialog v-model="dialog2" persistent max-width="580">
-
-        <v-btn slot="activator" color="primary" class="black--text mt-3">Capacité</v-btn>
-        <v-card>
+        <v-btn slot="activator" color="white" text="black">Capacité</v-btn>
+        <v-card ml4>
           <!-- Capacité d'accueil -->
-          <v-card-title>
-            <div class="headline">Capacité d'accueil</div>
-          </v-card-title>
-          <v-card-text>
-            <v-layout row wrap>
-              <v-flex xs9>
-                <v-slider v-model="filter.guests" min="1" max="20" label="Nombre des personnes"></v-slider>
-              </v-flex>
-              <v-flex xs3>
-                <v-text-field v-model="filter.guests" type="number"></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
+          <v-flex xs12>
+      <div class="headline">Capacité</div>
+                  <v-divider></v-divider>
+          </v-flex>
+          <v-flex xs9 ml-4>
+            <v-slider v-model="number" min="1" max="20" label="Nombre des personnes"></v-slider>                                   
+          </v-flex>
+          <v-flex xs3 ml-4>
+            <v-text-field v-model="number"  type="number"  ></v-text-field>
+          </v-flex ml-4>
           <!-- Nombre de lits -->
-          <!-- <v-flex xs12 ml-4>
+          <v-flex xs12 ml-4>
           </v-flex>
           <v-flex xs9 ml-4>
             <v-slider v-model="beds" min="1" max="20" xs9 label="Nombre des lits"></v-slider>
           </v-flex>
           <v-flex xs3 ml-4>
-            <v-text-field v-model="beds" type="number"></v-text-field> -->
-          <!-- </v-flex> -->
+            <v-text-field v-model="beds" type="number" ></v-text-field>
+          </v-flex>
           <!-- Nombre de chambres -->
-          <!-- <v-flex xs12 ml-4>
+          <v-flex xs12 ml-4>
           </v-flex>
           <v-flex xs9 ml-4>
             <v-slider v-model="rooms" min="1" max="20" xs9 label="Nombre des chambres"></v-slider>
           </v-flex>
           <v-flex xs3 ml-4>
-            <v-text-field v-model="rooms" type="number"></v-text-field>
-          </v-flex> -->
+            <v-text-field  v-model="rooms" type="number" ></v-text-field>
+          </v-flex>
           <v-spacer></v-spacer>
           <v-btn color="black" flat @click.native="dialog2 = false">Annuler</v-btn>
           <v-btn color="primary" flat @click.native="dialog2 = false">Valider</v-btn>
-
           </v-layout>
         </v-card>
       </v-dialog>
-      <v-dialog v-if="false" v-model="dialog3" persistent max-width="580">
-
-        <v-btn slot="activator" color="primary" class="black--text">Type de logement</v-btn>
+      <v-dialog v-model="dialog3" persistent max-width="580">
+        <v-btn slot="activator" color="white" text="black">Type de logement</v-btn>
         <v-card>
-          <div class="headline">Type de logement</div>
-          <v-divider></v-divider>
+              <div class="headline">Type de logement</div>
+                  <v-divider></v-divider>
           <v-card-text>
             <v-container fluid>
               <v-layout row wrap>
@@ -119,19 +115,15 @@
                   <v-checkbox v-model="filter.selectedTypes" :value="type._id" :label="type.frname"></v-checkbox>
                 </v-flex>
                 <v-spacer></v-spacer>
-
               </v-layout>
               <v-btn color="black" flat @click.native="dialog3 = false">Annuler</v-btn>
               <v-btn color="primary" flat @click.native="dialog3 = false">Valider</v-btn>
             </v-container>
           </v-card-text>
-
         </v-card>
-
       </v-dialog>
-      <v-dialog v-if="false" v-model="dialog4" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
-        <v-btn slot="activator" color="secondary" class="black--text">plus de filtres</v-btn>
-
+      <v-dialog v-model="dialog4" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
+        <v-btn slot="activator" color="white" text="black">plus de filtres</v-btn>
         <v-card tile>
           <v-toolbar card dark color="primary">
             <v-btn icon dark @click.native="dialog4 = false">
@@ -140,59 +132,48 @@
             <v-toolbar-title color="black">Plus de filtres</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
-              <v-btn dark flat @click.native="dialog4 = false">Valider </v-btn>
+              <v-btn dark flat @click.native="dialog4 = false" >Valider </v-btn>
               <v-btn dark flat @click.native="dialog4 = false">Annuler </v-btn>
-
             </v-toolbar-items>
-
           </v-toolbar>
           <v-card-text>
-
+    
             <v-divider></v-divider>
-            <v-list>
-              <v-subheader>Equipements</v-subheader>
-              <v-flex v-for="(equipment, index) in availableFilters.listOfEquipments" :key="equipment._id" xs12 md3>
-                <v-checkbox v-model="filter.selectedEquipments" :value="equipment._id" :label="equipment.frname"></v-checkbox>
-              </v-flex>
-              <v-divider></v-divider>
-              <v-subheader>Installations</v-subheader>
-              <v-flex v-for="(space, index) in availableFilters.listOfAvailableSpaces" :key="space._id" xs12 md3>
-                <v-checkbox v-model="filter.selectedSpaces" :value="space._id" :label="space.frname"></v-checkbox>
-              </v-flex>
-              <v-divider></v-divider>
-              <v-subheader>Règlement intérieur</v-subheader>
-              <v-flex v-for="(rule, index) in availableFilters.listOfAvailableRules" :key="rule._id" xs12 md3>
-                <v-checkbox v-model="filter.selectedRules" :value="rule._id" :label="rule.frname"></v-checkbox>
-              </v-flex>
-
+            <v-list >
+              <v-subheader >Equipements</v-subheader>
+                 <v-flex v-for="(equipment, index) in availableFilters.listOfEquipments" :key="equipment._id" xs12 md3>
+                  <v-checkbox v-model="filter.selectedEquipments" :value="equipment._id" :label="equipment.frname"></v-checkbox>
+                </v-flex>
+                      <v-divider></v-divider>
+              <v-subheader >Installations</v-subheader>
+                  <v-flex v-for="(space, index) in availableFilters.listOfAvailableSpaces" :key="space._id" xs12 md3>
+                  <v-checkbox v-model="filter.selectedSpaces" :value="space._id" :label="space.frname"></v-checkbox>
+                </v-flex>
+                         <v-divider></v-divider>
+              <v-subheader >Règlement intérieur</v-subheader>
+                  <v-flex v-for="(rule, index) in availableFilters.listOfAvailableRules" :key="rule._id" xs12 md3>
+                  <v-checkbox v-model="filter.selectedRules" :value="rule._id" :label="rule.frname"></v-checkbox>                
+                </v-flex>
             </v-list>
           </v-card-text>
-
           <div style="flex: 1 1 auto;"></div>
         </v-card>
       </v-dialog>
-
-      <!-- La recherche !!!  -->
-      <v-btn @click="onClickSearchWithFilter()" color="secondary" class="black--text mt-3">Rechercher !</v-btn>
-
-      <v-container grid-list-lg>
+      <v-divider></v-divider>
+            <v-container grid-list-lg>
         <v-layout row wrap>
           <v-flex style="transition: all 250ms" v-for="accomodation in accomodations" :key="accomodation._id" v-bind:class="{'md12 lg12 xl12': accomodation.viewDetail}" class="xs12 md4 lg3 xl2">
             <v-card>
-
               <div @click="onViewDetail(accomodation)" style="cursor:pointer;" v-if="!accomodation.viewDetail">
-
                 <div>
                   <v-card-media height="200px" :src="accomodation.images[0] == null ? '/static/images/no_bkg_state.svg' : accomodation.images[0].data"></v-card-media>
                   <v-card-title primary-title>
                     <div class="headline" style="width:100%">{{ accomodation.name }}</div>
-                    <div class="price" style="width:100%">{{ accomodation.priceNight }} € par nuit</div>
+                    <div class="price" style="width:100%">{{ accomodation.priceNight}} € par nuit</div>
                     <div class="grey--text" style="width:100%">{{ getTruncatedDescription(accomodation) }}</div>
                   </v-card-title>
                 </div>
-
               </div>
-
               <!-- si jamais je clique sur une carte pour afficher le détail -->
               <div v-if="accomodation.viewDetail">
                 <v-btn @click="accomodation.viewDetail = false;" color="primary" top absolute right fab>
@@ -205,64 +186,13 @@
                     </v-flex>
                   </v-layout>
                 </v-container>
-
-                <v-card-title class="yellow">
-                  <v-flex class="display-2" xs12>{{ accomodation.name }}</v-flex>
+                <v-card-title>
+                  <v-flex class="display-2 blue--text" xs12>{{ accomodation.name }}</v-flex>
+                  <v-flex class="subheading" xs12>{{ accomodation.priceNight}}€ par nuit</v-flex>
                   <v-flex class="subheading" xs12>{{ accomodation.description }}</v-flex>
                 </v-card-title>
-
                 <v-card-text>
-
-                  <v-subheader>Informations générales</v-subheader>
-                  <v-flex xs12>
-                    <v-chip color="primary" class="black--text">{{ accomodation.type.frname }}</v-chip>
-                    <v-chip color="primary" class="black--text">{{ accomodation.priceNight }} € par nuit</v-chip>
-                    <v-chip color="secondary" class="black--text">{{ accomodation.city }}</v-chip>
-                    <v-chip>{{ accomodation.guests }} invités maximum</v-chip>
-                    <v-chip>{{ accomodation.beds }} lit(s)</v-chip>
-                    <v-chip>{{ accomodation.bedrooms }} chambre(s)</v-chip>
-                    <v-chip>{{ accomodation.bathrooms }} salle(s) de bain</v-chip>
-                    <v-chip>{{ accomodation.durationmin }} jour(s) minimum</v-chip>
-                    <v-chip>{{ accomodation.durationmax }} jour(s) maximum</v-chip>
-                    <!-- Equipements -->
-                    <v-subheader>Equipements</v-subheader>
-                    <v-chip v-for="equipment in accomodation.equipments" :key="equipment._id">{{ equipment.frname }}</v-chip>
-                    <!-- Règlement -->
-                    <v-subheader>Règlement</v-subheader>
-                    <v-chip v-for="rule in accomodation.requirements" :key="rule._id">{{ rule.frname }}</v-chip>
-                    <!-- Espaces accessibles -->
-                    <v-subheader>Espaces accessibles</v-subheader>
-                    <v-chip v-for="space in accomodation.spaces" :key="space._id"> {{ space.frname }}</v-chip>
-                    <!-- Features -->
-                    <v-subheader>Autres</v-subheader>
-                    <v-chip v-for="feature in accomodation.features" :key="feature._id">{{ feature.name }} : {{ feature.value }}</v-chip>
-                    <v-subheader>Activités à proximité</v-subheader>
-                  </v-flex>
-                  <v-layout row wrap>
-                    <!-- Les activités à proximité -->
-                    <v-flex v-for="(nearby, index) in accomodation.activities" :key="nearby._id" xs12 sm4 lg3 xl2 class="pa-2">
-
-                      <v-card>
-
-                        <v-card-media :src="nearby.images[0] == null ? '/static/images/no_bkg_state.svg' : nearby.images[0].data" height="200px"></v-card-media>
-                        <v-card-title v-bind:class="{blue: index % 2 == 0, yellow: index % 2 != 0}" primary-title>
-                          <div class="headline" style="width:100%;">{{ nearby.name }}</div>
-                          <div>{{ nearby.description }}</div>
-                        </v-card-title>
-
-                        <v-card-text v-bind:class="{blue: index % 2 == 0, yellow: index % 2 != 0}">
-                          <v-chip v-if="nearby.price != null && nearby.price != ''">{{ nearby.price }}</v-chip>
-                          <v-chip v-if="nearby.distance != null && nearby.distance != ''">{{ nearby.distance }}</v-chip>
-                          <v-chip v-if="nearby.phone != null && nearby.phone != ''">{{ nearby.phone }}</v-chip>
-                          <v-chip v-if="nearby.website != null && nearby.website != ''">{{ nearby.website }}</v-chip>
-                        </v-card-text>
-
-                      </v-card>
-
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout v-if="$store.state.user != null" row unwrap>
+                  <v-layout row unwrap>
                     <v-flex style="display:flex;" xs12 md6>
                       <v-btn @click="onContactOwner(accomodation)" class="mx-auto" outline large flat>CONTACTER</v-btn>
                     </v-flex>
@@ -271,39 +201,28 @@
                         <v-icon>{{ accomodation.showLocationProcess ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>RESERVER</v-btn>
                     </v-flex>
                   </v-layout>
-                  <v-alert type="info" :value="true" v-else>Veuillez vous connecter pour contacter le propriétaire ou réserver le bien</v-alert>
-
                 </v-card-text>
-
                 <v-card-text v-show="accomodation.showLocationProcess && accomodation.calendar != null">
-
                   <v-container v-if="accomodation.showLocationProcess && accomodation.calendar != null" grid-list-md>
                     <v-layout row wrap>
-
                       <v-stepper v-model="accomodation.step" vertical>
-
                         <v-stepper-step :complete="accomodation.step > 1" step="1">
                           Choix des dates
                         </v-stepper-step>
                         <v-stepper-content step="1">
                           <div v-show="accomodation.step == 1">
-
                             <!-- Affichage du prix par nuité -->
-
                             <HotelDatePicker :startingDateValue="accomodation.reservation.dateDebut" :endingDateValue="accomodation.reservation.dateFin" format="DD/MM/YYYY" :minNights="accomodation.durationmin" :maxNights="accomodation.durationmax" :disabledDates="getLockedDates(accomodation)" :disabledDaysOfWeek="getLockedDays(accomodation)" @checkInChanged="accomodation.reservation.dateDebut = $event" @checkOutChanged="accomodation.reservation.dateFin = $event" />
                             <div v-if="accomodation.reservation.dateFin != null && accomodation.reservation.dateDebut != null"> {{ nbNightsBetweenTwoDates(accomodation) }} nuits</div>
                             <div v-else>0 nuit</div>
                             <v-btn :disabled="accomodation.reservation.dateFin == null" color="primary" @click.native="onGoStep2(accomodation)">Continue</v-btn>
-
                           </div>
                         </v-stepper-content>
-
                         <v-stepper-step :complete="accomodation.step > 2" step="2">
                           Nombre de voyageurs
                         </v-stepper-step>
                         <v-stepper-content step="2">
                           <div v-show="accomodation.step == 2">
-
                             <v-container fluid>
                               <v-layout row wrap>
                                 <v-flex xs9>
@@ -312,11 +231,9 @@
                                 <v-flex xs3>
                                   <v-text-field v-model="accomodation.reservation.nbrPersonnes" type="number"></v-text-field>
                                 </v-flex>
-
                                 <v-flex xs12>
                                   <v-divider></v-divider>
                                 </v-flex>
-
                                 <v-flex xs12>
                                   <v-list>
                                     <v-list-tile>
@@ -325,42 +242,32 @@
                                         <v-list-tile-sub-title>Montant du séjour sur la base du nombre de nuits</v-list-tile-sub-title>
                                       </v-list-tile-content>
                                     </v-list-tile>
-
                                     <v-list-tile>
                                       <v-list-tile-content>
                                         <v-list-tile-title>{{ getTaxeAmount(accomodation) }} €</v-list-tile-title>
                                         <v-list-tile-sub-title>Frais de gestion AtypikHouse</v-list-tile-sub-title>
                                       </v-list-tile-content>
                                     </v-list-tile>
-
                                     <v-divider></v-divider>
-
                                     <v-list-tile>
                                       <v-list-tile-content>
                                         <v-list-tile-title>{{ getTotalAmountToPay(accomodation) }} €</v-list-tile-title>
                                         <v-list-tile-sub-title>Montant total à régler</v-list-tile-sub-title>
                                       </v-list-tile-content>
                                     </v-list-tile>
-
                                   </v-list>
                                 </v-flex>
-
                               </v-layout>
                             </v-container>
-
                             <v-btn color="primary" @click.native="onChooseVisitorsBeforePay(accomodation)">Continue</v-btn>
                             <v-btn @click="accomodation.step = 1" flat>Retour</v-btn>
-
                           </div>
                         </v-stepper-content>
-
                         <v-stepper-step :complete="accomodation.step > 3" step="3">
                           Règlement
                         </v-stepper-step>
                         <v-stepper-content step="3">
-
                           <div v-show="accomodation.step == 3">
-
                             <v-jumbotron>
                               <v-container fill-height>
                                 <v-layout align-center>
@@ -369,73 +276,51 @@
                                     <span class="subheading">Vous êtes sur le point de finaliser la réservation d'un bien. Nous vous remercions de la confiance que vous accordez, à nous comme au propriétaire.</span>
                                     <v-divider class="my-3"></v-divider>
                                     <div class="title mb-3">Montant à payer : {{ accomodation.reservation.totalAmount }} €</div>
-
                                     <PayPal :amount="accomodation.reservation.price.toString()" currency="EUR" :client="credentials" env="sandbox" @payment-completed="userHasPaid(accomodation)">
                                     </PayPal>
-
                                   </v-flex>
                                 </v-layout>
                               </v-container>
                             </v-jumbotron>
-
                             <v-btn @click="accomodation.step = 2" flat>Retour</v-btn>
                           </div>
                         </v-stepper-content>
-
                       </v-stepper>
-
                     </v-layout>
                   </v-container>
-
                 </v-card-text>
-
-                <contact-form :showModal="contactOwner" @close="contactOwner = false;" :receiverProp="accomodation.host"></contact-form>
+                 <contact-form :showModal="contactOwner" @close="contactOwner = false;" :receiverProp="accomodation.host"></contact-form>
 
               </div>
-
             </v-card>
           </v-flex>
         </v-layout>
       </v-container>
-
     </v-container>
-
   </div>
 </template>
-
 <script>
   import PayPal from "vue-paypal-checkout";
   import HotelDatePicker from "vue-hotel-datepicker";
   import moment from "moment";
   import ContactForm from "../ContactForm";
   import ListService from "../../class/services/ListService";
-  import Modal from "../Modal";
+  import Modal from '../Modal';
   export default {
     components: {
       HotelDatePicker,
       PayPal,
       ContactForm,
-      Modal
+      Modal,
     },
     created: function() {
-      ListService.fetchList(
-        "accomodationTypes",
-        this.availableFilters.listOfAccomodationTypes
-      );
-      ListService.fetchList(
-        "accomodationEquipements",
-        this.availableFilters.listOfEquipments
-      );
-      ListService.fetchList(
-        "accomodationAvailableSpaces",
-        this.availableFilters.listOfAvailableSpaces
-      );
-      ListService.fetchList(
-        "accomodationRules",
-        this.availableFilters.listOfAvailableRules
-      );
-
-      this.$http.post("accomodation/filters").then(response => {
+      
+      ListService.fetchList("accomodationTypes", this.availableFilters.listOfAccomodationTypes);
+      ListService.fetchList("accomodationEquipements", this.availableFilters.listOfEquipments);
+      ListService.fetchList("accomodationAvailableSpaces",this.availableFilters.listOfAvailableSpaces);
+      ListService.fetchList("accomodationRules", this.availableFilters.listOfAvailableRules);
+      
+      this.$http.get("accomodation").then(response => {
         if (response.status == 200) {
           this.accomodations = response.body.accomodations;
           for (var accomodation in this.accomodations) {
@@ -445,8 +330,6 @@
               "showLocationProcess",
               false
             );
-            this.$set(this.accomodations[accomodation], "host", "");
-            this.$set(this.accomodations[accomodation], "activities", []);
           }
         }
       });
@@ -455,32 +338,26 @@
       return {
         search: null,
         dialog: false,
-        dialog1: false,
+        dialog1 :false,
         dialog2: false,
         dialog3: false,
         dialog4: false,
         filter: {
-          priceRange: {
-            min: 0,
-            max: 9999
-          },
-          city: null,
-          guests: 1,
-          // dateDebut: null, //pas encore
-          // dateFin: null, //pas encore
-          // selectedEquipments: [] //pas encore
+          dateDebut: null,
+          dateFin: null,
+          selectedEquipments: [],
         },
         availableFilters: {
           listOfAccomodationTypes: [],
-          listOfEquipments: [],
-          listOfAvailableSpaces: [],
-          listOfAvailableRules: []
+          listOfEquipments:[],
+          listOfAvailableSpaces:[],
+          listOfAvailableRules:[],
         },
-        PriceMin: "",
-        PriceMax: "",
-        number: "",
-        beds: "",
-        rooms: "",
+     PriceMin:'',
+     PriceMax:'',
+     number:'',
+     beds:'',
+     rooms:'',
         accomodations: [],
         //les traductions parce que le calendar est stocké en FR
         daysTraduction: [
@@ -494,7 +371,7 @@
         ],
         credentials: {
           sandbox:
-            "ASRh-BZAq7jdqDlHHU7gspeJA9Ok-eeHvVYqtMIe9YJMpmbGdjS5yvLDK3JyGBMJdLwgBUt4kFkNEg03"
+            "ASV2UoEKitc5KSR1jltaQS1pW-NgIYuZtQSwxUx_rDmwt1MRIF8lyK8ipgg0mxAHUE2tymSsU5SYT2zH"
         },
         //La taxe AH, en %
         AHTaxe: 5,
@@ -503,27 +380,8 @@
       };
     },
     methods: {
-      //La méthode pour chercher avec les filtres
-      onClickSearchWithFilter() {
-        this.$store.commit("snackbar", "C'est parti !");
-        this.$http.post("accomodation/filters", this.filter).then(response => {
-          if (response.status == 200) {
-        	console.log("recherche effectuée")
-            this.accomodations.length = 0;
-            this.accomodations = this.accomodations.concat(response.body.accomodations);
-          }
-        })
-      },
       getRandomPlaceHolder() {
-        var items = [
-          "Paris",
-          "La Rochelle",
-          "Bordeaux",
-          "Madrid",
-          "Los Angeles",
-          "Dubai"
-        ];
-        return items[Math.floor(Math.random() * items.length)];
+        return "Une maison sous l'eau";
       },
       imLucky() {
         this.selectedAccomodation = null;
@@ -545,34 +403,15 @@
         else return accomodation.description.substring(0, length);
       },
       onViewDetail(accomodation) {
-        var vue = this;
         if (accomodation.fetch) accomodation.viewDetail = true;
         else
           this.$http.get("accomodation/" + accomodation._id).then(response => {
+            // console.log("accomodation");
+            console.log(accomodation);
             if (response.status == 200) {
-              //Récupère la liste des activités d'un bien
-              this.$http.get("activity/" + accomodation._id).then(response => {
-                if (response.status == 200) {
-                  accomodation.activities = response.body.activities;
-                }
-              });
-              //Récupère la liste des réservations d'un bien
-              this.$http.get("reservation/" + accomodation._id).then(response => {
-                if (response.status == 200) {
-                  console.log("je récupère les réservations");
-                  console.log(response.body.reservations.length);
-                  accomodation.reservations = response.body.reservations;
-                }
-              });
-
-              //Permet de supprimer tous les champs ceux dont on souhaite traçer les modifications
+              //Permet de supprimer tous les champs sauf viewDetail qu'on a besoin de suivre pour mettre les valeurs du détail
               Object.keys(accomodation).forEach(function(key) {
-                if (
-                  key != "viewDetail" &&
-                  key != "showLocationProcess" &&
-                  key != "host" &&
-                  key != "activities"
-                )
+                if (key != "viewDetail" && key != "showLocationProcess")
                   delete accomodation[key];
               });
               Object.keys(response.body.accomodation).forEach(function(key) {
@@ -630,7 +469,7 @@
             this.$store.commit("snackbar", "Réservation effectuée");
             accomodation.viewDetail = false;
             setTimeout(function() {
-              //vue.$store.commit("snackbar", "Accès à la réservation");
+              vue.$store.commit("snackbar", "Accès à la réservation");
               //TODO rediriger vers le détail de la réservation
             }, 1500);
           }
@@ -638,7 +477,7 @@
         //ervé entre temps on reçoit un message qui indique cela
         //router redirection vers le détail d'un voyage en cas de succèsTODO requête http post reservation, si un utilisateur a déjà rés
       },
-      getLockedDates(accomodation) {
+    getLockedDates(accomodation) {
         // console.log("dates : " + typeof accomodation.calendar);
         var lockedDates = [];
         if (accomodation.calendar != null) {
@@ -660,7 +499,6 @@
               endDate = moment(reservation.dateFin);
               var now = startDate.clone(),
                 dates = [];
-
               while (now.isSameOrBefore(endDate)) {
                 lockedDates.push(now.format("YYYY-MM-DD"));
                 now.add(1, "days");
@@ -693,16 +531,18 @@
           "days"
         );
       },
-      //calcule le prix de la réservation en fonction du nombre de personnes
+      //calcule le prix de la réservation en fonction du nombre du jour
       getPriceOfAccomodation(accomodation) {
         return (
-          accomodation.priceNight * this.nbNightsBetweenTwoDates(accomodation)
+          accomodation.priceNight *
+          this.nbNightsBetweenTwoDates(accomodation)*accomodation.reservation.nbrPersonnes
         );
       },
       //calcule le prix de la taxe
       getTaxeAmount(accomodation) {
         return this.getPriceOfAccomodation(accomodation) * this.AHTaxe / 100;
       },
+
       getTotalAmountToPay(accomodation) {
         return (
           this.getTaxeAmount(accomodation) +
@@ -712,7 +552,6 @@
     }
   };
 </script>
-
 <style scss>
   .datepicker__clear-button,
   .datepicker__close-button {
@@ -728,7 +567,6 @@
   .datepicker {
     transform: translateY(-418px);
   }
-
   .fade-enter-active,
   .fade-leave-active {
     transition: opacity 5s;
@@ -736,7 +574,6 @@
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }
-
   .ah-divider {
     height: 1px;
     border-top: 1px grey solid;

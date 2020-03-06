@@ -1,3 +1,4 @@
+  
 <template>
   <modal :dialog="showModal" @close="$emit('close')">
   
@@ -32,8 +33,6 @@
 import User from '../class/entities/User';
 import Modal from './Modal';
 import TD from '../class/utils/TokenDecrypter';
-
-
 export default {
 	components: {
 		Modal,
@@ -91,7 +90,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <style scoped>

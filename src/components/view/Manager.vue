@@ -120,27 +120,6 @@
 </template>
 
 <Script>
-
-
-
-
-
-
-
 </Script>
 <style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </style>

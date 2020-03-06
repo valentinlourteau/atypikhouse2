@@ -19,15 +19,15 @@
                     <v-icon>edit</v-icon>
                   </v-btn>
                 </td>
-
               </template>
             </v-data-table>
-
           </v-card>
         </v-flex>
       </v-layout>
     </v-container>
-
+    <v-btn @click="dialog = true;" color="yellow" fab fixed right bottom>
+      <v-icon>add</v-icon>
+    </v-btn>
     <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card>
         <v-card-title>
@@ -58,7 +58,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
   </div>
 </template>
 <script>
@@ -84,15 +83,12 @@
         email: ""
       }
     }),
-
     computed: {},
-
     watch: {
       dialog(val) {
         val || this.close();
       }
     },
-
     created() {
       this.initialize();
     },
@@ -104,19 +100,16 @@
           }
         });
       },
-
       editItem(item) {
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
       },
-
       close() {
         this.dialog = false;
         setTimeout(() => {
           this.editedItem = this.defaultItem;
         }, 300);
       },
-
       save() {
         var vue = this;
         console.log(this.editedItem)
@@ -135,8 +128,6 @@
     }
   };
 </script>
-
-
 <style>
   td {
     vertical-align: middle !important;
