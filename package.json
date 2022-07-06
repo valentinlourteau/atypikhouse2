@@ -18,7 +18,7 @@
     "base-64": "^0.1.0",
     "eslint": "^4.19.1",
     "google-maps": "^3.2.1",
-    "moment": "^2.22.1",
+    "moment": "^2.29.4",
     "moment-random": "^1.0.3",
     "payload": "^1.0.3",
     "phantomjs": "^2.1.7",
